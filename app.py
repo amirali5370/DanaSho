@@ -7,6 +7,7 @@ from blueprints.user import app as user
 from blueprints.general import page_not_found
 import config
 import extentions
+from models.user import User
 from flask_login import LoginManager
 
 
@@ -25,13 +26,14 @@ app.config["SQLALCHEMY_DATABASE_URI"] = config.SQLALCHEMY_DATABASE_URI
 app.config["SECRET_KEY"] = config.SECRET_KEY
 extentions.db.init_app(app)
 csrf = CSRFProtect(app)
-# login_manager = LoginManager()
-# login_manager.init_app(app)
+
+login_manager = LoginManager()
+login_manager.init_app(app)
 
 
-# @login_manager.user_loader
-# def load_teacher(teacher_id):
-#     return Teacher.get(teacher_id)
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.filter(User.id==user_id).first()
 
 
 # FIXME : هر وقت برنامه خواست روی هاست اجرا بشه باید خط های زیر از کامنت در بیان

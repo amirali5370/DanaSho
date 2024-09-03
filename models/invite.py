@@ -5,7 +5,7 @@ from extentions import db
 class Invite(db.Model):
     __tablename__ = "invites"
     id = Column(Integer, primary_key=True)
-    inviter_id = Column(Integer, ForeignKey('classes.id') ,nullable=False, index=True)
+    inviter_id = Column(Integer, ForeignKey('users.id') ,nullable=False, index=True)
     invitee_id = Column(Integer, nullable=False, index=True)
     invitee = Column(String, nullable=False, index=True)
 
