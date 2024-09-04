@@ -1,0 +1,74 @@
+{% extends "Base.html" %}
+{% block head %}
+    <title>تکمیل پروفایل</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='libraries/sweetalert2/sweetalert2.min.css') }}">
+    <script defer src="{{ url_for('static', filename='libraries/sweetalert2/sweetalert2.all.min.js') }}"></script>
+{% endblock %}
+{% block body %}
+    <h1>صفحه تکمیل پروفایل</h1>
+    <form action="#" method="post" id="register">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+        <select name="province" id="province" onchange="fetchCities(this.value)">
+            <option selected disabled value="">انتخاب استان</option>
+            <option value="تهران">تهران</option>
+            <option value="اصفهان">اصفهان</option>
+        </select>
+    
+        <select name="city" id="city">
+            <option value="">انتخاب شهر</option>
+        </select>
+
+        <input type="text" name="school_name" id="school_name" placeholder="نام مدرسه">
+        <select type="text" name="school_type" id="school_type">
+            <option selected disabled value="">نوع مدرسه</option>
+            <option value="1">دولتی</option>
+            <option value="2">نمونه دولتی</option>
+            <option value="3">هیئت امنایی</option>
+            <option value="4">غیر انتفاعی</option>
+            <option value="5">شاهد</option>
+            <option value="6">تیزهوشان</option>
+            <option value="7">استثنائی</option>
+        </select>
+
+        <textarea name="addres" id="addres" placeholder="آدرس" form="register"></textarea>
+
+        <select name="recognition" id="recognition">
+            <option selected disabled value="">شیوه آشنایی</option>
+            <option value="1">روش اول</option>
+            <option value="2">روش دوم</option>
+            <option value="3">روش سوم</option>
+        </select>
+
+        <input type="submit" value="تکمیل ثبت نام">
+    </form>
+
+
+
+
+
+
+
+    <script>
+
+        function fetchCities(province) {
+            if (province === "") {
+                document.getElementById("city").innerHTML = "<option value=''>انتخاب شهر</option>";
+                return;
+            }
+        
+            // ارسال درخواست AJAX به سرور برای دریافت شهرها
+            fetch(`/get_cities/${province}`)
+                .then(response => response.json())
+                .then(cities => {
+                    let options = "<option value=''>انتخاب شهر</option>";
+                    cities.forEach(city => {
+                        options += `<option value='${city}'>${city}</option>`;
+                    });
+                    document.getElementById("city").innerHTML = options;
+                })
+                .catch(error => console.error('Error fetching cities:', error));
+        }
+
+    </script>
+{% endblock %}

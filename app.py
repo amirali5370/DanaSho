@@ -28,6 +28,7 @@ extentions.db.init_app(app)
 csrf = CSRFProtect(app)
 
 login_manager = LoginManager()
+login_manager.login_view = 'user.login'
 login_manager.init_app(app)
 
 

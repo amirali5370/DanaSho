@@ -12,7 +12,7 @@ class User(db.Model, UserMixin):
     password = Column(String, nullable=False, unique=True, index=True)
     code = Column(Integer, nullable=False, unique=True, index=True)
     phone = Column(String, nullable=False, index=True)
-    # email = Column(String, nullable=False, index=True)
+    email = Column(String, nullable=False, index=True)
     grade = Column(String, nullable=False, index=True)
     birth = Column(String, nullable=False, index=True)  #1340 - 1397
     gender = Column(String, nullable=False, index=True)
@@ -21,11 +21,12 @@ class User(db.Model, UserMixin):
     invite_code = Column(Integer, nullable=False, index=True)
 
     
-    province = Column(Integer, index=True)
-    city = Column(Integer, index=True)
+    province = Column(String, index=True)
+    city = Column(String, index=True)
     school_name = Column(String, index=True)
     school_type = Column(String, index=True)
     home_addres = Column(String, index=True)
+    recognition = Column(String, index=True)
 
 
     final = Column(Integer, default=0, index=True)
@@ -36,6 +37,7 @@ class User(db.Model, UserMixin):
     coin = Column(Integer, default=0, index=True)
     point = Column(Integer, default=0, index=True)
     badge = Column(Integer, default=0, index=True)
+    like = Column(Integer, default=0, index=True)
     invite = Column(Integer, default=0, index=True)
 
 

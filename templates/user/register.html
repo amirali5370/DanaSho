@@ -1,36 +1,57 @@
 {% extends "Base.html" %}
 {% block head %}
+    <script type="module">
+        function checkPass() {
+            alert("SDf")
+            // می‌توانید شرایط خود را در اینجا بررسی کنید
+            let password = document.querySelector("input[name='password']").value;
+            let config = document.querySelector("input[name='password_co']").value;
+        
+            // اگر نام کاربری خالی باشد، ارسال فرم را متوقف کنید
+            if (password == config) {
+                alert("سورد یکی نیس");
+                return false; // جلوگیری از ارسال فرم
+            }
+        
+            // در غیر این صورت، فرم ارسال می‌شود
+            return true;
+        }
+    </script>
     <title>ثبت نام کاربران</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='libraries/sweetalert2/sweetalert2.min.css') }}">
     <script defer src="{{ url_for('static', filename='libraries/sweetalert2/sweetalert2.all.min.js') }}"></script>
+
+
 {% endblock %}
 {% block body %}
     <h1>صفحه ثبت نام کاربران</h1>
-    <form action="#" method="post">
+    <form action="#" method="post" id="form" onsubmit="checkPass()">
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-        <input type="text" name="firstname" placeholder="نام">
-        <input type="text" name="lastname" placeholder="نام خانوادگی">
+        <input type="text" name="firstname" placeholder="نام" id="a" data-required>
+        <input type="text" name="lastname" placeholder="نام خانوادگی" data-required>
         <br>
-        <input type="text" name="username" placeholder="نام کاربری">
-        <input type="text" name="birth" placeholder="تاریخ تولد">
+        <input type="text" name="username" placeholder="نام کاربری" data-required>
+        <input type="text" name="birth" placeholder="تاریخ تولد" data-required>
         <br>
-        <input type="password" name="password" placeholder="رمز عبور">
-        <input type="password" name="password_co" placeholder="تکرار رمز عبور">
+        <input type="password" name="password" placeholder="رمز عبور" data-required>
+        <input type="password" name="password_co" placeholder="تکرار رمز عبور" data-required>
         <br>
         <input type="text" name="code" placeholder="کد ملی">
-        <input type="number" name="phone" maxlength="10" minlength="10" placeholder="9125536125">
+        <input type="number" name="phone" maxlength="10" minlength="10" placeholder="9125536125" data-required>
         <br>
-        <input type="radio" name="gender" id="student" value="man">
+        <input type="radio" name="gender" id="man" value="man" data-required>
         <label for="student">آقا</label>
-        <input type="radio" name="gender" id="teacher" value="woman">
+        <input type="radio" name="gender" id="woman" value="woman" data-required>
         <label for="teacher">خانم</label>
         <br>
-        <input type="radio" name="type" id="student" value="student">
+        <input type="radio" name="type" id="student" value="student" onchange="radio()" checked data-required> 
         <label for="student">دانش آموز</label>
-        <input type="radio" name="type" id="teacher" value="teacher">
+        <input type="radio" name="type" id="teacher" value="teacher" onchange="radio()" data-required>
         <label for="teacher">فرهنگی</label>
         <br>
-        <select name="grade" id="grade">
+        <input type="email" name="email" id="email" placeholder="ایمیل">
+        <br>
+        <select name="grade" id="grade" data-required>
             <option disabled selected value="">پایه تحصیلی</option>
             <option value="1">دوره اول ابتدایی</option>
             <option value="2">دوره دوم ابتدایی</option>
@@ -38,7 +59,7 @@
             <option value="4">دوره متوسطه دوم</option>
         </select>
         <br>
-        <input type="text" name="invite" id="invite" placeholder="کد معرف" maxlength="6">
+        <input type="text" name="invite" id="invite" placeholder="کد معرف" maxlength="6" data-required>
 
         <input type="submit" value="ثبت نام">
     </form>
@@ -61,6 +82,16 @@
                 {% endfor %}
             {% endif %}
         {% endwith %}
+    </script>
+    <script>
+        function radio() {
+                var radios = document.querySelector('#student');
+                if (radios.checked) {
+                    document.querySelector("#grade").style.display= "inline";
+                }else{
+                    document.querySelector("#grade").style.display= "none";
+                }};
+        
     </script>
 
 {% endblock %}
