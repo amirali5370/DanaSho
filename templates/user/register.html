@@ -1,0 +1,66 @@
+{% extends "Base.html" %}
+{% block head %}
+    <title>ثبت نام کاربران</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='libraries/sweetalert2/sweetalert2.min.css') }}">
+    <script defer src="{{ url_for('static', filename='libraries/sweetalert2/sweetalert2.all.min.js') }}"></script>
+{% endblock %}
+{% block body %}
+    <h1>صفحه ثبت نام کاربران</h1>
+    <form action="#" method="post">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <input type="text" name="firstname" placeholder="نام">
+        <input type="text" name="lastname" placeholder="نام خانوادگی">
+        <br>
+        <input type="text" name="username" placeholder="نام کاربری">
+        <input type="text" name="birth" placeholder="تاریخ تولد">
+        <br>
+        <input type="password" name="password" placeholder="رمز عبور">
+        <input type="password" name="password_co" placeholder="تکرار رمز عبور">
+        <br>
+        <input type="text" name="code" placeholder="کد ملی">
+        <input type="number" name="phone" maxlength="10" minlength="10" placeholder="9125536125">
+        <br>
+        <input type="radio" name="gender" id="student" value="man">
+        <label for="student">آقا</label>
+        <input type="radio" name="gender" id="teacher" value="woman">
+        <label for="teacher">خانم</label>
+        <br>
+        <input type="radio" name="type" id="student" value="student">
+        <label for="student">دانش آموز</label>
+        <input type="radio" name="type" id="teacher" value="teacher">
+        <label for="teacher">فرهنگی</label>
+        <br>
+        <select name="grade" id="grade">
+            <option disabled selected value="">پایه تحصیلی</option>
+            <option value="1">دوره اول ابتدایی</option>
+            <option value="2">دوره دوم ابتدایی</option>
+            <option value="3">دوره متوسطه اول</option>
+            <option value="4">دوره متوسطه دوم</option>
+        </select>
+        <br>
+        <input type="text" name="invite" id="invite" placeholder="کد معرف" maxlength="6">
+
+        <input type="submit" value="ثبت نام">
+    </form>
+    <script type="module">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    {% if message == "unique"%}
+                    swal({
+                        title: 'مشخصات قبلا در سامانه ثبت شده!',
+                        html: 'این مشخصات قبلا در سامانه ثبت شده است. لطفا مشخصات دیگری وارد کنید.',
+                        type: 'warning',
+                        confirmButtonColor: '#ffc000',
+                        confirmButtonText: '<div style="direction:rtl;font-size:18px;font-family:Iran,Calibri;font-weight:bold;"><i style="margin-left: 5px;" class="fa fa-times"></i> تائید</div>',
+                        showCloseButton: true,
+                        showLoaderOnConfirm:true,
+                        allowOutsideClick:false,
+                    }).then((result) => {swal.close();})
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </script>
+
+{% endblock %}

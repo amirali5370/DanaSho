@@ -6,38 +6,11 @@
     <h1>صفحه ورود کاربران</h1>
     <form action="#" method="post">
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-        <input type="text" name="firstname" placeholder="نام">
-        <input type="text" name="lastname" placeholder="نام خانوادگی">
-        <br>
+        
         <input type="text" name="username" placeholder="نام کاربری">
-        <input type="text" name="birth" placeholder="تاریخ تولد">
-        <br>
         <input type="password" name="password" placeholder="رمز عبور">
-        <input type="password" name="password_co" placeholder="تکرار رمز عبور">
-        <br>
-        <input type="text" name="code" placeholder="کد ملی">
-        <input type="number" name="phone" maxlength="10" minlength="10" placeholder="9125536125">
-        <br>
-        <input type="radio" name="gender" id="student" value="man">
-        <label for="student">آقا</label>
-        <input type="radio" name="gender" id="teacher" value="woman">
-        <label for="teacher">خانم</label>
-        <br>
-        <input type="radio" name="type" id="student" value="student">
-        <label for="student">دانش آموز</label>
-        <input type="radio" name="type" id="teacher" value="teacher">
-        <label for="teacher">فرهنگی</label>
-        <br>
-        <select name="grade" id="grade">
-            <option disabled selected value="">پایه تحصیلی</option>
-            <option value="1">دوره اول ابتدایی</option>
-            <option value="2">دوره دوم ابتدایی</option>
-            <option value="3">دوره متوسطه اول</option>
-            <option value="4">دوره متوسطه دوم</option>
-        </select>
 
-
-        <input type="submit" value="ثبت نام">
+        <input type="submit" value="ورود">
     </form>
 
 
