@@ -9,6 +9,8 @@ from sqlalchemy.exc import IntegrityError
 from instance.data import cities as city_data
 from instance.data import school_types, recognitions
 from scoring import *
+import requests
+import json
 
 app = Blueprint("user" , __name__)
 
@@ -95,6 +97,10 @@ def logout():
 
 
 
+
+
+
+
 @app.route("/dashboard")
 @login_required
 def dashboard():
@@ -144,6 +150,41 @@ def completion():
     else:
         return render_template("user/completion.html")
     
+
+@app.route("/payment", methods=["GET"])
+@login_required
+def payment():
+    r = requests.post('https://sandbox.shepa.com/api/v1/token', 
+                    data={
+                        'api':'sandbox',
+                        'amount':5000,
+                        'callback':str(url_for('user.verify', _external=True))
+                    })
+    
+    url = r.json()['result']['url']
+
+    return redirect(url)
+
+
+@app.route("/verify", methods=["GET"])
+@login_required
+def verify():
+    token = request.args.get('token')
+    r = requests.post('https://sandbox.shepa.com/api/v1/verify', 
+                    data={
+                        'api':'sandbox',
+                        'amount':5000,
+                        'token':token
+                    })
+    status = bool(r.json()['success'])
+    if status:
+        flash("پرداخت موفقیت آمیز بود")
+        current_user.final = 1
+        db.session.commit()
+    else:
+        flash("پرداخت با خطا مواجه شد")
+    return redirect(url_for("user.dashboard"))
+
 
 @app.route('/get_cities/<province>')
 def get_cities(province):
