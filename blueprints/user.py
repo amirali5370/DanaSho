@@ -3,6 +3,7 @@ from flask_login import login_user, login_required, current_user, logout_user
 from passlib.hash import sha256_crypt
 from models.user import User
 from models.invite import Invite
+from models.payment import Payment
 from extentions import db
 from functions.methods import invite_generator
 from sqlalchemy.exc import IntegrityError
@@ -151,38 +152,63 @@ def completion():
         return render_template("user/completion.html")
     
 
+
+
 @app.route("/payment", methods=["GET"])
 @login_required
 def payment():
+    next = request.args.get('next',None)
+    if current_user.final != 0:
+        if next != None:
+            return redirect(next)
+        return redirect(url_for("user.dashboard"))
     r = requests.post('https://sandbox.shepa.com/api/v1/token', 
                     data={
                         'api':'sandbox',
-                        'amount':5000,
+                        'amount':price,
                         'callback':str(url_for('user.verify', _external=True))
                     })
     
+    token = r.json()['result']['token']
     url = r.json()['result']['url']
+
+    pay = Payment(user_id=current_user.id, token=token, next=next, amount=price)
+    db.session.add(pay)
+    db.session.commit()
 
     return redirect(url)
 
 
 @app.route("/verify", methods=["GET"])
-@login_required
 def verify():
     token = request.args.get('token')
+    pay = Payment.query.filter(Payment.token==token).first_or_404()
     r = requests.post('https://sandbox.shepa.com/api/v1/verify', 
                     data={
                         'api':'sandbox',
-                        'amount':5000,
+                        'amount':pay.amount,
                         'token':token
                     })
     status = bool(r.json()['success'])
     if status:
-        flash("پرداخت موفقیت آمیز بود")
-        current_user.final = 1
+        flash("payment_success")
+
+        pay.status = "success"
+        pay.card_pan = r.json()['result']['card_pan']
+        pay.date = r.json()['result']['date']
+        pay.refid = r.json()['result']['refid']
+        pay.transaction_id = r.json()['result']['transaction_id']
+        pay.user.final = 1
+        pay.user.coin = pay.user.coin + coin_02
         db.session.commit()
     else:
-        flash("پرداخت با خطا مواجه شد")
+        flash("payment_failed")
+
+        pay.status = "failed"
+        pay.error = r.json()['error'][0]
+        db.session.commit()
+    if pay.next != None:
+        return redirect(pay.next)
     return redirect(url_for("user.dashboard"))
 
 
