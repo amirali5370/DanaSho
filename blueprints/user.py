@@ -33,6 +33,18 @@ def register():
         grade = request.form.get('grade',None)
         email = request.form.get('email',None)
         invite = request.form.get('invite',None)
+        province = request.form.get('province',None)
+        city = request.form.get('city',None)
+        school_name = request.form.get('school_name',None)
+        school_type = request.form.get('school_type',None)
+        addres = request.form.get('addres',None)
+        recognition = request.form.get('recognition',None)
+
+        user = current_user
+
+        school_type = school_types[school_type]
+        recognition = recognitions[recognition]
+
 
 
         name = firstName + " " + lastName
@@ -40,6 +52,14 @@ def register():
 
 
         user = User(name=name, username=username, password=sha256_crypt.encrypt(password), code=code, phone=phone, birth=birth, gender=gender, type=type, grade=grade, invite_code=invite_code, email=email)
+        
+        user.province = province
+        user.city = city
+        user.school_name = school_name
+        user.school_type = school_type
+        user.home_addres = addres
+        user.recognition = recognition
+        
         db.session.add(user)
         try:
             db.session.commit()
@@ -117,28 +137,12 @@ def completion():
         return redirect(url_for("user.dashboard"))
     if request.method == "POST":
 
-        province = request.form.get('province',None)
-        city = request.form.get('city',None)
-        school_name = request.form.get('school_name',None)
-        school_type = request.form.get('school_type',None)
-        addres = request.form.get('addres',None)
-        recognition = request.form.get('recognition',None)
-
+        phone = request.form.get('province',None)
+        code = "test"
+        
         user = current_user
 
-        school_type = school_types[school_type]
-        recognition = recognitions[recognition]
-        print(city,province)
 
-        user.province = province
-        user.city = city
-        user.school_name = school_name
-        user.school_type = school_type
-        user.home_addres = addres
-        user.recognition = recognition
-        user.completion = 1
-
-        user.coin = user.coin + coin_01
 
         db.session.commit()
 

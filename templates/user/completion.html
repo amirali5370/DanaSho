@@ -9,36 +9,7 @@
     <form action="#" method="post" id="register">
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
-        <select name="province" id="province" onchange="fetchCities(this.value)">
-            <option selected disabled value="">انتخاب استان</option>
-            <option value="تهران">تهران</option>
-            <option value="اصفهان">اصفهان</option>
-        </select>
-    
-        <select name="city" id="city">
-            <option value="">انتخاب شهر</option>
-        </select>
-
-        <input type="text" name="school_name" id="school_name" placeholder="نام مدرسه">
-        <select type="text" name="school_type" id="school_type">
-            <option selected disabled value="">نوع مدرسه</option>
-            <option value="1">دولتی</option>
-            <option value="2">نمونه دولتی</option>
-            <option value="3">هیئت امنایی</option>
-            <option value="4">غیر انتفاعی</option>
-            <option value="5">شاهد</option>
-            <option value="6">تیزهوشان</option>
-            <option value="7">استثنائی</option>
-        </select>
-
-        <textarea name="addres" id="addres" placeholder="آدرس" form="register"></textarea>
-
-        <select name="recognition" id="recognition">
-            <option selected disabled value="">شیوه آشنایی</option>
-            <option value="1">روش اول</option>
-            <option value="2">روش دوم</option>
-            <option value="3">روش سوم</option>
-        </select>
+        
 
         <input type="submit" value="تکمیل ثبت نام">
     </form>
