@@ -46,8 +46,12 @@ def register():
         except IntegrityError:
             flash("unique")
             return redirect(url_for("user.register"))
+        inv = request.args.get('invite',None)
+        if inviter != None:
+            inviter = User.query.filter(User.invite_auth==inv).first()
+        else:
+            inviter = User.query.filter(User.invite_code==invite).first()
 
-        inviter = User.query.filter(User.invite_code==invite).first()
         if inviter != None:
                 inv = Invite(inviter_id=inviter.id , invitee_id=user.id , invitee=name)
                 inviter.point = inviter.point + 30
