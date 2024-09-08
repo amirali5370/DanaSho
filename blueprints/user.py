@@ -15,9 +15,11 @@ import json
 
 app = Blueprint("user" , __name__)
 
-
+# ------------- LOGIN AND REGISTER-------------
+#register page
 @app.route("/register", methods = ["POST","GET"])
 def register():
+    next = request.args.get('next',None)
     if request.method == "POST":
         firstName = request.form.get('firstname',None)
         lastName = request.form.get('lastname',None)
@@ -48,19 +50,22 @@ def register():
         inviter = User.query.filter(User.invite_code==invite).first()
         if inviter != None:
                 inv = Invite(inviter_id=inviter.id , invitee_id=user.id , invitee=name)
+                inviter.point = inviter.point + 30
                 db.session.add(inv)
                 inviter.invite = len(Invite.query.filter(Invite.inviter_id==inviter.id).all())
                 db.session.commit()
 
         login_user(user)
-        
+        if next != None:
+            return redirect(next)
         return redirect(url_for("user.dashboard"))
     else:
         return render_template("user/register.html")
     
-
+#login page
 @app.route("/login", methods = ["POST","GET"])
 def login():
+    next = request.args.get('next',None)
     if request.method == "POST":
 
         username = request.form.get('username',None)
@@ -74,7 +79,6 @@ def login():
         
         elif sha256_crypt.verify(password, user.password):
             login_user(user)
-            next = request.args.get('next',None)
             if next != None:
                 return redirect(next)
             return redirect(url_for("user.dashboard"))
@@ -87,9 +91,9 @@ def login():
 
 
     else:
-        return render_template("user/login.html")
+        return render_template("user/login.html", next=next)
     
-
+#logout link
 @app.route("/logout")
 def logout():
     if current_user.is_authenticated:
@@ -97,17 +101,8 @@ def logout():
     return redirect(url_for('general.main'))
 
 
-
-
-
-
-
-@app.route("/dashboard")
-@login_required
-def dashboard():
-    return render_template("user/dashboard.html")
-
-
+# ------------- COMPLETION -------------
+#completion page
 @app.route("/completion", methods=["GET","POST"])
 @login_required
 def completion():
@@ -152,8 +147,8 @@ def completion():
         return render_template("user/completion.html")
     
 
-
-
+# ------------- PAYMENT-------------
+#payment handler
 @app.route("/payment", methods=["GET"])
 @login_required
 def payment():
@@ -178,7 +173,7 @@ def payment():
 
     return redirect(url)
 
-
+#verify handler
 @app.route("/verify", methods=["GET"])
 def verify():
     token = request.args.get('token')
@@ -212,7 +207,47 @@ def verify():
     return redirect(url_for("user.dashboard"))
 
 
+
+# ------------- MORE API-------------
 @app.route('/get_cities/<province>')
 def get_cities(province):
     cities = city_data.get(province, [])
     return jsonify(cities)
+
+
+# ------------- MAIN-------------
+#dashboard page
+@app.route("/dashboard")
+@login_required
+def dashboard():
+    return render_template("user/dashboard.html", user=current_user)
+
+#club page
+@app.route('/club')
+@login_required
+def club():
+    top_coins = User.query.order_by(User.coin.desc()).limit(10).all()
+    top_points = User.query.order_by(User.point.desc()).limit(10).all()
+    top_likes = User.query.order_by(User.like.desc()).limit(10).all()
+    top_badges = User.query.order_by(User.badge.desc()).limit(10).all()
+    top_invites = User.query.order_by(User.invite.desc()).limit(10).all()
+
+    rank_coins = User.query.order_by(User.coin.desc()).all().index(current_user)+1
+    rank_points = User.query.order_by(User.point.desc()).all().index(current_user)+1
+    rank_likes = User.query.order_by(User.like.desc()).all().index(current_user)+1
+    rank_badges = User.query.order_by(User.badge.desc()).all().index(current_user)+1
+    rank_invites = User.query.order_by(User.invite.desc()).all().index(current_user)+1
+
+    province_rank = User.query.filter(User.province==current_user.province).order_by(User.point.desc()).all().index(current_user)+1
+    city_rank = User.query.filter(User.city==current_user.city).order_by(User.point.desc()).all().index(current_user)+1
+
+    return render_template("user/club.html", user=current_user, top_coins=top_coins, top_points=top_points, top_likes=top_likes, top_badges=top_badges, top_invites=top_invites,
+                           rank_coins=rank_coins, rank_points=rank_points, rank_likes=rank_likes, rank_badges=rank_badges, rank_invites=rank_invites,
+                            province_rank=province_rank, city_rank=city_rank)
+
+#club page
+@app.route('/invites')
+@login_required
+def invites():
+    invitees = current_user.invites.all()
+    return render_template("user/invites.html", user=current_user, invitees=invitees)

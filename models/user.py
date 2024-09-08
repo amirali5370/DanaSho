@@ -18,7 +18,8 @@ class User(db.Model, UserMixin):
     gender = Column(String, nullable=False, index=True)
     type = Column(String, nullable=False, index=True)
 
-    invite_code = Column(Integer, nullable=False, index=True)
+    invite_code = Column(String, nullable=False, index=True)
+    invite_auth = Column(String, nullable=False, index=True)
 
     
     province = Column(String, index=True)

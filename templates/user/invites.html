@@ -1,0 +1,48 @@
+{% extends "Base.html" %}
+{% block head %}
+    <title>دعوت</title>
+    <style>
+        form{
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 2px solid black; 
+            padding: 8px; 
+            text-align: center; 
+        }
+    </style>
+
+    <!-- <script>
+        function sendSMS() {
+            const link = "{{url_for('user.register', _external=True)}}?invite={{user.invite_auth}}"
+            const phoneNumber = document.getElementById("phone").value;
+            const message = `سلام دوست من! \n لطفا از طریق لینک زیر وارد داناشو بشو. \n ${link}`.replace(/\n/g, "%0A"); 
+            const smsLink = `sms:${phoneNumber}?body=${encodeURIComponent(message)}`;
+            window.location.href = smsLink;
+            alert("sended")
+        }
+    </script> -->
+
+    {% endblock %}
+    {% block body %}
+    <table>
+        <tr>
+            <th>#</th>
+            <th>نام و نام خانوادگی</th>
+        </tr>
+        {%for i in invitees%}
+        <tr>
+            <td>{{loop.index}}</td>
+            <td>{{i.invitee}}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <br>
+
+    <!-- <form onsubmit="event.preventDefault(); sendSMS();">
+        <label for="phone">شماره تلفن</label>
+        <input type="text" id="phone">
+        <input type="submit" value="دعوت دوست">
+    </form> -->
+{% endblock %}

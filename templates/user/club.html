@@ -1,0 +1,133 @@
+{% extends "Base.html" %}
+{% block head %}
+    <title>باشگاه</title>
+    <style>
+        .me{
+            color: goldenrod;
+        }
+        form{
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 2px solid black; 
+            padding: 8px; 
+            text-align: center; 
+        }
+    </style>
+    {% endblock %}
+    {% block body %}
+    <table>
+        <tr>
+            <th>رتبه</th>
+            <th>نام و نام خانوادگی</th>
+            <th>تعداد سکه ها</th>
+        </tr>
+        {%for i in top_coins%}
+        <tr class="{{'me' if i==user}}">
+            <td>{{loop.index}}</td>
+            <td>{{i.name}}</td>
+            <td>{{i.coin}}</td>
+        </tr>
+        {% endfor %}
+        <tr>
+            <td colspan="3">رتبه شما : {{rank_coins}}</td>
+        </tr>
+    </table>
+
+    <br>
+
+    <table>
+        <tr>
+            <th>رتبه</th>
+            <th>نام و نام خانوادگی</th>
+            <th>مقدار امتیاز </th>
+        </tr>
+        {%for i in top_points%}
+        <tr class="{{'me' if i==user}}">
+            <td>{{loop.index}}</td>
+            <td>{{i.name}}</td>
+            <td>{{i.point}}</td>
+        </tr>
+        {% endfor %}
+        <tr>
+            <td colspan="3">رتبه شما : {{rank_points}}</td>
+        </tr>
+    </table>
+
+    <br>
+
+    <table>
+        <tr>
+            <th>رتبه</th>
+            <th>نام و نام خانوادگی</th>
+            <th>تعداد نشان ها </th>
+        </tr>
+        {%for i in top_badges%}
+        <tr class="{{'me' if i==user}}">
+            <td>{{loop.index}}</td>
+            <td>{{i.name}}</td>
+            <td>{{i.badge}}</td>
+        </tr>
+        {% endfor %}
+        <tr>
+            <td colspan="3">رتبه شما : {{rank_badges}}</td>
+        </tr>
+    </table>
+
+    <br>
+
+    <table>
+        <tr>
+            <th>رتبه</th>
+            <th>نام و نام خانوادگی</th>
+            <th>تعداد لایک ها </th>
+        </tr>
+        {%for i in top_likes%}
+        <tr class="{{'me' if i==user}}">
+            <td>{{loop.index}}</td>
+            <td>{{i.name}}</td>
+            <td>{{i.like}}</td>
+        </tr>
+        {% endfor %}
+        <tr>
+            <td colspan="3">رتبه شما : {{rank_likes}}</td>
+        </tr>
+    </table>
+
+    <br>
+
+    <table>
+        <tr>
+            <th>رتبه</th>
+            <th>نام و نام خانوادگی</th>
+            <th>تعداد دعوت ها </th>
+        </tr>
+        {%for i in top_invites%}
+        <tr class="{{'me' if i==user}}">
+            <td>{{loop.index}}</td>
+            <td>{{i.name}}</td>
+            <td>{{i.invite}}</td>
+        </tr>
+        {% endfor %}
+        <tr>
+            <td colspan="3">رتبه شما : {{rank_invites}}</td>
+        </tr>
+    </table>
+
+    <br>
+
+    <table>
+        <tr>
+            <th>رتبه های {{user.name}}</th>
+        </tr>
+        <tr>
+            <td>رتبه شما در کشور : {{rank_points}}</td>
+        </tr>
+        <tr>
+            <td>رتبه شما در {{user.province}} : {{province_rank}}</td>
+        </tr>
+        <tr>
+            <td>رتبه شما در {{user.city}} : {{city_rank}}</td>
+        </tr>
+    </table>
+{% endblock %}

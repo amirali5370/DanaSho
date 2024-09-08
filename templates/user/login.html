@@ -12,6 +12,6 @@
 
         <input type="submit" value="ورود">
     </form>
-
-
+    <br>
+    <a href="/register{% if next is not none %}?next={{ next }}{% endif %}">ثبت نام</a>
 {% endblock %}
