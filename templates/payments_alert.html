@@ -25,6 +25,31 @@
                     allowOutsideClick:false,
                 }).then((result) => {swal.close();})
                 {% endif %}
+
+
+                {% if message == "confirmation_suc"%}
+                swal({
+                    title: 'شماره تلفن شما تائید شد!',
+                    html: '',
+                    type: 'success',
+                    confirmButtonColor: '#3f9b0b',
+                    confirmButtonText: '<div style="direction:rtl;font-size:18px;font-family:Iran,Calibri;font-weight:bold;"><i style="margin-left: 5px;" class="fa fa-times"></i> باشه</div>',
+                    showCloseButton: true,
+                    showLoaderOnConfirm:true,
+                    allowOutsideClick:false,
+                }).then((result) => {swal.close();})
+                {% elif message == "confirmation_fil" %}
+                swal({
+                    title: 'کد ورود اشتباه است',
+                    html: "",
+                    type: 'error',
+                    confirmButtonColor: '#dc1225',
+                    confirmButtonText: '<div style="direction:rtl;font-size:18px;font-family:Iran,Calibri;font-weight:bold;"><i style="margin-left: 5px;" class="fa fa-times"></i> باشه</div>',
+                    showCloseButton: true,
+                    showLoaderOnConfirm:true,
+                    allowOutsideClick:false,
+                }).then((result) => {swal.close();})
+                {% endif %}
             {% endfor %}
         {% endif %}
     {% endwith %}

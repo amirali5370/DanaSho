@@ -29,9 +29,11 @@
             <td>{{i.coin}}</td>
         </tr>
         {% endfor %}
+        {% if user.authentication==1 and user.final==1%}
         <tr>
             <td colspan="3">رتبه شما : {{rank_coins}}</td>
         </tr>
+        {% endif %}
     </table>
 
     <br>
@@ -49,9 +51,11 @@
             <td>{{i.point}}</td>
         </tr>
         {% endfor %}
+        {% if user.authentication==1 and user.final==1%}
         <tr>
             <td colspan="3">رتبه شما : {{rank_points}}</td>
         </tr>
+        {% endif %}
     </table>
 
     <br>
@@ -69,9 +73,11 @@
             <td>{{i.badge}}</td>
         </tr>
         {% endfor %}
+        {% if user.authentication==1 and user.final==1%}
         <tr>
             <td colspan="3">رتبه شما : {{rank_badges}}</td>
         </tr>
+        {% endif %}
     </table>
 
     <br>
@@ -89,9 +95,11 @@
             <td>{{i.like}}</td>
         </tr>
         {% endfor %}
+        {% if user.authentication==1 and user.final==1%}
         <tr>
             <td colspan="3">رتبه شما : {{rank_likes}}</td>
         </tr>
+        {% endif %}
     </table>
 
     <br>
@@ -109,13 +117,15 @@
             <td>{{i.invite}}</td>
         </tr>
         {% endfor %}
+        {% if user.authentication==1 and user.final==1%}
         <tr>
             <td colspan="3">رتبه شما : {{rank_invites}}</td>
         </tr>
+        {% endif %}
     </table>
 
     <br>
-
+    {% if user.authentication==1 and user.final==1%}
     <table>
         <tr>
             <th>رتبه های {{user.name}}</th>
@@ -130,4 +140,7 @@
             <td>رتبه شما در {{user.city}} : {{city_rank}}</td>
         </tr>
     </table>
+    {% else %}
+    <a href="{{url_for('user.completion')+'?next=/club'}}"><button>مشاهده رتبه های من</button></a>
+    {% endif %}
 {% endblock %}

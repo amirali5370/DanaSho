@@ -1,14 +1,14 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash, jsonify
+from flask import Blueprint, abort, render_template, request, redirect, url_for, flash, jsonify
 from flask_login import login_user, login_required, current_user, logout_user
 from passlib.hash import sha256_crypt
 from models.user import User
 from models.invite import Invite
 from models.payment import Payment
 from extentions import db
-from functions.methods import invite_generator
+from functions.methods import authCode_generator, invite_generator, inviteAuth_generator
 from sqlalchemy.exc import IntegrityError
 from instance.data import cities as city_data
-from instance.data import school_types, recognitions
+from instance.data import *
 from scoring import *
 import requests
 import json
@@ -20,6 +20,7 @@ app = Blueprint("user" , __name__)
 @app.route("/register", methods = ["POST","GET"])
 def register():
     next = request.args.get('next',None)
+    inv = request.args.get('invite',None)
     if request.method == "POST":
         firstName = request.form.get('firstname',None)
         lastName = request.form.get('lastname',None)
@@ -40,6 +41,9 @@ def register():
         addres = request.form.get('addres',None)
         recognition = request.form.get('recognition',None)
 
+        if type == "teacher":
+            grade = "teacher"
+
         user = current_user
 
         school_type = school_types[school_type]
@@ -49,9 +53,10 @@ def register():
 
         name = firstName + " " + lastName
         invite_code = invite_generator()
+        invite_auth = inviteAuth_generator()
 
 
-        user = User(name=name, username=username, password=sha256_crypt.encrypt(password), code=code, phone=phone, birth=birth, gender=gender, type=type, grade=grade, invite_code=invite_code, email=email)
+        user = User(name=name, username=username, password=sha256_crypt.encrypt(password), code=code, phone=phone, birth=birth, gender=genders[gender], type=types[type], grade=grade, invite_code=invite_code, invite_auth=invite_auth, email=email)
         
         user.province = province
         user.city = city
@@ -60,21 +65,24 @@ def register():
         user.home_addres = addres
         user.recognition = recognition
         
-        db.session.add(user)
-        try:
-            db.session.commit()
-        except IntegrityError:
-            flash("unique")
-            return redirect(url_for("user.register"))
-        inv = request.args.get('invite',None)
-        if inviter != None:
+
+
+        if inv != None:
             inviter = User.query.filter(User.invite_auth==inv).first()
         else:
             inviter = User.query.filter(User.invite_code==invite).first()
 
+        db.session.add(user)
+
+        try:
+            db.session.commit()
+        except IntegrityError:
+            flash("unique")
+            return redirect(request.url)
+
         if inviter != None:
                 inv = Invite(inviter_id=inviter.id , invitee_id=user.id , invitee=name)
-                inviter.point = inviter.point + 30
+                inviter.point = inviter.point + point_01
                 db.session.add(inv)
                 inviter.invite = len(Invite.query.filter(Invite.inviter_id==inviter.id).all())
                 db.session.commit()
@@ -84,7 +92,11 @@ def register():
             return redirect(next)
         return redirect(url_for("user.dashboard"))
     else:
-        return render_template("user/register.html")
+        if inv != None:
+            inviting = False
+        else:
+            inviting = True
+        return render_template("user/register.html", inviting=inviting)
     
 #login page
 @app.route("/login", methods = ["POST","GET"])
@@ -127,32 +139,72 @@ def logout():
 
 # ------------- COMPLETION -------------
 #completion page
-@app.route("/completion", methods=["GET","POST"])
+@app.route("/completion", methods=["GET"])
 @login_required
 def completion():
     next = request.args.get('next',None)
-    if current_user.completion != 0:
-        if next != None:
-            return redirect(next)
-        return redirect(url_for("user.dashboard"))
-    if request.method == "POST":
+    authentication = True if current_user.authentication != 0 else False
+    final = True if current_user.final != 0 else False
 
-        phone = request.form.get('province',None)
-        code = "test"
-        
-        user = current_user
-
-
-
-        db.session.commit()
-
-
+    if authentication and final:
         if next != None:
             return redirect(next)
         return redirect(url_for("user.dashboard"))
 
     else:
-        return render_template("user/completion.html")
+        return render_template("user/completion.html", user=current_user, final=final, authentication=authentication, next=next)
+    
+
+
+
+
+@app.route("/authentication")
+@login_required
+def authentication():
+    auth = request.args.get('auth',None)
+    if current_user.invite_auth == auth:
+        if current_user.authentication == 0:
+        
+            code = authCode_generator()
+
+            # r = requests.post("https://api.payamak-panel.com/post/Send.asmx")
+            # if r.status_code == 200:
+            current_user.msg_code = code
+            db.session.commit()
+            return jsonify({"status":"200"})
+        else:
+            return redirect(url_for('user.completion'))
+    else:
+        return "sss"
+
+    
+
+@app.route("/confirmation", methods=["GET"])
+@login_required
+def confirmation():
+    code = int(request.args.get('code',None))
+    if code == current_user.msg_code :
+        current_user.authentication = 1
+        current_user.coin = current_user.coin + coin_01
+        current_user.msg_code = None
+        db.session.commit()
+        flash("confirmation_suc")
+        return jsonify({"status":"200"})
+    else:
+        flash("confirmation_fil")
+        return jsonify({"status":"404"})
+
+
+
+@app.route("/unconf", methods=["GET"])
+@login_required
+def unconf():
+    auth = request.args.get('auth',None)
+    if current_user.invite_auth == auth:
+        current_user.msg_code = None
+        db.session.commit()
+        return jsonify({"status":"200"})
+    abort(404)
     
 
 # ------------- PAYMENT-------------
@@ -210,9 +262,8 @@ def verify():
         pay.status = "failed"
         pay.error = r.json()['error'][0]
         db.session.commit()
-    if pay.next != None:
-        return redirect(pay.next)
-    return redirect(url_for("user.dashboard"))
+    next = '?next='+pay.next if pay.next != None else ""
+    return redirect(url_for("user.completion")+next)
 
 
 

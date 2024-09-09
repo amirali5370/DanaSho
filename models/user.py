@@ -20,6 +20,7 @@ class User(db.Model, UserMixin):
 
     invite_code = Column(String, nullable=False, index=True)
     invite_auth = Column(String, nullable=False, index=True)
+    msg_code = Column(Integer, index=True)
 
     
     province = Column(String, index=True)
@@ -31,7 +32,7 @@ class User(db.Model, UserMixin):
 
 
     final = Column(Integer, default=0, index=True)
-    completion = Column(Integer, default=0, index=True)
+    authentication = Column(Integer, default=0, index=True)
     downloads = Column(Integer, default=2, index=True)
 
     

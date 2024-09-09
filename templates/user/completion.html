@@ -3,43 +3,98 @@
     <title>تکمیل پروفایل</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='libraries/sweetalert2/sweetalert2.min.css') }}">
     <script defer src="{{ url_for('static', filename='libraries/sweetalert2/sweetalert2.all.min.js') }}"></script>
+    <style>
+        .hid {
+            display: none;
+        }
+    </style>
 {% endblock %}
 {% block body %}
     <h1>صفحه تکمیل پروفایل</h1>
-    <form action="#" method="post" id="register">
-        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-
-        
-
-        <input type="submit" value="تکمیل ثبت نام">
-    </form>
-
-
-
-
-
+    {% if authentication == false %}
+    <div id="phone_form">
+        <input disabled type="tel" value="{{user.phone}}">
+        <button type="button" onclick="send_sms()">تائید شماره تلفن</button>
+    </div>
+    <div id="code_form" class="hid">
+        <p id="exam-timer">3:00</p>
+        <input id="code_inp" type="number" minlength="6" maxlength="6" pattern="[0-9]{6}" placeholder="کد ارسال شده" required>
+        <input id="code_but" type="submit" onclick="send_code()" value="تائید کد">
+        <button type="button" id="resend_but" class="hid" onclick="send_sms()">ارسال مجدد کد</button>
+    </div>
+    {% else %}
+    <input disabled type="tel" value="{{user.phone}}">
+    <h4>شماره تلفن تائید شده است</h4>
+    {% endif %}
+    <br><br>
+    {% if final == false %}
+    <h4>وضعیت : در انتظار پرداخت</h4>
+    <a href="/payment{{'?next='+next if next is not none}}"><button>پرداخت</button></a>
+    {% else %}
+    <h4>وضعیت : پرداخت شده</h4>
+    <button disabled>پرداخت</button>
+    {% endif %}
 
 
     <script>
 
-        function fetchCities(province) {
-            if (province === "") {
-                document.getElementById("city").innerHTML = "<option value=''>انتخاب شهر</option>";
-                return;
-            }
-        
-            // ارسال درخواست AJAX به سرور برای دریافت شهرها
-            fetch(`/get_cities/${province}`)
-                .then(response => response.json())
-                .then(cities => {
-                    let options = "<option value=''>انتخاب شهر</option>";
-                    cities.forEach(city => {
-                        options += `<option value='${city}'>${city}</option>`;
-                    });
-                    document.getElementById("city").innerHTML = options;
-                })
-                .catch(error => console.error('Error fetching cities:', error));
+        function send_sms(){
+
+           // fetch("{{url_for('user.authentication', _external=True)}}?auth={{user.invite_auth}}")
+            fetch("{{url_for('user.authentication', _external=True)}}?auth={{user.invite_auth}}")
+
+            document.querySelector("#phone_form").classList.add("hid");
+            document.querySelector("#code_form").classList.remove("hid")
+            document.querySelector("#code_but").classList.remove("hid");
+            document.querySelector("#resend_but").classList.add("hid");
+            document.querySelector("#code_inp").removeAttribute("disabled");
+            timer()
         }
 
+
+        function timer(){
+            var examDuration = 25; 
+            var examStartTime = new Date().getTime(); 
+
+            var examTimer = setInterval(function() {
+            var currentTime = new Date().getTime();
+            var elapsedTime = currentTime - examStartTime;
+            var remainingTime = examDuration - Math.floor(elapsedTime / 1000);
+
+            var minutes = Math.floor(remainingTime / 60);
+            var seconds = remainingTime % 60;
+
+            document.getElementById("exam-timer").textContent = minutes + ":" + String(seconds).padStart(2, '0');
+
+            if (remainingTime <= 0) {
+                clearInterval(examTimer);
+                document.querySelector("#code_inp").setAttribute("disabled", true);
+                document.querySelector("#code_but").classList.add("hid");
+                document.querySelector("#resend_but").classList.remove("hid");
+                fetch("{{ url_for('user.unconf', _external=True) }}?auth={{user.invite_auth}}")
+            }
+            }, 1000);
+        }
+
+        function send_code(){
+            const code = document.querySelector("#code_inp").value
+            fetch(`{{ url_for('user.confirmation', _external=True) }}?code=${code}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                location.reload()
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+            document.querySelector("#code_inp").setAttribute("disabled", true);
+            document.querySelector("#code_but").classList.add("hid");
+            document.querySelector("#resend_but").classList.remove("hid");
+        }
     </script>
+
 {% endblock %}
