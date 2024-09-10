@@ -1,5 +1,4 @@
 from flask import Flask
-# import requests
 from flask_wtf.csrf import CSRFProtect
 from blueprints.general import app as general
 from blueprints.admin import app as admin

@@ -1,0 +1,141 @@
+{% extends "Base.html" %}
+{% block head %}
+    <title>داشبورد</title>
+
+    <link href="{{ url_for('static', filename='libraries/bootstrap-5/bootstrap.min.css') }}" rel="stylesheet" />
+    <script src="{{ url_for('static', filename='libraries/bootstrap-5/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='libraries/dselect.js') }} "></script>
+    
+    <title>اطلاعات شرکت کنندگان</title>
+    <style>
+        body{
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+        }
+        .dselect-wrapper {
+            width: 500px;
+        }
+        .dropdown-menu *{
+            text-align: right;
+        }
+        .hid{
+            display: none;
+        }
+    </style>
+
+{% endblock %}
+{% block body %}
+    <h3>اطلاعات کاربران</h3>
+    <div>
+        <select onchange="send()" name="select_box" class="form-select" id="select_box">
+            <option value="">انتخاب دانش آموز</option>
+            {% for user in users %}
+            <option value="{{user.id}}">{{user.name}}</option>
+            {% endfor%}
+        </select>
+    </div>
+    <div id="data" class="hid">
+        <label for="username">نام کاربری :</label>
+        <input disabled type="text" id="username">
+        <label for="username">کدملی :</label>
+        <input disabled type="text" id="code">
+        <label for="phone">تلفن :</label>
+        <input disabled type="text" id="phone">
+        <br>
+        <label for="email">ایمیل :</label>
+        <input disabled type="text" id="email">
+        <label for="grade">پایه :</label>
+        <input disabled type="text" id="grade">
+        <label for="birth">تاریخ تولد :</label>
+        <input disabled type="text" id="birth">
+        <br>
+        <label for="gender">جنسیت :</label>
+        <input disabled type="text" id="gender">
+        <label for="type">نوع :</label>
+        <input disabled type="text" id="type">
+        <label for="invite_code">کد دعوت :</label>
+        <input disabled type="text" id="invite_code">
+        <br>
+        <label for="province">استان :</label>
+        <input disabled type="text" id="province">
+        <label for="city">شهر :</label>
+        <input disabled type="text" id="city">
+        <label for="school_name">نام مدرسه :</label>
+        <input disabled type="text" id="school_name">
+        <br>
+        <label for="school_type">نوع مدرسه :</label>
+        <input disabled type="text" id="school_type">
+        <label for="invite">تعداد دعوت ها :</label>
+        <input disabled type="text" id="invite">
+        <label for="recognition">نحوه آشنایی :</label>
+        <input disabled type="text" id="recognition">
+        <br>
+        <label for="final">پرداخت :</label>
+        <input disabled type="text" id="final">
+        <label for="authentication">احراز هویت :</label>
+        <input disabled type="text" id="authentication">
+        <label for="like">لایک ها :</label>
+        <input disabled type="text" id="like">
+        <br>
+        <label for="home_addres">آدرس :</label>
+        <textarea disabled type="text" id="home_addres"></textarea>
+        <br>
+        <label for="downloads">دانلود های باقی مانده :</label>
+        <input onchange="changed()" type="text" id="downloads">
+        <label for="coin">سکه ها :</label>
+        <input onchange="changed()" type="text" id="coin">
+        <br>
+        <label for="point">امتیازات :</label>
+        <input onchange="changed()" type="text" id="point">
+        <label for="badge">نشان ها :</label>
+        <input onchange="changed()" type="text" id="badge">
+        <br>
+        <button class="hid" id="save-change" onclick="change_data()" type="button">ذخیره تغییرات</button>
+    </div>
+    <br>
+    <button>خروجی excel</button>
+
+    
+    
+    <script>
+        function changed() {
+            document.getElementById('save-change').classList.remove("hid")
+        }
+        
+        var select_box_element = document.querySelector('#select_box');
+        
+        dselect(select_box_element, {
+            search: true
+        });
+        function send(){
+            op_val = document.querySelector('#select_box').value
+            fetch(`{{url_for('admin.get_data', _external=True)}}?val=${op_val}`)
+                .then(response => response.json())
+                .then(data => {
+                    for (const [key, value] of Object.entries(data)) {
+                        document.getElementById(key).value = value
+                    }
+                    document.getElementById('data').classList.remove("hid")
+                })
+                .catch(error => console.error('Error fetching cities:', error));
+        }
+
+        function change_data(){
+            const op_val = document.querySelector('#select_box').value
+            const coin = document.querySelector('#coin').value;
+            const point = document.querySelector('#point').value;
+            const badge = document.querySelector('#badge').value;
+            const downloads = document.querySelector('#downloads').value;
+            fetch(`{{url_for('admin.change_data', _external=True)}}?val=${op_val}&coin=${coin}&point=${point}&badge=${badge}&downloads=${downloads}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data["status"]==200){
+                        document.getElementById('save-change').classList.add("hid")
+                    }
+                })
+                .catch(error => console.error('Error fetching cities:', error));
+        }       
+    </script>
+{% endblock %}
+

@@ -1,4 +1,4 @@
-from flask import Blueprint, json, render_template, request, session, redirect, abort, flash, url_for
+from flask import Blueprint, jsonify, render_template, request, session, redirect, abort, flash, url_for
 import os
 import config
 from models.user import User
@@ -10,7 +10,7 @@ app = Blueprint("admin" , __name__)
 @app.before_request
 def before_request():
         if session.get("admin_login", None) == None and request.endpoint != "admin.login":
-            abort(403)
+            abort(404)
 
 
 ##############################   ADMIN   ###############################
@@ -22,9 +22,9 @@ def login():
 
         if username == config.ADMIN_USERNAME and password == config.ADMIN_PASSWORD:
             session["admin_login"] = username
-            return redirect("/admin/dashboard")
+            return redirect(url_for("admin.dashboard"))
         else:
-            return redirect("/admin/login")
+            return redirect(url_for("admin.login"))
     else:
         return render_template("admin/login.html")
 
@@ -35,8 +35,8 @@ def dashboard():
 
 
 ##############################   STUDENT   ###############################
-@app.route("/admin/dashboard/students", methods = ["GET", "POST"])
-def students():
+@app.route("/admin/data", methods = ["GET", "POST"])
+def data():
     if request.method == "POST":
         firstName = request.form.get("firstName", None)
         lastName = request.form.get("lastName", None)
@@ -74,10 +74,82 @@ def students():
             flash('edit success')
             return redirect(url_for('admin.students'))
     else:
-        users = User.query.order_by(User.class_id,User.number).all()
-
-        return render_template("admin/students.html", users=users)
+        users = User.query.all()
+        return render_template("admin/data.html", users=users)
     
+
+@app.route("/admin/get_data")
+def get_data():
+    id = request.args.get("val", None)
+    user = User.query.filter(User.id==id).first()
+    gr = user.grade
+    grade_code = 0 if gr == "teacher" else int(user.grade)
+    data = {"username":user.username,
+            "code":user.code,
+            "phone":user.phone,
+            "email":user.email,
+            "grade":"دوره اول ابتدایی" if grade_code == 1 else "دوره دوم ابتدایی" if grade_code == 2 else "دوره متوسطه اول" if grade_code == 3 else "دوره متوسطه دوم" if grade_code == 4 else "فرهنگی",
+            "birth":user.birth,
+            "gender":user.gender,
+            "type":user.type,
+            "invite_code":user.invite_code,
+            "province":user.province,
+            "city":user.city,
+            "school_name":user.school_name,
+            "school_type":user.school_type,
+            "home_addres":user.home_addres,
+            "recognition":user.recognition,
+            "final":"انجام شده" if user.final == 1 else "انجام نشده",
+            "authentication":"انجام شده" if user.authentication == 1 else "انجام نشده",
+            "downloads":user.downloads,
+            "coin":user.coin,
+            "point":user.point,
+            "badge":user.badge,
+            "like" :user.like,
+            "invite" :user.invite}
+    return jsonify(data)
+    
+
+@app.route("/admin/change_data")
+def change_data():
+    id = request.args.get("val")
+    coin = request.args.get("coin")
+    point = request.args.get("point")
+    badge = request.args.get("badge")
+    downloads = request.args.get("downloads")
+    user = User.query.filter(User.id==id).first()
+    user.coin = coin
+    user.point = point
+    user.badge = badge
+    user.downloads = downloads
+    db.session.commit()
+    return jsonify({'status':200})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# ---------------------------------OLD CODE---------------------------------------
 
 @app.route("/admin/dashboard/del-students/<id>", methods = ["GET", "POST"])
 def delete_user(id):

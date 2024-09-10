@@ -134,7 +134,7 @@
             }
         
             // ارسال درخواست AJAX به سرور برای دریافت شهرها
-            fetch(`/get_cities/${province}`)
+            fetch(`{{url_for('user.get_cities', _external=True)}}${province}`)
                 .then(response => response.json())
                 .then(cities => {
                     let options = "<option value=''>انتخاب شهر</option>";
