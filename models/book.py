@@ -7,4 +7,4 @@ class Book(db.Model):
     id = Column(Integer, primary_key=True)
     name = Column(String, nullable=False, index=True)
     about = Column(String, nullable=False, index=True)
-    grade = Column(String, nullable=False, index=True)
+    grade = Column(Integer, nullable=False, index=True)
