@@ -1,9 +1,11 @@
 from flask import Blueprint, jsonify, render_template, request, session, redirect, abort, flash, url_for
+from PIL import Image
 import os
 import config
 from models.user import User
 from models.book import Book
 from extentions import db
+from scoring import *
 
 app = Blueprint("admin" , __name__)
 
@@ -133,14 +135,20 @@ def books():
         name = request.form.get("name", None)
         about = request.form.get("about", None)
         grade = request.form.get("grade", None)
+        primalink = request.form.get("primalink", None)
         mode = request.form.get("mode", None)
         if mode=="add":
             file = request.files.get("photo", None)
 
-            b = Book(name=name, about=about, grade=grade)
+            b = Book(name=name, about=about, grade=grade, primalink=primalink)
             db.session.add(b)
             db.session.commit()
             file.save(f"static/books/{b.id}.jpg")
+
+            image = Image.open(f"static/books/{b.id}.jpg")
+            resized_image = image.resize(vol_size)
+            resized_image.save(f"static/books/{b.id}.jpg")
+
 
             flash('book_add_success')
             return redirect(url_for('admin.books'))
@@ -150,7 +158,6 @@ def books():
             b.name = name
             b.about = about
             b.grade = grade
-            #TODO:  عکس هم ویرایش شود
             db.session.commit()
             flash('book_edit_success')
             return redirect(url_for('admin.books'))
@@ -170,3 +177,17 @@ def delete_book(id):
         os.remove(f"static/books/{book.id}.jpg")
         flash('book_del_success')
     return redirect(url_for("admin.books"))
+
+@app.route("/admin/photo-book/<id>", methods = ["GET", "POST"])
+def edit_photo_book(id):
+    file = request.files.get("photo", None)
+    if file!=None:
+        file.save(f"static/books/{id}.jpg")
+
+        image = Image.open(f"static/books/{id}.jpg")
+        resized_image = image.resize(vol_size)
+        resized_image.save(f"static/books/{id}.jpg")
+        
+    flash('book_edit_success')
+    return redirect(url_for('admin.books'))
+    

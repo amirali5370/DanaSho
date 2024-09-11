@@ -11,9 +11,23 @@
         #k_class .c12 {
             background-color: rgb(244, 127, 255);
         }
-        table * {
-            border: 2px black solid;  
+        td,th,tr {
+            border: 2px black solid; 
+            text-align: center; 
         }
+        input[type="file"] {
+            display: none;
+        }
+
+        .custom-file-upload {
+            display: inline-block;
+            padding: 6px 12px;
+            cursor: pointer;
+            background-color: #007bff;
+            color: white;
+            border-radius: 4px;
+        }
+        
     </style>
     <link rel="stylesheet" href="{{ url_for('static', filename='libraries/sweetalert2/sweetalert2.min.css') }}">
     <script defer src="{{ url_for('static', filename='libraries/sweetalert2/sweetalert2.all.min.js') }}"></script>
@@ -26,14 +40,14 @@
     <input type="hidden" name="mode" id="mode" value="add">
 
     <label for="photo" id="L-photo">عکس کتاب</label>
-    <input type="file" name="photo" id="photo" value="">
+    <input type="file" name="photo" id="photo" accept="image/*">
     
     <label for="name" id="L-name">نام کتاب :</label>
     <input type="text" name="name" id="name" placeholder="مثلا : مسافر هشتم">
-
+    
     <label for="about" id="L-about">توضیحات کتاب :</label>
     <textarea type="text" name="about" id="about" placeholder="مثلا : رضایی"></textarea>
-
+    
     <select name="grade" id="grade">
         <option disabled selected id="title_grade" value="">پایه مورد نظر :</option>
         <option value="1">دوره اول ابتدایی</option>
@@ -42,6 +56,9 @@
         <option value="4">دوره متوسطه دوم</option>
         <option value="0">فرهنگیان</option>
     </select>
+
+    <label for="primalink" id="L-primalink">پیوند یکتا :</label>
+    <input type="text" name="primalink" id="primalink" placeholder="مثلا : mosafer_hashtom" onkeypress="return isValidChar(event)">
     
     <button type="submit" id="submit">ثبت کتاب</button>
 </form>
@@ -57,7 +74,9 @@
         <th>نام</th>
         <th>توضیحات</th>
         <th>پایه</th>
+        <th>پیوند یکتا</th>
         <th>ویرایش</th>
+        <th>تغییر جلد</th>
         <th>حذف</th>
     </tr>
     {% for b in books %}
@@ -66,7 +85,13 @@
         <td>{{b.name}}</td>
         <td>{{b.about}}</td>
         <td>{{"دوره اول ابتدایی" if b.grade == 1 else "دوره دوم ابتدایی" if b.grade == 2 else "دوره متوسطه اول" if b.grade == 3 else "دوره متوسطه دوم" if b.grade == 4 else "فرهنگیان"}}</td>
+        <td>{{b.primalink}}</td>
         <td onclick="edit(this)">ویرایش</td>
+        <td><form id="upload-file" enctype="multipart/form-data">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <label for="photo" class="custom-file-upload">ویرایش جلد</label>
+            <input name="photo" id="photo" type="file" onchange="edit_photo(this)" accept="image/*">
+        </form></td>
         <td>
             <input type="button" value="Eliminar"
             onclick="del_book(this,{{b.id}})">
@@ -79,6 +104,12 @@
 <br><br>
 <a href="/admin/dashboard"> بازگشت</a>
 
+<script>
+    function isValidChar(event) {
+      const allowedChars = /^[a-zA-Z0-9--_]+$/;
+      return allowedChars.test(event.key);
+    }
+</script>
 
 
 <script type="module">
@@ -131,6 +162,7 @@
 
     document.querySelector("#name").value = null;
     document.querySelector("#about").value = null;
+    document.querySelector("#primalink").value = null;
 
     document.querySelector("#title_grade").selected = "selected";
 
@@ -142,6 +174,7 @@
         const name = row.children[1].innerText;
         const about = row.children[2].innerText;
         const grade = row.children[3].innerText;
+        const primalink = row.children[4].innerText;
 ;
 
         document.querySelector("#submit").innerText = "ویرایش کتاب";
@@ -150,6 +183,7 @@
 
         document.querySelector("#name").value = name;
         document.querySelector("#about").value = about;
+        document.querySelector("#primalink").value = primalink;
 
         const grade_list = document.querySelector("#grade").children
         for (var i=1;i<=grade_list.length;i++){
@@ -205,7 +239,36 @@
 
 
 
+    function edit_photo(e) {
+        const id = e.parentNode.parentNode.parentNode.id
+        var form = document.getElementById('upload-file');
+        var formData = new FormData(form);
 
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', `/admin/photo-book/${id}`, true);
+        
+        xhr.onload = function() {
+            if (xhr.status === 200) {
+                swal({
+                    title: 'ویرایش کتاب!',
+                    html: 'جلد کتاب مورد نظر با موفقیت ویرایش شد.',
+                    type: 'success',
+                    confirmButtonColor: '#3f9b0b',
+                    confirmButtonText: '<div style="direction:rtl;font-size:18px;font-family:Iran,Calibri;font-weight:bold;"><i style="margin-left: 5px;" class="fa fa-times"></i> تائید</div>',
+                    showCloseButton: true,
+                    showLoaderOnConfirm:true,
+                    allowOutsideClick:false,
+                }).then((result) => {swal.close();
+                    setInterval(function() {
+                        location.reload();
+                    }, 250)});
+            } else {
+                console.error('خطا: ' + xhr.status);
+            }
+        };
+
+        xhr.send(formData);
+    };
 
 
 
