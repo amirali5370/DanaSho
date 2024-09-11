@@ -2,7 +2,7 @@ from flask import Blueprint, jsonify, render_template, request, session, redirec
 import os
 import config
 from models.user import User
-from models.slides import Slide
+from models.book import Book
 from extentions import db
 
 app = Blueprint("admin" , __name__)
@@ -34,7 +34,7 @@ def dashboard():
     return render_template("admin/dashboard.html")
 
 
-##############################   STUDENT   ###############################
+##############################   USER DATA   ###############################
 @app.route("/admin/data", methods = ["GET", "POST"])
 def data():
     if request.method == "POST":
@@ -82,11 +82,13 @@ def data():
 def get_data():
     id = request.args.get("val", None)
     user = User.query.filter(User.id==id).first()
+    gr = user.grade
+    grade_code = 0 if gr == "teacher" else int(user.grade)
     data = {"username":user.username,
             "code":user.code,
             "phone":user.phone,
             "email":user.email,
-            "grade":user.grade,
+            "grade":"دوره اول ابتدایی" if grade_code == 1 else "دوره دوم ابتدایی" if grade_code == 2 else "دوره متوسطه اول" if grade_code == 3 else "دوره متوسطه دوم" if grade_code == 4 else "فرهنگی",
             "birth":user.birth,
             "gender":user.gender,
             "type":user.type,
@@ -97,8 +99,8 @@ def get_data():
             "school_type":user.school_type,
             "home_addres":user.home_addres,
             "recognition":user.recognition,
-            "final":user.final,
-            "authentication":user.authentication,
+            "final":"انجام شده" if user.final == 1 else "انجام نشده",
+            "authentication":"انجام شده" if user.authentication == 1 else "انجام نشده",
             "downloads":user.downloads,
             "coin":user.coin,
             "point":user.point,
@@ -108,94 +110,63 @@ def get_data():
     return jsonify(data)
     
 
+@app.route("/admin/change_data")
+def change_data():
+    id = request.args.get("val")
+    coin = request.args.get("coin")
+    point = request.args.get("point")
+    badge = request.args.get("badge")
+    downloads = request.args.get("downloads")
+    user = User.query.filter(User.id==id).first()
+    user.coin = coin
+    user.point = point
+    user.badge = badge
+    user.downloads = downloads
+    db.session.commit()
+    return jsonify({'status':200})
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# ---------------------------------OLD CODE---------------------------------------
-
-@app.route("/admin/dashboard/del-students/<id>", methods = ["GET", "POST"])
-def delete_user(id):
-    status = request.args.get("status")
-    if status == "true":
-        students = User.query.filter(User.id == id).first_or_404()
-        # TODO : نتایج امحاناتش حذف شود
-        db.session.delete(students)
-        db.session.commit()
-        flash('del success')
-    return redirect(url_for("admin.classes"))
-
-
-##############################   SETTING   ###############################
-@app.route("/admin/dashboard/slider", methods = ["GET","POST"])
-def slider_setting():
-    slides = Slide.query.all()
+##############################   BOOKS   ###############################
+@app.route("/admin/books", methods=["GET","POST"])
+def books():
     if request.method == "POST":
-        head = request.form.get("head", None)
-        text = request.form.get("text", None)
-        active = request.form.get("active", None)
-        if active == "active":
-            activate = 1
-        else:
-            activate = 0
+        name = request.form.get("name", None)
+        about = request.form.get("about", None)
+        grade = request.form.get("grade", None)
         mode = request.form.get("mode", None)
         if mode=="add":
-            file = request.files.get("slide", None)
+            file = request.files.get("photo", None)
 
-            s = Slide(head=head,text=text,active=activate)
-            db.session.add(s)
+            b = Book(name=name, about=about, grade=grade)
+            db.session.add(b)
             db.session.commit()
-            file.save(f"static/slides/{s.id}.jpg")
+            file.save(f"static/books/{b.id}.jpg")
 
-            flash('add success')
-            return redirect(url_for('admin.slider_setting'))
-
+            flash('book_add_success')
+            return redirect(url_for('admin.books'))
+        
         else:
-            s = Slide.query.filter(Slide.id==int(mode)).first_or_404()
-            s.head = head
-            s.text = text
-            if active == "active":
-                s.active = True
-            else:
-                s.active = False
-
+            b = Book.query.filter(Book.id==int(mode)).first_or_404()
+            b.name = name
+            b.about = about
+            b.grade = grade
+            #TODO:  عکس هم ویرایش شود
             db.session.commit()
-            flash('edit success')
-            return redirect(url_for('admin.slider_setting'))
-            
+            flash('book_edit_success')
+            return redirect(url_for('admin.books'))
     else:
-        return render_template("admin/slider.html", slides=slides)
+        books = Book.query.order_by(Book.grade).all()
+        return render_template("admin/books.html", books=books)
+    
 
-
-@app.route("/admin/dashboard/slider/<id>", methods = ["GET","POST"])
-def slide_delete(id):
+@app.route("/admin/del-book/<id>", methods = ["GET", "POST"])
+def delete_book(id):
     status = request.args.get("status")
     if status == "true":
-        slide = Slide.query.filter(Slide.id == id).first_or_404()
-        db.session.delete(slide)
+        book = Book.query.filter(Book.id == id).first_or_404()
+        # TODO : کنش ها و آزمون هایش حدف شوند
+        db.session.delete(book)
         db.session.commit()
-        os.remove(f"static/slides/{slide.id}.jpg")
-
-        flash('del success')
-    return redirect(url_for("admin.teachers"))
+        os.remove(f"static/books/{book.id}.jpg")
+        flash('book_del_success')
+    return redirect(url_for("admin.books"))
