@@ -61,8 +61,9 @@
         <br>
         <select name="province" id="province" onchange="fetchCities(this.value)">
             <option selected disabled value="">انتخاب استان</option>
-            <option value="تهران">تهران</option>
-            <option value="اصفهان">اصفهان</option>
+            {% for p in provinces%}
+            <option value="{{p}}">{{p}}</option>
+            {% endfor %}
         </select>
         
         <select name="city" id="city">
@@ -85,9 +86,9 @@
         <br>
         <select name="recognition" id="recognition">
             <option selected disabled value="">شیوه آشنایی</option>
-            <option value="1">روش اول</option>
-            <option value="2">روش دوم</option>
-            <option value="3">روش سوم</option>
+            {% for key, value in recognitions.items() %}
+            <option value="{{key}}">{{value}}</option>
+            {% endfor %}
         </select>
         {% if inviting == true%}
         <input type="text" name="invite" id="invite" placeholder="کد معرف" maxlength="6" data-required>
@@ -134,7 +135,7 @@
             }
         
             // ارسال درخواست AJAX به سرور برای دریافت شهرها
-            fetch(`{{url_for('user.get_cities', _external=True)}}${province}`)
+            fetch(`{{ url_for('user.get_cities', _external=True) }}?province=${province}`)
                 .then(response => response.json())
                 .then(cities => {
                     let options = "<option value=''>انتخاب شهر</option>";

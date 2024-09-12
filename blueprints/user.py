@@ -1,11 +1,14 @@
+import time
 from flask import Blueprint, abort, render_template, request, redirect, url_for, flash, jsonify
 from flask_login import login_user, login_required, current_user, logout_user
 from passlib.hash import sha256_crypt
+from models.ticket import Ticket
 from models.user import User
 from models.invite import Invite
 from models.payment import Payment
 from extentions import db
-from functions.methods import authCode_generator, invite_generator, inviteAuth_generator
+from functions.code_generators import authCode_generator, invite_generator, inviteAuth_generator
+from functions.text_generators import invited_text_generator
 from sqlalchemy.exc import IntegrityError
 from instance.data import cities as city_data
 from instance.data import *
@@ -85,6 +88,8 @@ def register():
                 inviter.point = inviter.point + point_01
                 db.session.add(inv)
                 inviter.invite = len(Invite.query.filter(Invite.inviter_id==inviter.id).all())
+                tik = Ticket(type="invited", content=invited_text_generator(inviter.name, user.name), user_id=inviter.id, time=time.time())
+                db.session.add(tik)
                 db.session.commit()
 
         login_user(user)
@@ -96,7 +101,8 @@ def register():
             inviting = False
         else:
             inviting = True
-        return render_template("user/register.html", inviting=inviting)
+        print(cities.keys())
+        return render_template("user/register.html", inviting=inviting, recognitions=recognitions, provinces=cities.keys())
     
 #login page
 @app.route("/login", methods = ["POST","GET"])
@@ -268,8 +274,11 @@ def verify():
 
 
 # ------------- MORE API-------------
-@app.route('/get_cities/<province>')
-def get_cities(province):
+@app.route('/get_cities')
+def get_cities():
+    province = request.args.get('province' , None)
+    if province == None:
+        abort(404)
     cities = city_data.get(province, [])
     return jsonify(cities)
 
@@ -310,3 +319,11 @@ def club():
 def invites():
     invitees = current_user.invites.all()
     return render_template("user/invites.html", user=current_user, invitees=invitees)
+
+
+# ------------- TICKET-------------
+@app.route("/ticket")
+@login_required
+def ticket():
+    tickets = current_user.tickets.order_by(Ticket.time).all()
+    return render_template("user/ticket.html", user=current_user, tickets=tickets)

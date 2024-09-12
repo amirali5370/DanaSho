@@ -12,17 +12,6 @@
         }
     </style>
 
-    <!-- <script>
-        function sendSMS() {
-            const link = "{{url_for('user.register', _external=True)}}?invite={{user.invite_auth}}"
-            const phoneNumber = document.getElementById("phone").value;
-            const message = `سلام دوست من! \n لطفا از طریق لینک زیر وارد داناشو بشو. \n ${link}`.replace(/\n/g, "%0A"); 
-            const smsLink = `sms:${phoneNumber}?body=${encodeURIComponent(message)}`;
-            window.location.href = smsLink;
-            alert("sended")
-        }
-    </script> -->
-
     {% endblock %}
     {% block body %}
     <table>
@@ -40,9 +29,25 @@
 
     <br>
 
-    <!-- <form onsubmit="event.preventDefault(); sendSMS();">
-        <label for="phone">شماره تلفن</label>
-        <input type="text" id="phone">
-        <input type="submit" value="دعوت دوست">
-    </form> -->
+    <h1>ارسال پیامک</h1>
+    <label for="phone">شماره موبایل:</label>
+    <input type="text" id="phone" placeholder="09123456789">
+    <br>
+    <button onclick="sendSMS()">ارسال دعوتنامه</button>
+    
+
+    <script>
+        function sendSMS() {
+            const phoneNumber = document.getElementById('phone').value;
+            const message = "سلام دوست عزیز!\nامیدوارم حالت خوب باشه. من یه خبر خوب برات دارم:\nتو میتونی از طریق لینک زیر وارد مسابقه بزرگ «دانا پلاس شو» بشی و با خوندن کتاب، کلی جایزه ببری!\n{{ url_for('user.register', _external=True) }}?invite={{user.invite_auth}}"
+            const smsLink = `sms:${phoneNumber}?body=${encodeURIComponent(message)}`;
+
+            const smsAnchor = document.createElement("a");
+            smsAnchor.href = smsLink;
+            document.body.appendChild(smsAnchor)
+
+            smsAnchor.click()
+            smsAnchor.remove()
+        }
+    </script>
 {% endblock %}

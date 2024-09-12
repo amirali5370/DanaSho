@@ -1,0 +1,44 @@
+{% extends "Base.html" %}
+{% block head %}
+    <title>تیکت پشتیبانی</title>
+    <style>
+        .admin-co{
+            justify-content: flex-end;
+        }
+        .user-co{
+            justify-content: flex-start;
+        }
+        .admin{
+            background-color: rgb(255, 241, 240);
+        }
+        .user{
+            background-color: rgb(143, 219, 165);
+
+        }
+    </style>
+{% endblock %}
+{% block body %}
+    {% for t in tickets%}
+    <div id="container{{loop.index}}" class="{{'admin-co' if t.type == 'invited' or t.type == coin_confirm or t.type == comment_sta else 'user-co'}}" style="padding: 7px; display: flex;">
+        <div class="{{'admin' if t.type == 'invited' or t.type == coin_confirm or t.type == comment_sta else 'user'}}">
+            <p>{{t.content}}</p>
+
+        </div>
+    </div>
+    {% endfor %}
+
+<script>
+    function conv(paragraph){
+        paragraph.innerHTML = paragraph.innerHTML
+            .replace(/دستور_برو_خط_بعد/g, '<br>')
+            .replace(/دستور_شروع_بولد/g, '<b>')
+            .replace(/دستور_پایان_بولد/g, '</b>'); 
+    }
+
+
+    var paragraphs = document.getElementsByTagName("p");
+    for (var i = 0; i < paragraphs.length; i++) {
+        conv(paragraphs[i])
+    }
+</script>
+{% endblock %}
