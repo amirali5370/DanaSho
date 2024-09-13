@@ -2,6 +2,7 @@ import time
 from flask import Blueprint, abort, render_template, request, redirect, url_for, flash, jsonify
 from flask_login import login_user, login_required, current_user, logout_user
 from passlib.hash import sha256_crypt
+from models.book import Book
 from models.ticket import Ticket
 from models.user import User
 from models.invite import Invite
@@ -161,9 +162,7 @@ def completion():
         return render_template("user/completion.html", user=current_user, final=final, authentication=authentication, next=next)
     
 
-
-
-
+#authentication api
 @app.route("/authentication")
 @login_required
 def authentication():
@@ -184,7 +183,7 @@ def authentication():
         return "sss"
 
     
-
+#confirmation handler
 @app.route("/confirmation", methods=["GET"])
 @login_required
 def confirmation():
@@ -201,7 +200,7 @@ def confirmation():
         return jsonify({"status":"404"})
 
 
-
+#confirmation code deleter
 @app.route("/unconf", methods=["GET"])
 @login_required
 def unconf():
@@ -238,6 +237,7 @@ def payment():
     db.session.commit()
 
     return redirect(url)
+
 
 #verify handler
 @app.route("/verify", methods=["GET"])
@@ -284,12 +284,22 @@ def get_cities():
 
 
 # ------------- MAIN-------------
-#dashboard page
+#home user page
 @app.route("/dashboard")
 @login_required
 def dashboard():
     return render_template("user/dashboard.html", user=current_user)
 
+
+#home user page
+@app.route("/book/<book_link>")
+@login_required
+def book(book_link):
+    book = Book.query.filter(Book.primalink==book_link).first_or_404()
+    return render_template("user/book.html", user=current_user, book=book)
+
+
+# ------------- CLUB-------------
 #club page
 @app.route('/club')
 @login_required
@@ -313,7 +323,9 @@ def club():
                            rank_coins=rank_coins, rank_points=rank_points, rank_likes=rank_likes, rank_badges=rank_badges, rank_invites=rank_invites,
                             province_rank=province_rank, city_rank=city_rank)
 
-#club page
+
+# ------------- PROFILE-------------
+#invites page
 @app.route('/invites')
 @login_required
 def invites():

@@ -182,11 +182,14 @@ def delete_book(id):
 def edit_photo_book(id):
     file = request.files.get("photo", None)
     if file!=None:
-        file.save(f"static/books/{id}.jpg")
+        file.save(f"static/books/{file.filename}")
 
-        image = Image.open(f"static/books/{id}.jpg")
+        image = Image.open(f"static/books/{file.filename}")
         resized_image = image.resize(vol_size)
-        resized_image.save(f"static/books/{id}.jpg")
+        resized_image = resized_image.convert("RGB") 
+        resized_image.save(f"static/books/{id}.jpg", 'JPEG')
+
+        os.remove(f"static/books/{file.filename}")
         
     flash('book_edit_success')
     return redirect(url_for('admin.books'))

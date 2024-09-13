@@ -1,0 +1,9 @@
+{% extends "Base.html" %}
+{% block head %}
+    <title>{{book.name}} | دانا پلاس شو</title>
+    {% endblock %}
+    {% block body %}
+    <img src="/static/books/{{book.id}}.jpg" height="400" alt="{{book.name}}'s image">
+    <h3>{{book.name}}</h3>
+    <p style="white-space: pre-wrap;">{{book.about}}</p>
+{% endblock %}

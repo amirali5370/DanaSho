@@ -83,14 +83,14 @@
     <tr id="{{b.id}}">
         <td><a href="/static/books/{{b.id}}.jpg">جلد</a></td>
         <td>{{b.name}}</td>
-        <td>{{b.about}}</td>
+        <td style="white-space: pre-wrap;">{{b.about}}</td>
         <td>{{"دوره اول ابتدایی" if b.grade == 1 else "دوره دوم ابتدایی" if b.grade == 2 else "دوره متوسطه اول" if b.grade == 3 else "دوره متوسطه دوم" if b.grade == 4 else "فرهنگیان"}}</td>
         <td>{{b.primalink}}</td>
         <td onclick="edit(this)">ویرایش</td>
         <td><form id="upload-file" enctype="multipart/form-data">
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-            <label for="photo" class="custom-file-upload">ویرایش جلد</label>
-            <input name="photo" id="photo" type="file" onchange="edit_photo(this)" accept="image/*">
+            <label for="photo-edit" class="custom-file-upload">ویرایش جلد</label>
+            <input class="file-inp" name="photo" id="photo-edit" type="file" onchange="edit_photo(this)" accept="image/*">
         </form></td>
         <td>
             <input type="button" value="Eliminar"
@@ -102,7 +102,6 @@
 
 
 <br><br>
-<a href="/admin/dashboard"> بازگشت</a>
 
 <script>
     function isValidChar(event) {
@@ -157,16 +156,21 @@
 
 
 <script>
+
+    
+    
+    
+    
     document.querySelector("#mode").value = "add";
     document.querySelector("#submit").innerText = "ثبت کتاب";
-
+    
     document.querySelector("#name").value = null;
     document.querySelector("#about").value = null;
     document.querySelector("#primalink").value = null;
-
+    
     document.querySelector("#title_grade").selected = "selected";
 
-
+    
     function edit(e) {
         const row = e.parentNode;
 
@@ -175,16 +179,16 @@
         const about = row.children[2].innerText;
         const grade = row.children[3].innerText;
         const primalink = row.children[4].innerText;
-;
-
+        ;
+        
         document.querySelector("#submit").innerText = "ویرایش کتاب";
         document.querySelector("#mode").value = id;
-
-
+        
+        
         document.querySelector("#name").value = name;
         document.querySelector("#about").value = about;
         document.querySelector("#primalink").value = primalink;
-
+        
         const grade_list = document.querySelector("#grade").children
         for (var i=1;i<=grade_list.length;i++){
             var element = grade_list[i]
@@ -195,9 +199,9 @@
         }
         
     };
-
-
-
+    
+    
+    
     function del_book(e,id){
         swal({
             title: 'آیا از حذف این کتاب اطمینان دارید؟',
@@ -213,66 +217,66 @@
             showCloseButton: false,
             focusConfirm: true,
         }).then((result) => {
-        if(result.value){
-            const xhr = new XMLHttpRequest();
-            var url = '/admin/del-book/'+id+'?status=true'
-            xhr.open('GET',url, true);
-            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-            xhr.send();
-            e.parentNode.parentNode.style.display = "none";
-            swal({
-                title: 'حذف کتاب!',
-                html: 'کتاب مورد نظر به همراه تمام کنش ها و آزمون هایش با موفقیت حذف شد.',
-                type: 'success',
-                confirmButtonColor: '#3f9b0b',
-                confirmButtonText: '<div style="direction:rtl;font-size:18px;font-family:Iran,Calibri;font-weight:bold;"><i style="margin-left: 5px;" class="fa fa-times"></i> تائید</div>',
-                showLoaderOnConfirm:true,
-                allowOutsideClick:false,
-            }).then((result) => {swal.close();
-                setInterval(function() {
-                    location.reload();
-                }, 250);
-            })  
-        };
-      });
-    }
-
-
-
-    function edit_photo(e) {
-        const id = e.parentNode.parentNode.parentNode.id
-        var form = document.getElementById('upload-file');
-        var formData = new FormData(form);
-
-        var xhr = new XMLHttpRequest();
-        xhr.open('POST', `/admin/photo-book/${id}`, true);
-        
-        xhr.onload = function() {
-            if (xhr.status === 200) {
+            if(result.value){
+                const xhr = new XMLHttpRequest();
+                var url = '/admin/del-book/'+id+'?status=true'
+                xhr.open('GET',url, true);
+                xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                xhr.send();
+                e.parentNode.parentNode.style.display = "none";
                 swal({
-                    title: 'ویرایش کتاب!',
-                    html: 'جلد کتاب مورد نظر با موفقیت ویرایش شد.',
+                    title: 'حذف کتاب!',
+                    html: 'کتاب مورد نظر به همراه تمام کنش ها و آزمون هایش با موفقیت حذف شد.',
                     type: 'success',
                     confirmButtonColor: '#3f9b0b',
                     confirmButtonText: '<div style="direction:rtl;font-size:18px;font-family:Iran,Calibri;font-weight:bold;"><i style="margin-left: 5px;" class="fa fa-times"></i> تائید</div>',
-                    showCloseButton: true,
                     showLoaderOnConfirm:true,
                     allowOutsideClick:false,
                 }).then((result) => {swal.close();
                     setInterval(function() {
                         location.reload();
-                    }, 250)});
-            } else {
-                console.error('خطا: ' + xhr.status);
-            }
+                }, 250);
+            })  
         };
-
-        xhr.send(formData);
-    };
-
+    });
+}
 
 
-</script>
 
+function edit_photo(e) {
+    const id = e.parentNode.parentNode.parentNode.id
+    var form = document.getElementById('upload-file');
+    var formData = new FormData(form);
+    
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', `/admin/photo-book/${id}`, true);
+    
+    xhr.onload = function() {
+        if (xhr.status === 200) {
+            swal({
+                title: 'ویرایش کتاب!',
+                html: 'جلد کتاب مورد نظر با موفقیت ویرایش شد.',
+                type: 'success',
+                confirmButtonColor: '#3f9b0b',
+                confirmButtonText: '<div style="direction:rtl;font-size:18px;font-family:Iran,Calibri;font-weight:bold;"><i style="margin-left: 5px;" class="fa fa-times"></i> تائید</div>',
+                showCloseButton: true,
+                showLoaderOnConfirm:true,
+                    allowOutsideClick:false,
+                }).then((result) => {swal.close();
+                    setInterval(function() {
+                        location.reload();
+                    }, 250)});
+                } else {
+                    console.error('خطا: ' + xhr.status);
+                }
+            };
+            
+            xhr.send(formData);
+        };
+        
 
+        
+    </script>
+    
+    
 {% endblock %}
