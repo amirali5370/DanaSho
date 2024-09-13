@@ -39,7 +39,7 @@
     <script>
         function sendSMS() {
             const phoneNumber = document.getElementById('phone').value;
-            const message = "سلام دوست عزیز!\nامیدوارم حالت خوب باشه. من یه خبر خوب برات دارم:\nتو میتونی از طریق لینک زیر وارد مسابقه بزرگ «دانا پلاس شو» بشی و با خوندن کتاب، کلی جایزه ببری!\n{{ url_for('user.register', _external=True) }}?invite={{user.invite_auth}}"
+            const message = "سلام دوست عزیز!\nامیدوارم حالت خوب باشه. من یه خبر خوب برات دارم:\nتو میتونی از طریق لینک زیر وارد مسابقه بزرگ «دانا پلاس شو» بشی و با خوندن کتاب، کلی جایزه ببری!\n{{ url_for('user.register', _external=True) }}?invite={{current_user.invite_auth}}"
             const smsLink = `sms:${phoneNumber}?body=${encodeURIComponent(message)}`;
 
             const smsAnchor = document.createElement("a");

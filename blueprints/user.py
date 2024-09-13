@@ -159,7 +159,7 @@ def completion():
         return redirect(url_for("user.dashboard"))
 
     else:
-        return render_template("user/completion.html", user=current_user, final=final, authentication=authentication, next=next)
+        return render_template("user/completion.html", final=final, authentication=authentication, next=next)
     
 
 #authentication api
@@ -288,7 +288,7 @@ def get_cities():
 @app.route("/dashboard")
 @login_required
 def dashboard():
-    return render_template("user/dashboard.html", user=current_user)
+    return render_template("user/dashboard.html")
 
 
 #home user page
@@ -296,7 +296,7 @@ def dashboard():
 @login_required
 def book(book_link):
     book = Book.query.filter(Book.primalink==book_link).first_or_404()
-    return render_template("user/book.html", user=current_user, book=book)
+    return render_template("user/book.html", book=book)
 
 
 # ------------- CLUB-------------
@@ -319,7 +319,7 @@ def club():
     province_rank = User.query.filter(User.province==current_user.province).order_by(User.point.desc()).all().index(current_user)+1
     city_rank = User.query.filter(User.city==current_user.city).order_by(User.point.desc()).all().index(current_user)+1
 
-    return render_template("user/club.html", user=current_user, top_coins=top_coins, top_points=top_points, top_likes=top_likes, top_badges=top_badges, top_invites=top_invites,
+    return render_template("user/club.html", top_coins=top_coins, top_points=top_points, top_likes=top_likes, top_badges=top_badges, top_invites=top_invites,
                            rank_coins=rank_coins, rank_points=rank_points, rank_likes=rank_likes, rank_badges=rank_badges, rank_invites=rank_invites,
                             province_rank=province_rank, city_rank=city_rank)
 
@@ -330,7 +330,7 @@ def club():
 @login_required
 def invites():
     invitees = current_user.invites.all()
-    return render_template("user/invites.html", user=current_user, invitees=invitees)
+    return render_template("user/invites.html", invitees=invitees)
 
 
 # ------------- TICKET-------------
@@ -338,4 +338,4 @@ def invites():
 @login_required
 def ticket():
     tickets = current_user.tickets.order_by(Ticket.time).all()
-    return render_template("user/ticket.html", user=current_user, tickets=tickets)
+    return render_template("user/ticket.html", tickets=tickets)

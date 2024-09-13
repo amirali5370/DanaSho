@@ -23,13 +23,13 @@
             <th>تعداد سکه ها</th>
         </tr>
         {%for i in top_coins%}
-        <tr class="{{'me' if i==user}}">
+        <tr class="{{'me' if i==current_user}}">
             <td>{{loop.index}}</td>
             <td>{{i.name}}</td>
             <td>{{i.coin}}</td>
         </tr>
         {% endfor %}
-        {% if user.authentication==1 and user.final==1%}
+        {% if current_user.authentication==1 and current_user.final==1%}
         <tr>
             <td colspan="3">رتبه شما : {{rank_coins}}</td>
         </tr>
@@ -45,13 +45,13 @@
             <th>مقدار امتیاز </th>
         </tr>
         {%for i in top_points%}
-        <tr class="{{'me' if i==user}}">
+        <tr class="{{'me' if i==current_user}}">
             <td>{{loop.index}}</td>
             <td>{{i.name}}</td>
             <td>{{i.point}}</td>
         </tr>
         {% endfor %}
-        {% if user.authentication==1 and user.final==1%}
+        {% if current_user.authentication==1 and current_user.final==1%}
         <tr>
             <td colspan="3">رتبه شما : {{rank_points}}</td>
         </tr>
@@ -73,7 +73,7 @@
             <td>{{i.badge}}</td>
         </tr>
         {% endfor %}
-        {% if user.authentication==1 and user.final==1%}
+        {% if current_user.authentication==1 and current_user.final==1%}
         <tr>
             <td colspan="3">رتبه شما : {{rank_badges}}</td>
         </tr>
@@ -89,13 +89,13 @@
             <th>تعداد لایک ها </th>
         </tr>
         {%for i in top_likes%}
-        <tr class="{{'me' if i==user}}">
+        <tr class="{{'me' if i==current_user}}">
             <td>{{loop.index}}</td>
             <td>{{i.name}}</td>
             <td>{{i.like}}</td>
         </tr>
         {% endfor %}
-        {% if user.authentication==1 and user.final==1%}
+        {% if current_user.authentication==1 and current_user.final==1%}
         <tr>
             <td colspan="3">رتبه شما : {{rank_likes}}</td>
         </tr>
@@ -111,13 +111,13 @@
             <th>تعداد دعوت ها </th>
         </tr>
         {%for i in top_invites%}
-        <tr class="{{'me' if i==user}}">
+        <tr class="{{'me' if i==current_user}}">
             <td>{{loop.index}}</td>
             <td>{{i.name}}</td>
             <td>{{i.invite}}</td>
         </tr>
         {% endfor %}
-        {% if user.authentication==1 and user.final==1%}
+        {% if current_user.authentication==1 and current_user.final==1%}
         <tr>
             <td colspan="3">رتبه شما : {{rank_invites}}</td>
         </tr>
@@ -125,19 +125,19 @@
     </table>
 
     <br>
-    {% if user.authentication==1 and user.final==1%}
+    {% if current_user.authentication==1 and current_user.final==1%}
     <table>
         <tr>
-            <th>رتبه های {{user.name}}</th>
+            <th>رتبه های {{current_user.name}}</th>
         </tr>
         <tr>
             <td>رتبه شما در کشور : {{rank_points}}</td>
         </tr>
         <tr>
-            <td>رتبه شما در {{user.province}} : {{province_rank}}</td>
+            <td>رتبه شما در {{current_user.province}} : {{province_rank}}</td>
         </tr>
         <tr>
-            <td>رتبه شما در {{user.city}} : {{city_rank}}</td>
+            <td>رتبه شما در {{current_user.city}} : {{city_rank}}</td>
         </tr>
     </table>
     {% else %}
