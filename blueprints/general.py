@@ -7,13 +7,6 @@ app = Blueprint("general" , __name__)
 def page_not_found(e):
     return render_template("404page.html"), 404
 
-
-@app.route("/")
-def main():
-    slides = Slide.query.all()
-    return render_template('home.html', slides=slides)
-
-
 @app.route("/about")
 def about():
     return "about us"

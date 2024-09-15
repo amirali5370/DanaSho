@@ -1,21 +1,25 @@
-import time
 from flask import Blueprint, abort, render_template, request, redirect, url_for, flash, jsonify
 from flask_login import login_user, login_required, current_user, logout_user
 from passlib.hash import sha256_crypt
+from functions.methods import is_liked, get_time
+import os
+import time
+from PIL import Image
 from models.book import Book
 from models.ticket import Ticket
 from models.user import User
 from models.invite import Invite
 from models.payment import Payment
+from models.interaction import Interaction
+from models.like import Like
 from extentions import db
 from functions.code_generators import authCode_generator, invite_generator, inviteAuth_generator
-from functions.text_generators import invited_text_generator
+from functions.text_generators import *
 from sqlalchemy.exc import IntegrityError
 from instance.data import cities as city_data
 from instance.data import *
 from scoring import *
 import requests
-import json
 
 app = Blueprint("user" , __name__)
 
@@ -46,7 +50,7 @@ def register():
         recognition = request.form.get('recognition',None)
 
         if type == "teacher":
-            grade = "teacher"
+            grade = 0
 
         user = current_user
 
@@ -89,14 +93,14 @@ def register():
                 inviter.point = inviter.point + point_01
                 db.session.add(inv)
                 inviter.invite = len(Invite.query.filter(Invite.inviter_id==inviter.id).all())
-                tik = Ticket(type="invited", content=invited_text_generator(inviter.name, user.name), user_id=inviter.id, time=time.time())
+                tik = Ticket(type="invited", content=invited_text_generator(inviter.name, user.name), user_id=inviter.id, time=get_time())
                 db.session.add(tik)
                 db.session.commit()
 
         login_user(user)
         if next != None:
             return redirect(next)
-        return redirect(url_for("user.dashboard"))
+        return redirect(url_for("user.home"))
     else:
         if inv != None:
             inviting = False
@@ -124,7 +128,7 @@ def login():
             login_user(user)
             if next != None:
                 return redirect(next)
-            return redirect(url_for("user.dashboard"))
+            return redirect(url_for("user.home"))
         
 
         else:
@@ -141,10 +145,152 @@ def login():
 def logout():
     if current_user.is_authenticated:
         logout_user()
-    return redirect(url_for('general.main'))
+    return redirect(url_for('user.home'))
+
+#get city api
+@app.route('/get_cities')
+def get_cities():
+    province = request.args.get('province' , None)
+    if province == None:
+        abort(404)
+    cities = city_data.get(province, [])
+    return jsonify(cities)
 
 
-# ------------- COMPLETION -------------
+# ------------- HOME -------------
+
+#home user page
+@app.route("/")
+def home():
+    return render_template("user/home.html")
+
+#comments (single book page)
+@app.route("/book/<book_link>", methods=["GET","POST"])
+def book(book_link):
+    book = Book.query.filter(Book.primalink==book_link).first_or_404()
+    if request.method == "POST":
+        comment = request.form.get('comment' , None)
+        c = Interaction(type="comment", content=comment, user_id=current_user.id, book_id=book.id, time=get_time())
+        db.session.add(c)
+
+        tik = Ticket(type="comment_sta", sub_type="review", content=review_comment_text_generator(current_user.name), user_id=current_user.id, time=get_time())
+        db.session.add(tik)
+
+        db.session.commit()
+        flash("comment_add_success")
+        return redirect(request.url)
+        
+    else:
+        comments = book.interactions.filter(Interaction.type=="comment", Interaction.status=="confirmed").all()
+    
+        return render_template("user/book.html", book=book, comments=comments)
+
+
+
+# ------------- ACTIVISM -------------
+
+#activism (single book page)
+@app.route("/activism/<book_link>", methods=["GET","POST"])
+@login_required
+def book_activisms(book_link):
+    book = Book.query.filter(Book.primalink==book_link).first_or_404()
+    if request.method == "POST":
+        replay_id = request.form.get('replay_id' , None)
+        if replay_id==None:
+            activism = request.form.get('activism' , None)
+            file = request.files.get("photo", None)
+            c = Interaction(type="activism", content=activism, user_id=current_user.id, book_id=book.id, time=get_time())
+            db.session.add(c)
+            
+            file.save(f"static/activisms/{file.filename}")
+
+            image = Image.open(f"static/activisms/{file.filename}")
+            resized_image = image.resize(vol_size)
+            resized_image = resized_image.convert("RGB") 
+            resized_image.save(f"static/activisms/{c.id}.jpg", 'JPEG')
+
+            os.remove(f"static/activisms/{file.filename}")
+            
+            tik = Ticket(type="activism_sta", sub_type="review", content=review_activate_text_generator(current_user.name), user_id=current_user.id, time=get_time())
+            db.session.add(tik)
+
+            db.session.commit()
+            flash("activism_add_success")
+            return redirect(request.url)
+        else:
+            comment = request.form.get('comment' , None)
+            c = Interaction(type="replay", content=comment, user_id=current_user.id, book_id=book.id, replay=replay_id, time=get_time())
+            db.session.add(c)
+            db.session.commit()
+            flash("replay_add_success")
+            return redirect(request.url)
+        
+    else:
+        activisms = book.interactions.filter(Interaction.type=="activism", Interaction.status=="confirmed").all()
+        replays = book.interactions.filter(Interaction.type=="replay", Interaction.status=="confirmed").all()
+        return render_template("user/activism.html", book=book, activisms=activisms, replays=replays)
+
+@app.route("/like_maneger", methods=["POST"])
+@login_required
+def like_maneger():
+    user_id = request.form.get('user_id' , None)
+    activism_id = request.form.get('activism_id' , None)
+    user = User.query.filter(User.id==user_id).first_or_404()
+    if user == current_user:
+        activism = Interaction.query.filter(Interaction.id==activism_id).first_or_404()
+        like = is_liked(user,activism)
+
+        if like:
+            l = Like.query.filter(Like.user_id==user.id, Like.activism_id==activism.id).first_or_404()
+            db.session.delete(l)
+            db.session.commit()
+            return jsonify({"status":200})
+        else:
+            l = Like(user_id=current_user.id,activism_id=activism.id)
+            db.session.add(l)
+            db.session.commit()
+            return jsonify({"status":200})
+    else:
+        abort(404)
+
+
+
+
+
+
+
+
+
+# ------------- CLUB -------------
+
+#club page
+@app.route('/club')
+@login_required
+def club():
+    top_coins = User.query.order_by(User.coin.desc()).limit(10).all()
+    top_points = User.query.order_by(User.point.desc()).limit(10).all()
+    top_likes = User.query.order_by(User.like.desc()).limit(10).all()
+    top_badges = User.query.order_by(User.badge.desc()).limit(10).all()
+    top_invites = User.query.order_by(User.invite.desc()).limit(10).all()
+
+    rank_coins = User.query.order_by(User.coin.desc()).all().index(current_user)+1
+    rank_points = User.query.order_by(User.point.desc()).all().index(current_user)+1
+    rank_likes = User.query.order_by(User.like.desc()).all().index(current_user)+1
+    rank_badges = User.query.order_by(User.badge.desc()).all().index(current_user)+1
+    rank_invites = User.query.order_by(User.invite.desc()).all().index(current_user)+1
+
+    province_rank = User.query.filter(User.province==current_user.province).order_by(User.point.desc()).all().index(current_user)+1
+    city_rank = User.query.filter(User.city==current_user.city).order_by(User.point.desc()).all().index(current_user)+1
+
+    return render_template("user/club.html", top_coins=top_coins, top_points=top_points, top_likes=top_likes, top_badges=top_badges, top_invites=top_invites,
+                           rank_coins=rank_coins, rank_points=rank_points, rank_likes=rank_likes, rank_badges=rank_badges, rank_invites=rank_invites,
+                            province_rank=province_rank, city_rank=city_rank)
+
+
+
+# ------------- PROFILE -------------
+
+#  ||||||||||||||||   completion   ||||||||||||||
 #completion page
 @app.route("/completion", methods=["GET"])
 @login_required
@@ -156,11 +302,10 @@ def completion():
     if authentication and final:
         if next != None:
             return redirect(next)
-        return redirect(url_for("user.dashboard"))
+        return redirect(url_for("user.home"))
 
     else:
         return render_template("user/completion.html", final=final, authentication=authentication, next=next)
-    
 
 #authentication api
 @app.route("/authentication")
@@ -181,7 +326,6 @@ def authentication():
             return redirect(url_for('user.completion'))
     else:
         return "sss"
-
     
 #confirmation handler
 @app.route("/confirmation", methods=["GET"])
@@ -199,7 +343,6 @@ def confirmation():
         flash("confirmation_fil")
         return jsonify({"status":"404"})
 
-
 #confirmation code deleter
 @app.route("/unconf", methods=["GET"])
 @login_required
@@ -210,9 +353,7 @@ def unconf():
         db.session.commit()
         return jsonify({"status":"200"})
     abort(404)
-    
 
-# ------------- PAYMENT-------------
 #payment handler
 @app.route("/payment", methods=["GET"])
 @login_required
@@ -221,7 +362,7 @@ def payment():
     if current_user.final != 0:
         if next != None:
             return redirect(next)
-        return redirect(url_for("user.dashboard"))
+        return redirect(url_for("user.home"))
     r = requests.post('https://sandbox.shepa.com/api/v1/token', 
                     data={
                         'api':'sandbox',
@@ -237,7 +378,6 @@ def payment():
     db.session.commit()
 
     return redirect(url)
-
 
 #verify handler
 @app.route("/verify", methods=["GET"])
@@ -271,60 +411,7 @@ def verify():
     next = '?next='+pay.next if pay.next != None else ""
     return redirect(url_for("user.completion")+next)
 
-
-
-# ------------- MORE API-------------
-@app.route('/get_cities')
-def get_cities():
-    province = request.args.get('province' , None)
-    if province == None:
-        abort(404)
-    cities = city_data.get(province, [])
-    return jsonify(cities)
-
-
-# ------------- MAIN-------------
-#home user page
-@app.route("/dashboard")
-@login_required
-def dashboard():
-    return render_template("user/dashboard.html")
-
-
-#home user page
-@app.route("/book/<book_link>")
-@login_required
-def book(book_link):
-    book = Book.query.filter(Book.primalink==book_link).first_or_404()
-    return render_template("user/book.html", book=book)
-
-
-# ------------- CLUB-------------
-#club page
-@app.route('/club')
-@login_required
-def club():
-    top_coins = User.query.order_by(User.coin.desc()).limit(10).all()
-    top_points = User.query.order_by(User.point.desc()).limit(10).all()
-    top_likes = User.query.order_by(User.like.desc()).limit(10).all()
-    top_badges = User.query.order_by(User.badge.desc()).limit(10).all()
-    top_invites = User.query.order_by(User.invite.desc()).limit(10).all()
-
-    rank_coins = User.query.order_by(User.coin.desc()).all().index(current_user)+1
-    rank_points = User.query.order_by(User.point.desc()).all().index(current_user)+1
-    rank_likes = User.query.order_by(User.like.desc()).all().index(current_user)+1
-    rank_badges = User.query.order_by(User.badge.desc()).all().index(current_user)+1
-    rank_invites = User.query.order_by(User.invite.desc()).all().index(current_user)+1
-
-    province_rank = User.query.filter(User.province==current_user.province).order_by(User.point.desc()).all().index(current_user)+1
-    city_rank = User.query.filter(User.city==current_user.city).order_by(User.point.desc()).all().index(current_user)+1
-
-    return render_template("user/club.html", top_coins=top_coins, top_points=top_points, top_likes=top_likes, top_badges=top_badges, top_invites=top_invites,
-                           rank_coins=rank_coins, rank_points=rank_points, rank_likes=rank_likes, rank_badges=rank_badges, rank_invites=rank_invites,
-                            province_rank=province_rank, city_rank=city_rank)
-
-
-# ------------- PROFILE-------------
+#  ||||||||||||||||   invite   ||||||||||||||
 #invites page
 @app.route('/invites')
 @login_required
@@ -333,9 +420,30 @@ def invites():
     return render_template("user/invites.html", invitees=invitees)
 
 
-# ------------- TICKET-------------
+# ------------- TICKET -------------
+
+#ticket page
 @app.route("/ticket")
 @login_required
 def ticket():
-    tickets = current_user.tickets.order_by(Ticket.time).all()
+    tickets = current_user.tickets.all()
     return render_template("user/ticket.html", tickets=tickets)
+
+#ticket api
+@app.route("/ticket_add", methods=["POST"])
+@login_required
+def ticket_add():
+    user_id = request.form.get('user_id', None)
+    user = User.query.filter(User.id==user_id).first_or_404()
+    if user==current_user:
+        req = request.form.get('type', None)
+        req = "camp" if req=="or" else "course"
+        text = camp_req_text_generator(current_user.name) if req=="camp" else course_req_text_generator(current_user.name)
+        tik = Ticket(type="request", sub_type=req, content=text, user_id=current_user.id, time=get_time())
+        db.session.add(tik)
+        db.session.commit()
+        return '200'
+    else:
+        abort(404)
+    
+    return render_template("user/ticket.html")

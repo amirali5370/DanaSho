@@ -15,7 +15,7 @@
             border: 2px black solid; 
             text-align: center; 
         }
-        input[type="file"] {
+        input[type="file"].edit {
             display: none;
         }
 
@@ -23,7 +23,7 @@
             display: inline-block;
             padding: 6px 12px;
             cursor: pointer;
-            background-color: #007bff;
+            background-color: #bef5f6;
             color: white;
             border-radius: 4px;
         }
@@ -87,10 +87,10 @@
         <td>{{"دوره اول ابتدایی" if b.grade == 1 else "دوره دوم ابتدایی" if b.grade == 2 else "دوره متوسطه اول" if b.grade == 3 else "دوره متوسطه دوم" if b.grade == 4 else "فرهنگیان"}}</td>
         <td>{{b.primalink}}</td>
         <td onclick="edit(this)">ویرایش</td>
-        <td><form id="upload-file" enctype="multipart/form-data">
+        <td><form id="upload-file{{b.id}}" enctype="multipart/form-data">
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-            <label for="photo-edit" class="custom-file-upload">ویرایش جلد</label>
-            <input class="file-inp" name="photo" id="photo-edit" type="file" onchange="edit_photo(this)" accept="image/*">
+            <label for="photo-edit{{b.id}}" class="custom-file-upload">ویرایش جلد</label>
+            <input class="file-inp edit" name="photo" id="photo-edit{{b.id}}" type="file" onchange="edit_photo(this)" accept="image/*">
         </form></td>
         <td>
             <input type="button" value="Eliminar"
@@ -245,7 +245,7 @@
 
 function edit_photo(e) {
     const id = e.parentNode.parentNode.parentNode.id
-    var form = document.getElementById('upload-file');
+    var form = document.getElementById(`upload-file${id}`);
     var formData = new FormData(form);
     
     var xhr = new XMLHttpRequest();

@@ -11,6 +11,6 @@ class Ticket(db.Model):
     user_id = Column(Integer, ForeignKey('users.id') ,nullable=False, index=True)
     time = Column(Integer, nullable=False, index=True)
 
-#   types={ admin : [ -invited , coin_confirm* , comment_sta* ],
-#            user : [ request* , excerpt      , mission*          ]}
+#   types={ admin : [ -invited , coin_confirm* , comment_sta*],
+#            user : [ request* , excerpt      ]}
     user = db.relationship("User", backref=backref("tickets" , lazy="dynamic"))

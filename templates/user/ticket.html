@@ -10,22 +10,57 @@
         }
         .admin{
             background-color: rgb(255, 241, 240);
+            max-width: 60%;
         }
         .user{
             background-color: rgb(143, 219, 165);
+            max-width: 60%;
 
         }
     </style>
 {% endblock %}
 {% block body %}
     {% for t in tickets%}
-    <div id="container{{loop.index}}" class="{{'admin-co' if t.type == 'invited' or t.type == coin_confirm or t.type == comment_sta else 'user-co'}}" style="padding: 7px; display: flex;">
-        <div class="{{'admin' if t.type == 'invited' or t.type == coin_confirm or t.type == comment_sta else 'user'}}">
+    <div id="container{{loop.index}}" class="{{'admin-co' if t.type == 'invited' or t.type == 'coin_confirm' or t.type == 'comment_sta' or t.type == 'activism_sta' else 'user-co'}}" style="padding: 7px; display: flex;">
+        <div class="{{'admin' if t.type == 'invited' or t.type == 'coin_confirm' or t.type == 'comment_sta' or t.type == 'activism_sta' else 'user'}}">
             <p style="white-space: pre-wrap;">{{t.content}}</p>
-
+            <p dir="ltr">{{t.time}}</p>
+            
         </div>
     </div>
     {% endfor %}
+    <br><br><br><br>
+
+    <button class="req" data-type="or">من در اردو موسسه شرکت کردم</button>
+    <button class="req" data-type="do">من در دوره های مجازی شرکت کردم</button>
+    <button class="" data-type="">ارسال فایل خلاصه کتاب</button>
+
+
+<script>
+document.querySelectorAll(".req").forEach(item => {
+    item.addEventListener("click", event => {
+        form = new FormData()
+
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', '{{url_for("user.ticket_add", _external=True)}}', true);
+
+
+        var data = { 'csrf_token': '{{ csrf_token() }}',
+         'type': item.getAttribute('data-type'),
+          'user_id':'{{current_user.id}}' };
+        
+        for (var key in data) {
+            form.append(key, data[key]);
+        }
+
+        xhr.send(form);
+        setInterval(function() {
+            location.reload();
+    }, 250);
+    })
+})
+</script>
+
 
 <script>
     function conv(paragraph){

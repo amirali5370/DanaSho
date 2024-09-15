@@ -50,6 +50,42 @@
                     allowOutsideClick:false,
                 }).then((result) => {swal.close();})
                 {% endif %}
+
+
+                {% if message == "comment_add_success"%}
+                swal({
+                    title: 'نظر شما با موفقیت ثبت شد!',
+                    html: 'بعد از بررسی شدن، نظر شما قابل مشاهده خواهد بود',
+                    type: 'success',
+                    confirmButtonColor: '#3f9b0b',
+                    confirmButtonText: '<div style="direction:rtl;font-size:18px;font-family:Iran,Calibri;font-weight:bold;"><i style="margin-left: 5px;" class="fa fa-times"></i> باشه</div>',
+                    showCloseButton: true,
+                    showLoaderOnConfirm:true,
+                    allowOutsideClick:false,
+                }).then((result) => {swal.close();})
+                {% elif message == "activism_add_success" %}
+                swal({
+                    title: 'کنش شما با موفقیت ثبت شد!',
+                    html: 'بعد از بررسی شدن، کنش شما قابل مشاهده خواهد بود',
+                    type: 'success',
+                    confirmButtonColor: '#dc1225',
+                    confirmButtonText: '<div style="direction:rtl;font-size:18px;font-family:Iran,Calibri;font-weight:bold;"><i style="margin-left: 5px;" class="fa fa-times"></i> باشه</div>',
+                    showCloseButton: true,
+                    showLoaderOnConfirm:true,
+                    allowOutsideClick:false,
+                }).then((result) => {swal.close();})
+                {% elif message == "replay_add_success" %}
+                swal({
+                    title: 'پاسخ شما با موفقیت ثبت شد!',
+                    html: 'بعد از بررسی شدن، پاسخ شما قابل مشاهده خواهد بود',
+                    type: 'success',
+                    confirmButtonColor: '#dc1225',
+                    confirmButtonText: '<div style="direction:rtl;font-size:18px;font-family:Iran,Calibri;font-weight:bold;"><i style="margin-left: 5px;" class="fa fa-times"></i> باشه</div>',
+                    showCloseButton: true,
+                    showLoaderOnConfirm:true,
+                    allowOutsideClick:false,
+                }).then((result) => {swal.close();})
+                {% endif %}
             {% endfor %}
         {% endif %}
     {% endwith %}

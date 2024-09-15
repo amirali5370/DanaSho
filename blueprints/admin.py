@@ -2,6 +2,7 @@ from flask import Blueprint, jsonify, render_template, request, session, redirec
 from PIL import Image
 import os
 import config
+from models.interaction import Interaction
 from models.user import User
 from models.book import Book
 from extentions import db
@@ -143,12 +144,15 @@ def books():
             b = Book(name=name, about=about, grade=grade, primalink=primalink)
             db.session.add(b)
             db.session.commit()
-            file.save(f"static/books/{b.id}.jpg")
 
-            image = Image.open(f"static/books/{b.id}.jpg")
+            file.save(f"static/books/{file.filename}")
+
+            image = Image.open(f"static/books/{file.filename}")
             resized_image = image.resize(vol_size)
-            resized_image.save(f"static/books/{b.id}.jpg")
+            resized_image = resized_image.convert("RGB") 
+            resized_image.save(f"static/books/{b.id}.jpg", 'JPEG')
 
+            os.remove(f"static/books/{file.filename}")
 
             flash('book_add_success')
             return redirect(url_for('admin.books'))
@@ -171,7 +175,12 @@ def delete_book(id):
     status = request.args.get("status")
     if status == "true":
         book = Book.query.filter(Book.id == id).first_or_404()
-        # TODO : کنش ها و آزمون هایش حدف شوند
+        
+        interactions = Interaction.query.filter(Interaction.book_id==book.id).all()
+        for i in interactions:
+            db.session.delete(i)
+        # آزمون ها هم حذف شوند
+
         db.session.delete(book)
         db.session.commit()
         os.remove(f"static/books/{book.id}.jpg")

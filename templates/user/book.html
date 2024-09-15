@@ -1,12 +1,31 @@
 {% extends "Base.html" %}
 {% block head %}
-    <title>{{book.name}} {{current_user.name}}| دانا پلاس شو</title>
+    <title>{{book.name}} | دانا پلاس شو</title>
     {% endblock %}
     {% block body %}
     <img src="/static/books/{{book.id}}.jpg" height="400" alt="{{book.name}}'s image">
     <h3>{{book.name}}</h3>
     <p style="white-space: pre-wrap;">{{book.about}}</p>
     <br><br><br>
-    
-    <textarea name="" id=""></textarea>
+    {% if current_user.is_authenticated %}
+        {% if current_user.authentication==1 and current_user.final==1 %}
+        <form action="#" method="post" id="comment-form">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <textarea name="comment" id="comment-inp" form="comment-form" placeholder="نظر خود را اینجا بنویسید..."></textarea>
+            <input type="submit" value="ارسال نظر">
+        </form>
+        {% else %}
+        <a href="{{ url_for('user.completion')+'?next=/book/'+book.primalink }}"><button>ارسال نظر</button></a>
+        {% endif %}
+    {% else %}
+    <a href="{{ url_for('user.login')+'?next=/book/'+book.primalink}}"><button>ارسال نظر</button></a>
+    {% endif %}
+    <br><br><br>
+    {% for c in comments %}
+    <div data-comment-id="{{c.id}}">
+        <p>{{c.user.name}}</p>
+        <p>{{c.content}}</p>
+        <p>{{c.time}}</p>
+    </div>
+    {% endfor %}
 {% endblock %}
