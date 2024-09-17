@@ -202,4 +202,23 @@ def edit_photo_book(id):
         
     flash('book_edit_success')
     return redirect(url_for('admin.books'))
-    
+################## cofirmation ##################
+#comment
+@app.route("/admin/comments")
+def comments():
+    comments = Interaction.query.filter(Interaction.type != 'activism',Interaction.status == 'review').all()
+    return render_template("admin/comments.html", comments=comments)
+
+@app.route("/admin/comments-api", methods=["POST"])
+def comment_api():
+    if request.method == "GET":
+        abort(404)
+    status = request.form.get('status', None)
+    if status=="confirmed" or status=="rejected":
+        comment_id = request.form.get('comment', None)
+        comment = Interaction.query.filter(Interaction.id==comment_id).first_or_404()
+        comment.status = status
+        db.session.commit()
+        return jsonify({'status':'200'})
+    else:
+        abort(404)
