@@ -2,7 +2,10 @@ from flask import Blueprint, jsonify, render_template, request, session, redirec
 from PIL import Image
 import os
 import config
+from functions.methods import get_time
+from functions.text_generators import confirm_comment_text_generator, reject_comment_text_generator
 from models.interaction import Interaction
+from models.ticket import Ticket
 from models.user import User
 from models.book import Book
 from extentions import db
@@ -202,4 +205,31 @@ def edit_photo_book(id):
         
     flash('book_edit_success')
     return redirect(url_for('admin.books'))
-    
+################## cofirmation ##################
+#comment
+@app.route("/admin/comments")
+def comments():
+    comments = Interaction.query.filter(Interaction.type != 'activism',Interaction.status == 'review').all()
+    return render_template("admin/comments.html", comments=comments)
+
+@app.route("/admin/comments-api", methods=["POST"])
+def comment_api():
+    if request.method == "GET":
+        abort(404)
+    status = request.form.get('status', None)
+    if status=="confirmed" or status=="rejected":
+        comment_id = request.form.get('comment', None)
+        comment = Interaction.query.filter(Interaction.id==comment_id).first_or_404()
+        comment.status = status
+
+        if status=="confirmed" and comment.type=="comment":
+            text = confirm_comment_text_generator(comment)
+        elif status=="rejected" and comment.type=="comment":
+            text = reject_comment_text_generator(comment)
+
+        tic = Ticket(type='comment_sta', sub_type='comment', content=text, user_id=comment.user_id, time=get_time())
+        db.session.add(tic)
+        db.session.commit()
+        return jsonify({'status':'200'})
+    else:
+        abort(404)
