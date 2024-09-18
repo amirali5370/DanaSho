@@ -3,7 +3,7 @@ from PIL import Image
 import os
 import config
 from functions.methods import get_time
-from functions.text_generators import confirm_comment_text_generator, reject_comment_text_generator
+from functions.text_generators import confirm_activate_text_generator, confirm_camp_text_generator, confirm_comment_text_generator, confirm_course_text_generator, reject_activate_text_generator, reject_comment_text_generator
 from models.interaction import Interaction
 from models.ticket import Ticket
 from models.user import User
@@ -223,12 +223,74 @@ def comment_api():
         comment.status = status
 
         if status=="confirmed" and comment.type=="comment":
+            comment.user.coin += coin_04
             text = confirm_comment_text_generator(comment)
         elif status=="rejected" and comment.type=="comment":
             text = reject_comment_text_generator(comment)
 
         tic = Ticket(type='comment_sta', sub_type='comment', content=text, user_id=comment.user_id, time=get_time())
         db.session.add(tic)
+        db.session.commit()
+        return jsonify({'status':'200'})
+    else:
+        abort(404)
+
+#activism
+@app.route("/admin/activisms")
+def activisms():
+    activisms = Interaction.query.filter(Interaction.type == 'activism',Interaction.status == 'review').all()
+    return render_template("admin/activisms.html", activisms=activisms)
+
+@app.route("/admin/activisms-api", methods=["POST"])
+def activism_api():
+    if request.method == "GET":
+        abort(404)
+    status = request.form.get('status', None)
+    if status=="confirmed" or status=="rejected":
+        activism_id = request.form.get('activism', None)
+        activism = Interaction.query.filter(Interaction.id==activism_id).first_or_404()
+        activism.status = status
+
+        if status=="confirmed" and activism.type=="activism":
+            text = confirm_activate_text_generator(activism)
+            activism.user.point += point_02
+        elif status=="rejected" and activism.type=="activism":
+            text = reject_activate_text_generator(activism)
+
+        tic = Ticket(type='comment_sta', sub_type='activism', content=text, user_id=activism.user_id, time=get_time())
+        db.session.add(tic)
+        db.session.commit()
+        return jsonify({'status':'200'})
+    else:
+        abort(404)
+
+#activism
+@app.route("/admin/requests")
+def requests():
+    requests = Ticket.query.filter(Ticket.type == 'request',Ticket.status == 'review').all()
+    return render_template("admin/requests.html", requests=requests)
+
+@app.route("/admin/requests-api", methods=["POST"])
+def request_api():
+    if request.method == "GET":
+        abort(404)
+    status = request.form.get('status', None)
+    if status=="confirmed" or status=="rejected":
+        request_id = request.form.get('request', None)
+        requested = Ticket.query.filter(Ticket.id==request_id).first_or_404()
+        requested.status = status
+
+        if status=="confirmed" and requested.sub_type=="camp":
+            text = confirm_camp_text_generator(requested.user.name)
+            requested.user.coin += coin_06
+            tic = Ticket(type='coin_confirm', sub_type=requested.type, content=text, user_id=requested.user_id, time=get_time())
+            db.session.add(tic)
+        elif status=="confirmed" and requested.sub_type=="course":
+            text = confirm_course_text_generator(requested.user.name)
+            requested.user.coin += coin_05
+            tic = Ticket(type='coin_confirm', sub_type=requested.type, content=text, user_id=requested.user_id, time=get_time())
+            db.session.add(tic)
+
         db.session.commit()
         return jsonify({'status':'200'})
     else:

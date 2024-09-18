@@ -201,6 +201,8 @@ def book_activisms(book_link):
             file = request.files.get("photo", None)
             c = Interaction(type="activism", content=activism, user_id=current_user.id, book_id=book.id, time=get_time())
             db.session.add(c)
+            db.session.commit()
+            print(c.id)
             
             file.save(f"static/activisms/{file.filename}")
 
@@ -439,7 +441,7 @@ def ticket_add():
         req = request.form.get('type', None)
         req = "camp" if req=="or" else "course"
         text = camp_req_text_generator(current_user.name) if req=="camp" else course_req_text_generator(current_user.name)
-        tik = Ticket(type="request", sub_type=req, content=text, user_id=current_user.id, time=get_time())
+        tik = Ticket(type="request", sub_type=req, content=text, user_id=current_user.id, time=get_time(), status='review')
         db.session.add(tik)
         db.session.commit()
         return '200'

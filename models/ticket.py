@@ -9,7 +9,8 @@ class Ticket(db.Model):
     sub_type = Column(String, index=True)
     content = Column(String, nullable=False, index=True)
     user_id = Column(Integer, ForeignKey('users.id') ,nullable=False, index=True)
-    time = Column(Integer, nullable=False, index=True)
+    time = Column(String, nullable=False, index=True)
+    status = Column(String, index=True)
 
 #   types={ admin : [ -invited , coin_confirm* , comment_sta*],
 #            user : [ request* , excerpt      ]}

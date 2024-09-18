@@ -1,0 +1,51 @@
+{% extends "Base.html" %}
+{% block head %}
+    <title>کنش ها</title>
+{% endblock %}
+{% block body %}
+
+{% for a in activisms %}
+    <div data-activism-id="{{a.id}}">
+        <p>{{a.user.name}}</p>
+        <p>{{a.content}}</p>
+        <img width="150px" src="/static/activisms/{{a.id}}.jpg" alt="">
+        <p dir="ltr" style="text-align: end;">{{a.time}}</p>
+        <button onclick="confirm(this,'confirmed')" style="display: inline;">تائید کنش</button>
+        <button onclick="confirm(this,'rejected')" style="display: inline;">رد کنش</button>
+    </div>
+{% endfor %}
+<script>
+    function confirm(item,status){
+        activism_id = item.parentNode.getAttribute("data-activism-id")
+        form = new FormData()
+    
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', '{{url_for("admin.activism_api", _external=True)}}', true);
+    
+    
+        var data = { 'csrf_token': '{{ csrf_token() }}', 'activism': activism_id, 'status':status };
+        
+        for (var key in data) {
+            form.append(key, data[key]);
+        }
+        xhr.onreadystatechange = function() {
+            // بررسی وضعیت درخواست
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+              // بررسی کد وضعیت پاسخ
+              if (xhr.status === 200) {
+                // 4. تبدیل پاسخ به JSON
+                var jsonResponse = JSON.parse(xhr.responseText);
+                if (jsonResponse['status'] == '200'){
+                    item.parentNode.style.display = 'none'
+                }
+              } else {
+                console.error('Error: ' + xhr.status);
+              }
+            }
+        };
+    
+        xhr.send(form);
+    }
+
+</script>
+{% endblock %}
