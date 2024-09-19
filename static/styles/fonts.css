@@ -1,0 +1,12 @@
+@font-face {
+  font-family: 'Tanha';
+  src: url('../fonts/Tanha/Tanha.woff2') format('woff2'),
+         url('../fonts/Tanha/Tanha.woff') format('woff'),
+         url('../fonts/Tanha/Tanha.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Emza';
+  src: url('../fonts/Emza/emza.woff2') format('woff2'),
+         url('../fonts/Emza/emza.woff') format('woff'),
+         url('../fonts/Emza/emza.ttf') format('truetype');
+}

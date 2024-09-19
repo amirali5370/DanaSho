@@ -1,146 +1,259 @@
 {% extends "Base.html" %}
 {% block head %}
     <title>باشگاه</title>
-    <style>
-        .me{
-            color: goldenrod;
-        }
-        form{
-            border-collapse: collapse;
-        }
-        th, td {
-            border: 2px solid black; 
-            padding: 8px; 
-            text-align: center; 
-        }
-    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/club.css') }}">
     {% endblock %}
     {% block body %}
-    <table>
-        <tr>
-            <th>رتبه</th>
-            <th>نام و نام خانوادگی</th>
-            <th>تعداد سکه ها</th>
-        </tr>
-        {%for i in top_coins%}
-        <tr class="{{'me' if i==current_user}}">
-            <td>{{loop.index}}</td>
-            <td>{{i.name}}</td>
-            <td>{{i.coin}}</td>
-        </tr>
-        {% endfor %}
-        {% if current_user.authentication==1 and current_user.final==1%}
-        <tr>
-            <td colspan="3">رتبه شما : {{rank_coins}}</td>
-        </tr>
-        {% endif %}
-    </table>
+    <div id="continer">
+        <div id="side-wrp">
+            <div id="logo-wrp">
+                <img id="logo" src="" alt="">
+            </div>
+            <a href="#" class="icon-wrp">
+                <i class="fa fa-home icon"></i>
+                <h2>خانه </h2>
+            </a>
+            <a href="#" class="icon-wrp">
+                <i class="fa fa-comments icon"></i>
+                <h2>کنشگری </h2>
+            </a>
+            <a href="#" class="icon-wrp active">
+                <i class="fa fa-trophy icon"></i>
+                <h2>باشگاه </h2>
+            </a>
+            <a href="#" class="icon-wrp">
+                <i class="fa fa-user-circle icon"></i>
+                <h2>پروفایل </h2>
+            </a>
+            <a href="#" class="icon-wrp">
+                <i class="fa fa-life-saver icon"></i>
+                <h2>تیکت </h2>
+            </a>
+        </div>
+        <div id="content-wrp">
+            <div id="heading">
+                <h1>باشگاه</h1>
+            </div>
+            <div id="main">
+                <div class="table-co" id="invite-table-co">
+                    <div class="table" id="invite-table">
+                        <div class="title-table">
+                            <h2 class="the-title">بیشترین دعوت</h2>
+                        </div>
+                        <div class="name">
+                            {%for i in top_invites%}
+                            <div class="person p{{loop.index}} neonText {{'me' if i==current_user}}">
+                                <h4>{{loop.index}}</h4>
+                                <div class="bio">
+                                    <img class="profile" src="{{ url_for('static', filename='styles/index.jpg') }}" alt="">
+                                    <h3 class="neonText">{{i.name}}</h3>
+                                </div>
+                                <h4>{{i.invite}}</h4>
+                            </div>
+                            {% endfor %}
+                            {% if current_user.authentication==1 and current_user.final==1%}
+                            <div class="my-level">
+                                <h4>{{rank_invites}}</h4>
+                                <div class="bio">
+                                    <h3 class="neonText">{{current_user.name}}</h3>
+                                </div>
+                                <h4>{{current_user.invite}}</h4>
+                            </div>
+                            {% else %}
+                            <div class="my-level">
+                                <h4>?</h4>
+                                <div class="bio">
+                                    <h3 class="neonText">{{current_user.name}}</h3>
+                                </div>
+                                <h4>?</h4>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="table-co" id="like-table-co">
+                    <div class="table" id="like-table">
+                        <div class="title-table">
+                            <h2 class="the-title">بیشترین لایک</h2>
+                        </div>
+                        <div class="name">
+                            {%for i in top_likes%}
+                            <div class="person p{{loop.index}} neonText {{'me' if i==current_user}}">
+                                <h4>{{loop.index}}</h4>
+                                <div class="bio">
+                                    <img class="profile" src="{{ url_for('static', filename='styles/index.jpg') }}" alt="">
+                                    <h3 class="neonText">{{i.name}}</h3>
+                                </div>
+                                <h4>{{i.like}}</h4>
+                            </div>
+                            {% endfor %}
+                            {% if current_user.authentication==1 and current_user.final==1%}
+                            <div class="my-level">
+                                <h4>{{rank_likes}}</h4>
+                                <div class="bio">
+                                    <h3 class="neonText">{{current_user.name}}</h3>
+                                </div>
+                                <h4>{{current_user.like}}</h4>
+                            </div>
+                            {% else %}
+                            <div class="my-level">
+                                <h4>?</h4>
+                                <div class="bio">
+                                    <h3 class="neonText">{{current_user.name}}</h3>
+                                </div>
+                                <h4>?</h4>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="table-co" id="point-table-co">
+                    <div class="table" id="point-table">
+                        <div class="title-table">
+                            <h2 class="the-title">بیشترین امتیاز</h2>
+                        </div>
+                        <div class="name">
+                            {%for i in top_points%}
+                            <div class="person p{{loop.index}} neonText {{'me' if i==current_user}}">
+                                <h4>{{loop.index}}</h4>
+                                <div class="bio">
+                                    <img class="profile" src="{{ url_for('static', filename='styles/index.jpg') }}" alt="">
+                                    <h3 class="neonText">{{i.name}}</h3>
+                                </div>
+                                <h4>{{i.point}}</h4>
+                            </div>
+                            {% endfor %}
+                            {% if current_user.authentication==1 and current_user.final==1%}
+                            <div class="my-level">
+                                <h4>{{rank_points}}</h4>
+                                <div class="bio">
+                                    <h3 class="neonText">{{current_user.name}}</h3>
+                                </div>
+                                <h4>{{current_user.point}}</h4>
+                            </div>
+                            {% else %}
+                            <div class="my-level">
+                                <h4>?</h4>
+                                <div class="bio">
+                                    <h3 class="neonText">{{current_user.name}}</h3>
+                                </div>
+                                <h4>?</h4>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="table-co" id="coin-table-co">
+                    <div class="table" id="coin-table">
+                        <div class="title-table">
+                            <h2 class="the-title">بیشترین سکه</h2>
+                        </div>
+                        <div class="name">
+                            {%for i in top_coins%}
+                            <div class="person p{{loop.index}} neonText {{'me' if i==current_user}}">
+                                <h4>{{loop.index}}</h4>
+                                <div class="bio">
+                                    <img class="profile" src="{{ url_for('static', filename='styles/index.jpg') }}" alt="">
+                                    <h3 class="neonText">{{i.name}}</h3>
+                                </div>
+                                <h4>{{i.coin}}</h4>
+                            </div>
+                            {% endfor %}
+                            {% if current_user.authentication==1 and current_user.final==1%}
+                            <div class="my-level">
+                                <h4>{{rank_coins}}</h4>
+                                <div class="bio">
+                                    <h3 class="neonText">{{current_user.name}}</h3>
+                                </div>
+                                <h4>{{current_user.coin}}</h4>
+                            </div>
+                            {% else %}
+                            <div class="my-level">
+                                <h4>?</h4>
+                                <div class="bio">
+                                    <h3 class="neonText">{{current_user.name}}</h3>
+                                </div>
+                                <h4>?</h4>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="table-co" id="badge-table-co">
+                    <div class="table" id="badge-table">
+                        <div class="title-table">
+                            <h2 class="the-title">بیشترین نشان</h2>
+                        </div>
+                        <div class="name">
+                            {%for i in top_badges%}
+                            <div class="person p{{loop.index}} neonText {{'me' if i==current_user}}">
+                                <h4>{{loop.index}}</h4>
+                                <div class="bio">
+                                    <img class="profile" src="{{ url_for('static', filename='styles/index.jpg') }}" alt="">
+                                    <h3 class="neonText">{{i.name}}</h3>
+                                </div>
+                                <h4>{{i.badge}}</h4>
+                            </div>
+                            {% endfor %}
+                            {% if current_user.authentication==1 and current_user.final==1%}
+                            <div class="my-level">
+                                <h4>{{rank_badges}}</h4>
+                                <div class="bio">
+                                    <h3 class="neonText">{{current_user.name}}</h3>
+                                </div>
+                                <h4>{{current_user.badge}}</h4>
+                            </div>
+                            {% else %}
+                            <div class="my-level">
+                                <h4>?</h4>
+                                <div class="bio">
+                                    <h3 class="neonText">{{current_user.name}}</h3>
+                                </div>
+                                <h4>?</h4>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="table-co" id="my-table-co">
+                    <div class="table" id="my-table">
+                        <div class="title-table">
+                            <h2 class="the-title">رتبه‌های من</h2>
+                        </div>
 
-    <br>
-
-    <table>
-        <tr>
-            <th>رتبه</th>
-            <th>نام و نام خانوادگی</th>
-            <th>مقدار امتیاز </th>
-        </tr>
-        {%for i in top_points%}
-        <tr class="{{'me' if i==current_user}}">
-            <td>{{loop.index}}</td>
-            <td>{{i.name}}</td>
-            <td>{{i.point}}</td>
-        </tr>
-        {% endfor %}
-        {% if current_user.authentication==1 and current_user.final==1%}
-        <tr>
-            <td colspan="3">رتبه شما : {{rank_points}}</td>
-        </tr>
-        {% endif %}
-    </table>
-
-    <br>
-
-    <table>
-        <tr>
-            <th>رتبه</th>
-            <th>نام و نام خانوادگی</th>
-            <th>تعداد نشان ها </th>
-        </tr>
-        {%for i in top_badges%}
-        <tr class="{{'me' if i==user}}">
-            <td>{{loop.index}}</td>
-            <td>{{i.name}}</td>
-            <td>{{i.badge}}</td>
-        </tr>
-        {% endfor %}
-        {% if current_user.authentication==1 and current_user.final==1%}
-        <tr>
-            <td colspan="3">رتبه شما : {{rank_badges}}</td>
-        </tr>
-        {% endif %}
-    </table>
-
-    <br>
-
-    <table>
-        <tr>
-            <th>رتبه</th>
-            <th>نام و نام خانوادگی</th>
-            <th>تعداد لایک ها </th>
-        </tr>
-        {%for i in top_likes%}
-        <tr class="{{'me' if i==current_user}}">
-            <td>{{loop.index}}</td>
-            <td>{{i.name}}</td>
-            <td>{{i.like}}</td>
-        </tr>
-        {% endfor %}
-        {% if current_user.authentication==1 and current_user.final==1%}
-        <tr>
-            <td colspan="3">رتبه شما : {{rank_likes}}</td>
-        </tr>
-        {% endif %}
-    </table>
-
-    <br>
-
-    <table>
-        <tr>
-            <th>رتبه</th>
-            <th>نام و نام خانوادگی</th>
-            <th>تعداد دعوت ها </th>
-        </tr>
-        {%for i in top_invites%}
-        <tr class="{{'me' if i==current_user}}">
-            <td>{{loop.index}}</td>
-            <td>{{i.name}}</td>
-            <td>{{i.invite}}</td>
-        </tr>
-        {% endfor %}
-        {% if current_user.authentication==1 and current_user.final==1%}
-        <tr>
-            <td colspan="3">رتبه شما : {{rank_invites}}</td>
-        </tr>
-        {% endif %}
-    </table>
-
-    <br>
-    {% if current_user.authentication==1 and current_user.final==1%}
-    <table>
-        <tr>
-            <th>رتبه های {{current_user.name}}</th>
-        </tr>
-        <tr>
-            <td>رتبه شما در کشور : {{rank_points}}</td>
-        </tr>
-        <tr>
-            <td>رتبه شما در {{current_user.province}} : {{province_rank}}</td>
-        </tr>
-        <tr>
-            <td>رتبه شما در {{current_user.city}} : {{city_rank}}</td>
-        </tr>
-    </table>
-    {% else %}
-    <a href="{{url_for('user.completion')+'?next=/club'}}"><button>مشاهده رتبه های من</button></a>
-    {% endif %}
+                        <div class="name-my-table">
+                            {% if current_user.authentication==1 and current_user.final==1%}
+                            <div class="person my-rank my-name neonText">
+                                <h3>{{current_user.name}}</h3>
+                                <h3>امتیاز : {{current_user.point}}</h3>
+                            </div>
+                            <div class="person my-rank country neonText">
+                                <h3>رتبه شما در کشور:</h3>
+                                <h3 class="rank-num">{{rank_points}}</h3>
+                            </div>
+                            <div class="person my-rank province neonText">
+                                <h3>رتبه شما در استان {{current_user.province}}:</h3>
+                                <h3 class="rank-num">{{province_rank}}</h3>
+                            </div>
+                            <div class="person my-rank city neonText">
+                                <h3>رتبه شما در شهر {{current_user.city}}:</h3>
+                                <h3 class="rank-num">{{city_rank}}</h3>
+                            </div>
+                            {% else %}
+                            <div class="person my-rank my-name neonText">
+                                <h3>{{current_user.name}}</h3>
+                                <h3><a href="{{url_for('user.completion')+'?next=/club'}}">مشاهده رتبه های من</a></h3>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="footer">
+                <h4 id="copyRight">© تمام حقوق برای مسابقه دانا پلاس شو محفوظ است</h4>
+            </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
