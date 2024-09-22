@@ -1,39 +1,75 @@
 {% extends "Base.html" %}
 {% block head %}
     <title>تیکت پشتیبانی</title>
-    <style>
-        .admin-co{
-            justify-content: flex-end;
-        }
-        .user-co{
-            justify-content: flex-start;
-        }
-        .admin{
-            background-color: rgb(255, 241, 240);
-            max-width: 60%;
-        }
-        .user{
-            background-color: rgb(143, 219, 165);
-            max-width: 60%;
-
-        }
-    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/user/ticket.css') }}">
 {% endblock %}
 {% block body %}
-    {% for t in tickets%}
-    <div id="container{{loop.index}}" class="{{'admin-co' if t.type == 'invited' or t.type == 'coin_confirm' or t.type == 'comment_sta' or t.type == 'activism_sta' else 'user-co'}}" style="padding: 7px; display: flex;">
-        <div class="{{'admin' if t.type == 'invited' or t.type == 'coin_confirm' or t.type == 'comment_sta' or t.type == 'activism_sta' else 'user'}}">
-            <p style="white-space: pre-wrap;">{{t.content}}</p>
-            <p dir="ltr">{{t.time}}</p>
-            
+<div id="container">
+    <div id="side-wrp">
+        <div id="logo-wrp">
+            <img id="logo" src="" alt="">
+        </div>
+        <a href="#" class="icon-wrp">
+            <i class="fa fa-home icon"></i>
+            <h2>خانه </h2>
+        </a>
+        <div class="icon-wrp">
+            <i class="fa fa-comments icon"></i>
+            <h2>کنشگری </h2>
+        </div>
+        <div class="icon-wrp">
+            <i class="fa fa-trophy icon"></i>
+            <h2>باشگاه </h2>
+        </div>
+        <div class="icon-wrp">
+            <i class="fa fa-user-circle icon"></i>
+            <h2>پروفایل </h2>
+        </div>
+        <div class="icon-wrp active">
+            <i class="fa fa-life-saver icon active"></i>
+            <h2>تیکت </h2>
         </div>
     </div>
-    {% endfor %}
-    <br><br><br><br>
+    <div id="content-wrp">
+        <div id="heading">
+            <h1>تیکت</h1>
+        </div>
+        <div id="main">
+            <div class="content-wrp">
+                <div class="chat-container">
+                    {% for t in tickets%}
+                        <div id="container{{loop.index}}" class="message {{'received' if t.type == 'invited' or t.type == 'coin_confirm' or t.type == 'comment_sta' or t.type == 'activism_sta' else 'sent'}}">
+                            <p>{{t.content}}</p>
+                            <div class="time-wrp">
+                                <p class="time">{{t.time}}</p>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                <div class="buttons-wrp">
+                    <button class="req" data-type="or">
+                        من در اردو موسسه شرکت کردم
+                    </button>
+                    <button class="req" data-type="do">
+                        من در دوره های مجازی شرکت کردم
+                    </button>
+                    <button>
+                        ارسال فایل خلاصه کتاب
+                    </button>
+                    <button>
+                        ارتباط آنلاین با «دانا پلاس شو»
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div id="footer">
+            <h4 id="copyRight">© تمام حقوق برای مسابقه دانا پلاس شو محفوظ است</h4>
+        </div>
+        </div>
+    </div>
+</div>
 
-    <button class="req" data-type="or">من در اردو موسسه شرکت کردم</button>
-    <button class="req" data-type="do">من در دوره های مجازی شرکت کردم</button>
-    <button class="" data-type="">ارسال فایل خلاصه کتاب</button>
 
 
 <script>

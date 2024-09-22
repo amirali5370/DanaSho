@@ -1,0 +1,559 @@
+@import url('../fonts.css');
+body::-webkit-scrollbar {
+    width: 0px; /* عرض نوار اسکرول را صفر می‌کند */
+    background: transparent; /* پس‌زمینه نوار اسکرول را شفاف می‌کند */
+}
+a:-webkit-any-link {
+    color: none;
+    cursor: pointer;
+    text-decoration: none;
+}
+body *{
+    font-family: Tanha;
+}
+.neonText{
+    transition: 0.3s;
+}
+.neonText:hover {
+    color: #fff;
+    text-shadow:
+      0 0 7px #fff,
+      0 0 10px #fff,
+      0 0 21px #fff,
+      0 0 42px #cfc800,
+      0 0 82px #cfc800,
+      0 0 92px #cfc800,
+      0 0 102px #cfc800,
+      0 0 151px #cfc800;
+      animation: pulsate 1.5s infinite alternate;  
+}
+.my-level>.bio>h3:hover{
+    color: #bc13fe;
+}
+
+  
+  @keyframes pulsate {
+    
+    100% {
+  
+        text-shadow:
+        0 0 4px #fff,
+        0 0 11px #fff,
+        0 0 19px #fff,
+        0 0 40px #cfc800,
+        0 0 80px #cfc800,
+        0 0 90px #cfc800,
+        0 0 100px #cfc800,
+        0 0 150px #cfc800;
+    
+    }
+    
+    0% {
+  
+      text-shadow:
+      0 0 2px #fff,
+      0 0 4px #fff,
+      0 0 6px #fff,
+      0 0 10px #cfc800,
+      0 0 45px #cfc800,
+      0 0 55px #cfc800,
+      0 0 70px #cfc800,
+      0 0 80px #cfc800;
+  
+  }}  
+  
+.person.me{
+    border: none;
+    width: calc(95% + 6px);
+    box-shadow: 0 0 .2rem #fff,
+    0 0 .2rem #fff,
+    0 0 2rem #cfc800,
+    0 0 0.8rem #cfc800,
+    0 0 2.8rem #cfc800,
+    inset 0 0 1.3rem #cfc800; 
+}
+
+
+body{
+    font-family: Arial;
+    padding: 0px;
+    margin: 0px;
+}
+h1{
+    margin-top: 8%;
+    color: #fff;
+    text-shadow:
+    0 0 5px #fff,
+    0 0 10px #fff,
+    0 0 20px #fff,
+    0 0 40px #0ff,
+    0 0 80px #0ff,
+    0 0 90px #0ff,
+    0 0 100px #0ff,
+    0 0 150px #0ff;
+    animation: club 2s infinite alternate;  
+
+    
+}
+@keyframes club {
+    
+    100% {
+
+        text-shadow:
+        0 0 4px #fff,
+        0 0 11px #fff,
+        0 0 19px #fff,
+        0 0 40px #0ff,
+        0 0 80px #0ff,
+        0 0 90px #0ff,
+        0 0 100px #0ff,
+        0 0 150px #0ff;
+    
+    }
+    
+    0% {
+
+        text-shadow:
+        0 0 2px #fff,
+        0 0 4px #fff,
+        0 0 6px #fff,
+        0 0 10px #0ff,
+        0 0 45px #0ff,
+        0 0 55px #0ff,
+        0 0 70px #0ff,
+        0 0 80px #0ff;
+
+}}  
+#heading{
+display: flex;
+justify-content: center;
+}
+.table{
+    padding-bottom: 20px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    width: 95%;
+    max-width: 600px;
+    border-radius: 29px;
+    background-image: linear-gradient(#0b937c,#005446);
+    transition: 0.5s;
+}
+.table:hover{
+    box-shadow: 0 0 .2rem #fff,
+    0 0 .2rem #fff,
+    0 0 2rem #bc13fe,
+    0 0 0.8rem #bc13fe,
+    0 0 2.8rem #bc13fe,
+    inset 0 0 1.3rem #bc13fe; 
+}
+.person.p1{
+    background-color: #056b59;
+    
+}
+.person.p2{
+    background-color: #056d5b;
+    
+}
+.person.p3{
+    background-color: #067562;
+    
+}
+.person.p4{
+    background-color: #077e6a;
+    
+}
+.person.p5{
+    background-color: #088671;
+    
+}
+.person.p6{
+    background-color: #098e77;
+    
+}
+.person.p7{
+    background-color: #0b9880;
+    
+}
+.person.p8{
+    background-color: #0b9f86;
+    
+}
+.person.p9{
+    background-color: #0da88e;
+    
+}
+.person.p10{
+    background-color: #0db094;
+    
+}
+.title-table{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    top: -20px;
+    border-radius: 15px;
+    width: 70%;
+    height: 50px;
+    border-radius: 42px;
+    border-radius: 42px;
+    background: #3df58d;
+    box-shadow: 
+    1px 1px 25px #186238,
+    -1px -1px 25px #62ffe235,
+    0 0 .2rem #fff,
+    0 0 .2rem #fff,
+    0 0 2rem #bc13fe,
+    0 0 0.8rem #bc13fe,
+    0 0 2.8rem #bc13fe,
+    inset 0 0 1.3rem #bc13fe;
+    transition: 0.3s;
+}
+.title-table:hover{
+    position: relative;
+    top: -20px;
+    border-radius: 15px;
+    width: 70%;
+    height: 50px;
+    border-radius: 42px;
+    border-radius: 42px;
+    background: #3df58d;
+    box-shadow: inset 5px 5px 26px #186238,
+    inset -5px -5px 26px #62ffe2,
+    1px 1px 25px #186238,
+    -1px -1px 25px #62ffe235;;
+    transform: scale(1.05);
+}
+
+
+.name{
+    width: 90%;
+    height: 100%;
+}
+.person{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin: 1%;
+    margin-top: 10px;
+    width: 95%;
+    height: 50px;
+    background-color: #0b937c;
+    border: 3px #012d25bc solid;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 50px;
+    box-shadow: inset 4px -8px 4px 0px rgb(4 4 4 / 19%),
+    inset -1px 3px 5px 3px rgb(0 0 0 / 12%);
+    
+    transition: background-color 0.3s, transform 0.3s;
+}
+.person:hover {
+    transform: scale(1.03);
+}
+.my-level{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    border: 10px double #ffffff74;
+    border-radius: 50px;
+    margin-top: 20px;
+    padding: 0.006%;
+    color: #cfc800;
+}
+h3{
+    font-size: 1.4em;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+.bio{
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    gap: 25px;
+    height: 100%;
+    width: 70%;
+}
+.profile{
+    height: calc(100% - 6px);
+    border-radius: 50%;
+}
+.the-title{
+    color: #116644;
+}
+.table-co{
+    display: flex;
+    justify-content: center;
+    margin-top: 100px;
+    width: 100% ;
+}
+#copyRight{
+    color: white
+}
+#author{
+    font-family: Emza;
+}
+.name-my-table{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    width: 90%;
+    height: 100%;
+}
+.person.my-rank{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    height: 120px;
+}
+.person.my-rank:hover{
+    transform: scale(1.09);
+}
+.person.my-rank>h4{
+    margin: 0;
+}
+.rank-num{
+    border: 5px dotted #cfc800;
+    padding: 2px;
+    padding-left: 15px;
+    padding-right: 15px;
+    border-radius: 15px;
+}
+.icon-wrp{
+    display: flex;
+    justify-content: start;
+    align-items: center;
+}
+.icon{
+    font-size:48px;
+    color:#fbe1d2;
+    margin-left: 10%;
+}
+.icon-wrp>h2{
+    color:#fbe1d2;
+}
+h2{
+    margin: 0;
+}
+#side-wrp{
+    display: flex;
+}
+#logo-wrp{
+    border-bottom: 3px dashed #d7d00297;
+    width: 100%;
+}
+#footer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.icon-wrp.active *{
+    color: #8dffea;
+    text-shadow:
+    0 0 5px #fff,
+    0 0 10px #fff,
+    0 0 20px #fff;
+}
+@media only screen and (min-width: 1025px) {
+    /*حالت عادی*/
+    /*کامپیوتر لپتاپ لارج*/
+    #continer{
+        display: flex;
+        width: 100%;
+        height: auto;
+    }
+    #content-wrp{
+        width: 85%;
+        background-color: #012720;
+        justify-content: center;
+        align-items: center;
+    }
+    #side-wrp{
+        flex-direction: column;
+        position: sticky;
+        top: 0;
+        width: 15%;
+        background-color: #012720;    
+        border-left: 3px solid #fbe1d2;
+        height: 100vh;
+    }
+    #main{
+        display: grid;
+        gap: 5px;
+        grid-template-columns: 50% 50%;
+        margin: 3%;
+    }
+    h1{
+        font-size: 2.7em;
+    }
+    .icon-wrp{
+        margin-top: 30px;
+        margin-right: 10%;
+
+    }
+    #logo-wrp{
+        margin-bottom: 40px;
+    }
+    
+}
+
+@media only screen and (max-width: 1024px) and (min-width: 770px) {
+    /*محتوای وسط تک ستونی*/
+    /* لپتاپ */
+    #continer{
+        display: flex;
+        width: 100%;
+        height: auto;
+    }
+    #content-wrp{
+        width: 85%;
+        background-color: #012720;
+    }
+    #side-wrp{
+        flex-direction: column;
+        position: sticky;
+        top: 0;
+        width: 17%;
+        background-color: #012720;    
+        border-left: 3px solid #fbe1d2;
+        height: 100vh;
+    }
+    #main{
+        
+        margin: 10%;
+    }
+    .icon{
+        font-size: 36px;
+    }
+    h2{
+        font-size: 1.3em;
+    }
+    .icon-wrp{
+        margin-top: 30px;
+        margin-right: 10%;
+
+    }
+    #logo-wrp{
+        margin-bottom: 35px;
+    }
+
+}
+
+
+@media only screen and (max-width: 769px){
+    /*منو زیر*/
+    /* مینی */
+    #continer{
+        display: flex;
+        width: 100%;
+        height: auto;
+    }
+    #main{
+        margin: 10%;
+    }
+    #content-wrp{
+        background-color: #012720;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        margin-bottom: 85px;
+    }
+    #side-wrp{
+        z-index: 999;
+        display: flex;
+        height: 85px;
+        width: 100%;
+        background-color: #012720;    
+        border-top: 3px solid #fbe1d2;
+        position: fixed;
+        bottom: 0;
+        margin: 0;
+        justify-content: space-around;
+    }
+    .table{
+        box-shadow: 0 0 .2rem #fff,
+        0 0 .2rem #fff,
+        0 0 2rem #bc13fe,
+        0 0 0.8rem #bc13fe,
+        0 0 2.8rem #bc13fe,
+        inset 0 0 1.3rem #bc13fe; 
+    }
+    h3{
+        font-size: 1.2em;
+    }
+    .bio{
+        gap: 15px;
+    }
+    .icon-wrp{
+        flex-direction: column;
+        height: 100%;
+        justify-content: center;
+    }
+    #logo-wrp{
+        border-bottom: none;
+        border-left: 3px dashed #d7d00297;
+        width: 60px;
+    }
+    .icon{
+        font-size: 30px;
+    }
+    h2{
+        font-size: 1.4em;
+    }
+    h1{
+        font-size: 2.2em;
+    }
+}
+
+@media only screen and (min-width: 1024px) and (max-width: 1400px) {
+    h3{
+        font-size: 1.2em;
+    }
+    .bio{
+        gap: 15px;
+    }
+    .icon{
+        font-size: 30px;
+    }
+    h2{
+        font-size: 1.4em;
+    }
+    h1{
+        font-size: 2.4em;
+    }
+}
+@media only screen and (max-width: 450px) {
+    h3{
+        font-size: 0.8em;
+    }
+    .person{
+        height: 30px;
+    }
+    h4{
+        font-size: 0.65em;
+    }
+    .the-title{
+        font-size: 1.2rem;
+    }
+    .icon{
+        font-size: 24px;
+    }
+    #logo-wrp{
+        display: none;
+    }
+    h2{
+        font-size: 1em;
+    }
+    h1{
+        font-size: 1.9em;
+    }
+}
+

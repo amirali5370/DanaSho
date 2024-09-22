@@ -428,7 +428,7 @@ def invites():
 @app.route("/ticket")
 @login_required
 def ticket():
-    tickets = current_user.tickets.all()
+    tickets = current_user.tickets.order_by(Ticket.id.desc()).all()
     return render_template("user/ticket.html", tickets=tickets)
 
 #ticket api
