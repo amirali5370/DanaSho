@@ -10,23 +10,23 @@
             <div id="logo-wrp">
                 <img id="logo" src="" alt="">
             </div>
-            <a href="#" class="icon-wrp">
+            <a href="{{ url_for('user.home') }}" class="icon-wrp">
                 <i class="fa fa-home icon"></i>
                 <h2>خانه </h2>
             </a>
-            <a href="#" class="icon-wrp">
+            <a href="{{ url_for('user.activism') }}" class="icon-wrp">
                 <i class="fa fa-comments icon"></i>
                 <h2>کنشگری </h2>
             </a>
-            <a href="#" class="icon-wrp active">
+            <a href="{{ url_for('user.club') }}" class="icon-wrp active">
                 <i class="fa fa-trophy icon"></i>
                 <h2>باشگاه </h2>
             </a>
-            <a href="#" class="icon-wrp">
+            <a href="{{ url_for('user.profile') }}" class="icon-wrp">
                 <i class="fa fa-user-circle icon"></i>
                 <h2>پروفایل </h2>
             </a>
-            <a href="#" class="icon-wrp">
+            <a href="{{ url_for('user.ticket') }}" class="icon-wrp">
                 <i class="fa fa-life-saver icon"></i>
                 <h2>تیکت </h2>
             </a>

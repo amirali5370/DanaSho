@@ -25,7 +25,7 @@ app = Blueprint("user" , __name__)
 
 # ------------- LOGIN AND REGISTER-------------
 #register page
-@app.route("/register", methods = ["POST","GET"])
+@app.route("/register", methods = ["POST","GET"],  strict_slashes=False)
 def register():
     next = request.args.get('next',None)
     inv = request.args.get('invite',None)
@@ -110,7 +110,7 @@ def register():
         return render_template("user/register.html", inviting=inviting, recognitions=recognitions, provinces=cities.keys())
     
 #login page
-@app.route("/login", methods = ["POST","GET"])
+@app.route("/login", methods = ["POST","GET"],  strict_slashes=False)
 def login():
     next = request.args.get('next',None)
     if request.method == "POST":
@@ -160,12 +160,12 @@ def get_cities():
 # ------------- HOME -------------
 
 #home user page
-@app.route("/")
+@app.route("/",  strict_slashes=False)
 def home():
     return render_template("user/home.html")
 
 #comments (single book page)
-@app.route("/book/<book_link>", methods=["GET","POST"])
+@app.route("/book/<book_link>", methods=["GET","POST"],  strict_slashes=False)
 def book(book_link):
     book = Book.query.filter(Book.primalink==book_link).first_or_404()
     if request.method == "POST":
@@ -190,7 +190,14 @@ def book(book_link):
 # ------------- ACTIVISM -------------
 
 #activism (single book page)
-@app.route("/activism/<book_link>", methods=["GET","POST"])
+@app.route("/activism", methods=["GET","POST"],  strict_slashes=False)
+@login_required
+def activism():
+    return 'ok'
+
+
+#activism (single book page)
+@app.route("/activism/<book_link>", methods=["GET","POST"],  strict_slashes=False)
 @login_required
 def book_activisms(book_link):
     book = Book.query.filter(Book.primalink==book_link).first_or_404()
@@ -266,7 +273,7 @@ def like_maneger():
 # ------------- CLUB -------------
 
 #club page
-@app.route('/club')
+@app.route('/club',  strict_slashes=False)
 @login_required
 def club():
     top_coins = User.query.order_by(User.coin.desc()).limit(10).all()
@@ -291,10 +298,15 @@ def club():
 
 
 # ------------- PROFILE -------------
+@app.route("/profile", methods=["GET"],  strict_slashes=False)
+@login_required
+def profile():
+    return 'profile'
+
 
 #  ||||||||||||||||   completion   ||||||||||||||
 #completion page
-@app.route("/completion", methods=["GET"])
+@app.route("/completion", methods=["GET"],  strict_slashes=False)
 @login_required
 def completion():
     next = request.args.get('next',None)
@@ -415,7 +427,7 @@ def verify():
 
 #  ||||||||||||||||   invite   ||||||||||||||
 #invites page
-@app.route('/invites')
+@app.route('/invites',  strict_slashes=False)
 @login_required
 def invites():
     invitees = current_user.invites.all()
@@ -425,7 +437,7 @@ def invites():
 # ------------- TICKET -------------
 
 #ticket page
-@app.route("/ticket")
+@app.route("/ticket",  strict_slashes=False)
 @login_required
 def ticket():
     tickets = current_user.tickets.order_by(Ticket.id.desc()).all()
