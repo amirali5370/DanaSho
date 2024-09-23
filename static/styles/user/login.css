@@ -1,0 +1,442 @@
+@import url('../fonts.css');
+body::-webkit-scrollbar {
+    width: 0px; /* عرض نوار اسکرول را صفر می‌کند */
+    background: transparent; /* پس‌زمینه نوار اسکرول را شفاف می‌کند */
+}
+a:-webkit-any-link {
+    color: none;
+    cursor: pointer;
+    text-decoration: none;
+}
+body *{
+    font-family: Tanha;
+}
+body{
+    font-family: Arial;
+    padding: 0px;
+    margin: 0px;
+}
+h1{
+    margin-top: 8%;
+    color: #fff;
+    text-shadow:
+    0 0 5px #fff,
+    0 0 10px #fff,
+    0 0 20px #fff,
+    0 0 40px #0ff,
+    0 0 80px #0ff,
+    0 0 90px #0ff,
+    0 0 100px #0ff,
+    0 0 150px #0ff;
+    animation: login 2s infinite alternate;  
+}
+@keyframes login {
+    
+    100% {
+
+        text-shadow:
+        0 0 4px #fff,
+        0 0 11px #fff,
+        0 0 19px #fff,
+        0 0 40px #0ff,
+        0 0 80px #0ff,
+        0 0 90px #0ff,
+        0 0 100px #0ff,
+        0 0 150px #0ff;
+    
+    }
+    
+    0% {
+
+        text-shadow:
+        0 0 2px #fff,
+        0 0 4px #fff,
+        0 0 6px #fff,
+        0 0 10px #0ff,
+        0 0 45px #0ff,
+        0 0 55px #0ff,
+        0 0 70px #0ff,
+        0 0 80px #0ff;
+
+}}  
+#heading{
+display: flex;
+justify-content: center;
+}
+.name{
+    width: 90%;
+    height: 100%;
+}
+#copyRight{
+    color: white
+}
+#author{
+    font-family: Emza;
+}
+.icon-wrp{
+    display: flex;
+    justify-content: start;
+    align-items: center;
+}
+.icon{
+    font-size:48px;
+    color:#fbe1d2;
+    margin-left: 10%;
+}
+.icon-wrp>h2{
+    color:#fbe1d2;
+}
+h2{
+    margin: 0;
+}
+#side-wrp{
+    display: flex;
+}
+#logo-wrp{
+    border-bottom: 3px dashed #d7d00297;
+    width: 100%;
+}
+#footer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.icon-wrp.active *{
+    color: #8dffea;
+    text-shadow:
+    0 0 5px #fff,
+    0 0 10px #fff,
+    0 0 20px #fff;
+}
+
+#main{
+    display: flex;
+    justify-content: center;
+}
+#content-wrp{
+    min-height: calc( 100vh - 88px );
+}
+
+
+
+
+
+
+form {
+    background-color: #fbe1d2;
+    text-align: center;
+    width: 80%;
+    padding: 50px 0px;
+    border-radius: 15px;
+    box-shadow: 0 0 .2rem #fff,
+    0 0 .2rem #fff,
+    0 0 2rem #bc13fe,
+    0 0 0.8rem #bc13fe,
+    0 0 2.8rem #bc13fe,
+    inset 0 0 1.3rem #bc13fe; 
+    max-width: 700px;
+    background-image: linear-gradient(#0dbfa1,#069e85);
+}
+#form-heading-wrp > p{
+    margin-top: 5px;
+    margin-bottom: 80px;
+}
+#form-body-wrp > p{
+    margin: 10px;
+    font-size: 15px;
+}
+
+
+#form-footer-wrp{
+    display: flex;
+    flex-direction: column;
+}
+#form-footer-wrp > p{
+    font-size: 12px;
+    font-weight: 600;
+    margin-top: 25px;
+    margin-bottom: 5px;
+}
+#form-footer-wrp > p a{
+    color:  #bc13fe;
+    text-decoration: none;
+}
+div#form-hr-wrp {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 190px;
+    align-self: center;
+}
+hr {
+    height: 1px;
+}
+hr#link-hr {
+    width: 25%;
+    color: #bc13fe;
+    background-color: #bc13fe;
+    border-style: solid;
+}
+hr#normal-hr {
+    width: 75%;
+    color: black;
+    background-color: black;
+    border-style: solid;
+}
+#inputs{
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    gap: 7%;
+}
+input{
+    border-radius: 10px;
+    border: none;
+    width: 100%;
+    height: 40px;
+    outline-color: #bc13fe;
+    background-color: #fbe1d2;
+    padding: 2px 7px;
+}
+.input-wrp{
+    width: 30%;
+}
+.button-wrp{
+    margin: 4% 0;
+}
+button{
+    height: 40px;
+    width: 60%;
+    border-radius: 35px;
+    max-width: 160px;
+    border: none;
+    background-color: #d2b9ab;
+    box-shadow: 
+    1px 1px 25px #186238,
+    -1px -1px 25px #62ffe235,
+    0 0 .1rem #fff,
+    0 0 .1rem #fff,
+    0 0 1.5rem #bc13fe,
+    0 0 0.3rem #bc13fe,
+    0 0 2.3rem #bc13fe,
+    inset 0 0 .8rem #bc13fe;
+    cursor: pointer;
+}
+button{
+    font-size: 1em;
+}
+@media only screen and (min-width: 1025px) {
+    /*حالت عادی*/
+    /*کامپیوتر لپتاپ لارج*/
+    #continer{
+        display: flex;
+        width: 100%;
+        height: auto;
+    }
+    #content-wrp{
+        width: 85%;
+        background-color: #012720;
+        justify-content: center;
+        align-items: center;
+    }
+    #side-wrp{
+        flex-direction: column;
+        position: sticky;
+        top: 0;
+        width: 15%;
+        background-color: #012720;    
+        border-left: 3px solid #fbe1d2;
+        height: 100vh;
+    }
+    #main{
+        margin: 3%;
+    }
+    h1{
+        font-size: 2.7em;
+    }
+    .icon-wrp{
+        margin-top: 30px;
+        margin-right: 10%;
+
+    }
+    #logo-wrp{
+        margin-bottom: 40px;
+    }
+    
+}
+
+@media only screen and (max-width: 1024px) and (min-width: 770px) {
+    /*محتوای وسط تک ستونی*/
+    /* لپتاپ */
+    #continer{
+        display: flex;
+        width: 100%;
+        height: auto;
+    }
+    #content-wrp{
+        width: 85%;
+        background-color: #012720;
+    }
+    #side-wrp{
+        flex-direction: column;
+        position: sticky;
+        top: 0;
+        width: 17%;
+        background-color: #012720;    
+        border-left: 3px solid #fbe1d2;
+        height: 100vh;
+    }
+    #main{
+        
+        margin: 10%;
+    }
+    .icon{
+        font-size: 36px;
+    }
+    h2{
+        font-size: 1.3em;
+    }
+    .icon-wrp{
+        margin-top: 30px;
+        margin-right: 10%;
+
+    }
+    #logo-wrp{
+        margin-bottom: 35px;
+    }
+    .input-wrp{
+        width: 40%;
+    }
+
+}
+
+
+@media only screen and (max-width: 769px){
+    /*منو زیر*/
+    /* مینی */
+    #continer{
+        display: flex;
+        width: 100%;
+        height: auto;
+    }
+    #main{
+        margin: 10%;
+    }
+    #content-wrp{
+        background-color: #012720;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        margin-bottom: 85px;
+    }
+
+    .fa-home-wrp { grid-area: home; }
+    .fa-sign-in-wrp { grid-area: login; }
+    .fa-plus-wrp { grid-area: register; }
+    .logo-wrp { grid-area: logo; }
+
+    #side-wrp{
+        z-index: 999;
+        display: grid;
+        grid-template-areas: 'logo login home register';
+        height: 85px;
+        width: 100%;
+        background-color: #012720;    
+        border-top: 3px solid #fbe1d2;
+        position: fixed;
+        bottom: 0;
+        margin: 0;
+        justify-content: space-around;
+    }
+
+    h3{
+        font-size: 1.2em;
+    }
+    .icon-wrp{
+        flex-direction: column;
+        height: 100%;
+        justify-content: center;
+        width: 71px;
+    }
+    #menu-br{
+        display: none;
+    }
+    #logo-wrp{
+        border-bottom: none;
+        border-left: 3px dashed #d7d00297;
+        width: 60px;
+    }
+    .icon{
+        font-size: 30px;
+    }
+    h2{
+        font-size: 1.4em;
+    }
+    h1{
+        font-size: 2.2em;
+    }
+    form{
+        margin: 50px 0;
+    }
+    #inputs{
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        justify-content: center;
+        align-items: center;
+    }
+    .input-wrp{
+        margin-bottom: 2%;
+        width: 70%;
+    }
+}
+
+@media only screen and (min-width: 1024px) and (max-width: 1400px) {
+    h3{
+        font-size: 1.2em;
+    }
+    .icon{
+        font-size: 30px;
+    }
+    h2{
+        font-size: 1.4em;
+    }
+    h1{
+        font-size: 2.4em;
+    }
+}
+@media only screen and (max-width: 500px) {
+    #side-wrp{
+        display: grid;
+        grid-template-areas: 'login home register';
+    }
+    h3{
+        font-size: 0.8em;
+    }
+    h4{
+        font-size: 0.65em;
+    }
+    .icon{
+        font-size: 24px;
+    }
+    #logo-wrp{
+        display: none;
+    }
+    h2{
+        font-size: 1em;
+    }
+    h1{
+        font-size: 1.9em;
+    }
+    form{
+        width: 95%;
+    }
+    input{
+        height: 35px;
+        margin-bottom: 10px;
+    }
+    button{
+        font-size: 0.8em;
+    }
+}
+

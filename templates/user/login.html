@@ -1,17 +1,64 @@
 {% extends "Base.html" %}
 {% block head %}
-    <title>ورود کاربران</title>
+    <title>ورود</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/user/login.css') }}">
 {% endblock %}
 {% block body %}
-    <h1>صفحه ورود کاربران</h1>
-    <form action="#" method="post">
-        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-        
-        <input type="text" name="username" placeholder="نام کاربری">
-        <input type="password" name="password" placeholder="رمز عبور">
+<div id="continer">
+    <div id="side-wrp">
+        <div id="logo-wrp">
+            <img id="logo" src="" alt="">
+        </div>
+        <a href="#" class="icon-wrp fa-home-wrp">
+            <i class="fa fa-home icon"></i>
+            <h2>خانه </h2>
+        </a>
+        <br id="menu-br">
+        <a href="#" class="icon-wrp fa-sign-in-wrp active">
+            <i class="fa fa-sign-in icon"></i>
+            <h2>ورود </h2>
+        </a>
+        <a href="#" class="icon-wrp fa-plus-wrp">
+            <i class="fa fa fa-plus icon"></i>
+            <h2>ثبت نام </h2>
+        </a>
+    </div>
+    <div id="content-wrp">
+        <div id="heading">
+            <h1>ورود</h1>
+        </div>
+        <div id="main">
+            <form action="#" method="post">
+                <div id="form-body-wrp">
+                    <div id="inputs">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
-        <input type="submit" value="ورود">
-    </form>
-    <br>
-    <a href="/register{% if next is not none %}?next={{ next }}{% endif %}">ثبت نام</a>
+                        <div class="input-wrp">
+                            <input type="text" placeholder="نام کاربری" name="username" id="usrename">
+                        </div>
+                        <div class="input-wrp">
+                            <input type="password" placeholder="رمز عبور" name="password" id="password" minlength="0">
+                        </div>
+                    </div>
+                    <div class="button-wrp">
+                        <button type="submit">ورود</button>
+                    </div>
+
+                </div>
+                <div id="form-footer-wrp">
+                    <p>میخوای اکانت  جدید بسازی؟ <a href="/register{% if next is not none %}?next={{ next }}{% endif %}">ثبت نام</a></p>
+                    <div id="form-hr-wrp">
+                        <hr id="normal-hr">
+                        <hr id="link-hr">
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div id="footer">
+            <h4 id="copyRight">© تمام حقوق برای مسابقه دانا پلاس شو محفوظ است</h4>
+        </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

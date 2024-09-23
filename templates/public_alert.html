@@ -86,6 +86,20 @@
                     allowOutsideClick:false,
                 }).then((result) => {swal.close();})
                 {% endif %}
+
+
+                {% if message == "نام کاربری یا رمز عبور اشتباه است!"%}
+                swal({
+                    title: 'نام کاربری یا رمز عبور اشتباه است!',
+                    html: '',
+                    type: 'error',
+                    confirmButtonColor: '#3f9b0b',
+                    confirmButtonText: '<div style="direction:rtl;font-size:18px;font-family:Iran,Calibri;font-weight:bold;"><i style="margin-left: 5px;" class="fa fa-times"></i> باشه</div>',
+                    showCloseButton: true,
+                    showLoaderOnConfirm:true,
+                    allowOutsideClick:false,
+                }).then((result) => {swal.close();})
+                {% endif %}
             {% endfor %}
         {% endif %}
     {% endwith %}
