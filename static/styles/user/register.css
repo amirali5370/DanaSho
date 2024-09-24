@@ -120,8 +120,6 @@ h2{
 
 
 
-
-
 form {
     background-color: #fbe1d2;
     text-align: center;
@@ -146,6 +144,9 @@ form {
     font-size: 15px;
 }
 
+#form-body-wrp{
+    height: 900px;
+}
 
 #form-footer-wrp{
     display: flex;
@@ -184,22 +185,22 @@ hr#normal-hr {
     border-style: solid;
 }
 #inputs{
-    display: flex;
+    display: grid;
     width: 100%;
-    justify-content: center;
-    gap: 7%;
+    grid-template-columns: 50% 50%;
+    row-gap: 7%;
 }
-input{
+input,select{
     border-radius: 10px;
     border: none;
-    width: 100%;
+    width: 70%;
     height: 40px;
     outline-color: #bc13fe;
     background-color: #fbe1d2;
     padding: 2px 7px;
 }
 .input-wrp{
-    width: 30%;
+    width: 100%;
 }
 .button-wrp{
     margin: 4% 0;
@@ -221,10 +222,29 @@ button{
     0 0 2.3rem #bc13fe,
     inset 0 0 .8rem #bc13fe;
     cursor: pointer;
+
+    position: relative;
+    top: 330px;
 }
-button{
-    font-size: 1em;
+input[type="radio"]{
+    width: 20px;
+    cursor: pointer;
 }
+.addres-wrp{
+    grid-column: 1 / 3;
+}
+textarea{
+    resize: none;
+    width: 65%;
+    background-color: #fbe1d2;
+    outline-color: #bc13fe;
+    border-radius: 15px;
+    padding: 7px;
+}
+
+
+
+
 @media only screen and (min-width: 1025px) {
     /*حالت عادی*/
     /*کامپیوتر لپتاپ لارج*/
@@ -305,7 +325,10 @@ button{
         margin-bottom: 35px;
     }
     .input-wrp{
-        width: 40%;
+        width: 100%;
+    }
+    input{
+        width: 60%;
     }
 
 }
@@ -329,11 +352,6 @@ button{
         width: 100%;
         margin-bottom: 85px;
     }
-
-    .fa-home-wrp { grid-area: home; }
-    .fa-sign-in-wrp { grid-area: login; }
-    .fa-plus-wrp { grid-area: register; }
-    .logo-wrp { grid-area: logo; }
 
     #side-wrp{
         z-index: 999;
@@ -386,7 +404,13 @@ button{
     }
     .input-wrp{
         margin-bottom: 2%;
-        width: 70%;
+        width: 90%;
+    }
+    #form-body-wrp{
+        height: 1150px;
+    }
+    button{
+        top: 50px;
     }
 }
 
@@ -404,7 +428,7 @@ button{
         font-size: 2.4em;
     }
 }
-@media only screen and (max-width: 500px) {
+@media only screen and (max-width: 450px) {
     h3{
         font-size: 0.8em;
     }
@@ -426,12 +450,9 @@ button{
     form{
         width: 95%;
     }
-    input{
+    input,select{
         height: 35px;
         margin-bottom: 10px;
-    }
-    button{
-        font-size: 0.8em;
     }
 }
 

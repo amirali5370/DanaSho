@@ -107,7 +107,7 @@ def register():
         else:
             inviting = True
         print(cities.keys())
-        return render_template("user/register.html", inviting=inviting, recognitions=recognitions, provinces=cities.keys())
+        return render_template("user/register.html", inviting=inviting, recognitions=recognitions, provinces=cities.keys(), next=next)
     
 #login page
 @app.route("/login", methods = ["POST","GET"],  strict_slashes=False)

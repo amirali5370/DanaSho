@@ -18,84 +18,165 @@
         }
     </script>
     <title>ثبت نام کاربران</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='libraries/sweetalert2/sweetalert2.min.css') }}">
-    <script defer src="{{ url_for('static', filename='libraries/sweetalert2/sweetalert2.all.min.js') }}"></script>
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/user/register.css') }}">
 
 {% endblock %}
 {% block body %}
-    <h1>صفحه ثبت نام کاربران</h1>
-    <form action="#" method="post" id="form" onsubmit="checkPass()">
-        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-        <input type="text" name="firstname" placeholder="نام" id="a" data-required>
-        <input type="text" name="lastname" placeholder="نام خانوادگی" data-required>
-        <br>
-        <input type="text" name="username" placeholder="نام کاربری" data-required>
-        <input type="text" name="birth" placeholder="تاریخ تولد" data-required>
-        <br>
-        <input type="password" name="password" placeholder="رمز عبور" data-required>
-        <input type="password" name="password_co" placeholder="تکرار رمز عبور" data-required>
-        <br>
-        <input type="text" name="code" placeholder="کد ملی">
-        <input type="tel" name="phone" maxlength="11" minlength="11"  placeholder="09125536125" pattern="[0-9]{11}" data-required>
-        <br>
-        <input type="radio" name="gender" id="man" value="man" data-required>
-        <label for="student">آقا</label>
-        <input type="radio" name="gender" id="woman" value="woman" data-required>
-        <label for="teacher">خانم</label>
-        <br>
-        <input type="radio" name="type" id="student" value="student" onchange="radio()" checked data-required> 
-        <label for="student">دانش آموز</label>
-        <input type="radio" name="type" id="teacher" value="teacher" onchange="radio()" data-required>
-        <label for="teacher">فرهنگی</label>
-        <br>
-        <input type="email" name="email" id="email" placeholder="ایمیل">
-        <br>
-        <select name="grade" id="grade" data-required>
-            <option disabled selected value="">پایه تحصیلی</option>
-            <option value="1">دوره اول ابتدایی</option>
-            <option value="2">دوره دوم ابتدایی</option>
-            <option value="3">دوره متوسطه اول</option>
-            <option value="4">دوره متوسطه دوم</option>
-        </select>
-        <br>
-        <select name="province" id="province" onchange="fetchCities(this.value)">
-            <option selected disabled value="">انتخاب استان</option>
-            {% for p in provinces%}
-            <option value="{{p}}">{{p}}</option>
-            {% endfor %}
-        </select>
-        
-        <select name="city" id="city">
-            <option value="">انتخاب شهر</option>
-        </select>
-        <br>
-        <input type="text" name="school_name" id="school_name" placeholder="نام مدرسه">
-        <select type="text" name="school_type" id="school_type">
-            <option selected disabled value="">نوع مدرسه</option>
-            <option value="1">دولتی</option>
-            <option value="2">نمونه دولتی</option>
-            <option value="3">هیئت امنایی</option>
-            <option value="4">غیر انتفاعی</option>
-            <option value="5">شاهد</option>
-            <option value="6">تیزهوشان</option>
-            <option value="7">استثنائی</option>
-        </select>
+<div id="continer">
+    <div id="side-wrp">
+        <div id="logo-wrp">
+            <img id="logo" src="" alt="">
+        </div>
+        <a href="{{ url_for('user.home') }}" class="icon-wrp">
+            <i class="fa fa-home icon"></i>
+            <h2>خانه </h2>
+        </a>
+        <a href="{{ url_for('user.activism') }}" class="icon-wrp">
+            <i class="fa fa-comments icon"></i>
+            <h2>کنشگری </h2>
+        </a>
+        <a href="{{ url_for('user.club') }}" class="icon-wrp">
+            <i class="fa fa-trophy icon"></i>
+            <h2>باشگاه </h2>
+        </a>
+        <a href="{{ url_for('user.profile') }}" class="icon-wrp">
+            <i class="fa fa-user-circle icon"></i>
+            <h2>پروفایل </h2>
+        </a>
+        <a href="{{ url_for('user.ticket') }}" class="icon-wrp">
+            <i class="fa fa-life-saver icon"></i>
+            <h2>تیکت </h2>
+        </a>
+    </div>
+    <div id="content-wrp">
+        <div id="heading">
+            <h1>ثبت نام</h1>
+        </div>
+        <div id="main">
+            <form action="#" method="post" id="form" onsubmit="checkPass()">
+                <div id="form-body-wrp">
+                    <div id="inputs">
+                        
+                        <div class="input-wrp">
+                            <input type="text" name="firstname" placeholder="نام" id="a" required>
+                        </div>
+                        <div class="input-wrp">
+                            <input type="text" name="lastname" placeholder="نام خانوادگی" required>
+                        </div>
+                        <div class="input-wrp">
+                            <input type="text" name="username" placeholder="نام کاربری" required>
+                        </div>
+                        <div class="input-wrp">
+                            <input type="text" name="birth" placeholder="تاریخ تولد : 1400/01/01" pattern="\d{4}/\d{2}/\d{2}" required>
+                        </div>
+                        <div class="input-wrp">
+                            <input type="password" name="password" placeholder="رمز عبور" required>
+                        </div>
+                        <div class="input-wrp">
+                            <input type="password" name="password_co" placeholder="تکرار رمز عبور" required>
+                        </div>
+                        <div class="input-wrp">
+                            <input type="text" name="code" placeholder="کد ملی" required>
+                        </div>
+                        <div class="input-wrp">
+                            <input type="tel" name="phone" maxlength="11" minlength="11"  placeholder="09125536125" pattern="[0-9]{11}" required>
+                        </div>
+                        <div class="input-wrp">
+                            <input type="radio" name="gender" id="man" value="man" required>
+                            <label for="man">آقا</label>
+                            <input type="radio" name="gender" id="woman" value="woman" required>
+                            <label for="woman">خانم</label>                            
+                        </div>
+                        <div class="input-wrp">
+                            <input type="radio" name="type" id="student" value="student" onchange="radio()" checked required> 
+                            <label for="student">دانش آموز</label>
+                            <input type="radio" name="type" id="teacher" value="teacher" onchange="radio()" required>
+                            <label for="teacher">فرهنگی</label>
+                        </div>
+                        <div class="input-wrp">
+                            <input type="email" name="email" id="email" placeholder="ایمیل" required>
+                        </div>
 
-        <textarea name="addres" id="addres" placeholder="آدرس" form="register"></textarea>
-        <br>
-        <select name="recognition" id="recognition">
-            <option selected disabled value="">شیوه آشنایی</option>
-            {% for key, value in recognitions.items() %}
-            <option value="{{key}}">{{value}}</option>
-            {% endfor %}
-        </select>
-        {% if inviting == true%}
-        <input type="text" name="invite" id="invite" placeholder="کد معرف" maxlength="6" data-required>
-        {% endif%}
 
-        <input type="submit" value="ثبت نام">
-    </form>
+
+                        <div class="input-wrp">
+                            <select name="grade" id="grade" required>
+                                <option disabled selected value="">پایه تحصیلی</option>
+                                <option value="1">دوره اول ابتدایی</option>
+                                <option value="2">دوره دوم ابتدایی</option>
+                                <option value="3">دوره متوسطه اول</option>
+                                <option value="4">دوره متوسطه دوم</option>
+                            </select>
+                        </div>
+                        <div class="input-wrp">
+                            <select name="province" id="province" onchange="fetchCities(this.value)" required>
+                                <option selected disabled value="">انتخاب استان</option>
+                                {% for p in provinces%}
+                                <option value="{{p}}">{{p}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="input-wrp">
+                            <select name="city" id="city" required>
+                                <option selected disabled value="">شهر</option>
+                            </select>
+                        </div>
+                        <div class="input-wrp">
+                            <input type="text" name="school_name" id="school_name" placeholder="نام مدرسه" required>
+                        </div>
+                        <div class="input-wrp">
+                            <select type="text" name="school_type" id="school_type" required>
+                                <option selected disabled value="">نوع مدرسه</option>
+                                <option value="1">دولتی</option>
+                                <option value="2">نمونه دولتی</option>
+                                <option value="3">هیئت امنایی</option>
+                                <option value="4">غیر انتفاعی</option>
+                                <option value="5">شاهد</option>
+                                <option value="6">تیزهوشان</option>
+                                <option value="7">استثنائی</option>
+                            </select>
+                        </div>
+                        <div class="input-wrp addres-wrp">
+                            <textarea name="addres" id="addres" placeholder="آدرس" form="register"></textarea>
+                        </div>
+                        {% if inviting == true%}
+                        <div class="input-wrp" class="custom-select">
+                            <select name="recognition" id="recognition" required>
+                                <option selected disabled value="">شیوه آشنایی</option>
+                                {% for key, value in recognitions.items() %}
+                                <option value="{{key}}">{{value}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="input-wrp">
+                            <input type="text" name="invite" id="invite" placeholder="کد معرف" maxlength="6">
+                        </div>
+                        {% endif%}
+
+
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    </div>
+                    <div class="button-wrp">
+                        <button type="submit">ثبت نام</button>
+                    </div>
+
+                </div>
+                <div id="form-footer-wrp">
+                    <p>از قبل اینجا اکانت داری؟ <a href="/login{% if next is not none %}?next={{ next }}{% endif %}">ورود</a></p>
+                    <div id="form-hr-wrp">
+                        <hr id="normal-hr">
+                        <hr id="link-hr">
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div id="footer">
+            <h4 id="copyRight">© تمام حقوق برای مسابقه دانا پلاس شو محفوظ است</h4>
+        </div>
+        </div>
+    </div>
+</div>
     <script type="module">
         {% with messages = get_flashed_messages() %}
             {% if messages %}
@@ -116,18 +197,9 @@
             {% endif %}
         {% endwith %}
     </script>
-    <script>
-        function radio() {
-                var radios = document.querySelector('#student');
-                if (radios.checked) {
-                    document.querySelector("#grade").style.display= "inline";
-                }else{
-                    document.querySelector("#grade").style.display= "none";
-                }};
-        
-    </script>
-    <script>
 
+    <script src="{{ url_for('static', filename='scripts/user/register.js') }}"></script>
+    <script>
         function fetchCities(province) {
             if (province === "") {
                 document.getElementById("city").innerHTML = "<option value=''>انتخاب شهر</option>";
@@ -146,7 +218,6 @@
                 })
                 .catch(error => console.error('Error fetching cities:', error));
         }
-
     </script>
 
 {% endblock %}
