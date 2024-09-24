@@ -1,40 +1,69 @@
 {% extends "Base.html" %}
 {% block head %}
     <title>دعوت</title>
-    <style>
-        form{
-            border-collapse: collapse;
-        }
-        th, td {
-            border: 2px solid black; 
-            padding: 8px; 
-            text-align: center; 
-        }
-    </style>
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/user/invites.css') }}">
     {% endblock %}
     {% block body %}
-    <table>
-        <tr>
-            <th>#</th>
-            <th>نام و نام خانوادگی</th>
-        </tr>
-        {%for i in invitees%}
-        <tr>
-            <td>{{loop.index}}</td>
-            <td>{{i.invitee}}</td>
-        </tr>
-        {% endfor %}
-    </table>
-
-    <br>
-
-    <h1>ارسال پیامک</h1>
-    <label for="phone">شماره موبایل:</label>
-    <input type="text" id="phone" placeholder="09123456789">
-    <br>
-    <button onclick="sendSMS()">ارسال دعوتنامه</button>
-    
+    <div id="continer">
+        <div id="side-wrp">
+            <div id="logo-wrp">
+                <img id="logo" src="" alt="">
+            </div>
+            <a href="{{ url_for('user.home') }}" class="icon-wrp">
+                <i class="fa fa-home icon"></i>
+                <h2>خانه </h2>
+            </a>
+            <a href="{{ url_for('user.activism') }}" class="icon-wrp">
+                <i class="fa fa-comments icon"></i>
+                <h2>کنشگری </h2>
+            </a>
+            <a href="{{ url_for('user.club') }}" class="icon-wrp">
+                <i class="fa fa-trophy icon"></i>
+                <h2>باشگاه </h2>
+            </a>
+            <a href="{{ url_for('user.profile') }}" class="icon-wrp">
+                <i class="fa fa-user-circle icon"></i>
+                <h2>پروفایل </h2>
+            </a>
+            <a href="{{ url_for('user.ticket') }}" class="icon-wrp">
+                <i class="fa fa-life-saver icon"></i>
+                <h2>تیکت </h2>
+            </a>
+        </div>
+        <div id="content-wrp">
+            <div id="heading">
+                <h1>دعوت ها</h1>
+            </div>
+            <div id="main">
+                <div class="table-co" id="invite-table-co">
+                    <div class="table" id="invite-table">
+                        <div class="title-table">
+                            <h2 class="the-title">افراد دعوت شده</h2>
+                        </div>
+                        <div class="name">
+                            {%for i in invitees%}
+                            <div class="person p{{loop.index}} neonText {{'me' if i==current_user}}">
+                                <h4>{{loop.index}}</h4>
+                                <h4>{{i.invitee}}</h4>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                <div class="form-co">
+                    <h2 class="sub-title">ارسال دعوتنامه</h2>
+                    <label for="phone">شماره موبایل:</label>
+                    <input type="text" id="phone" placeholder="09123456789">
+                    <br>
+                    <button onclick="sendSMS()">ارسال دعوتنامه</button>
+                </div>
+            </div>
+            <div id="footer">
+                <h4 id="copyRight">© تمام حقوق برای مسابقه دانا پلاس شو محفوظ است</h4>
+            </div>
+        </div>
+    </div>
 
     <script>
         function sendSMS() {
