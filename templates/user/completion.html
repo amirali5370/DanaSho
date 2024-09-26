@@ -3,37 +3,102 @@
     <title>تکمیل پروفایل</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='libraries/sweetalert2/sweetalert2.min.css') }}">
     <script defer src="{{ url_for('static', filename='libraries/sweetalert2/sweetalert2.all.min.js') }}"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/user/completion.css') }}">
     <style>
         .hid {
             display: none;
         }
     </style>
+    <script>
+        function moveToNextInput(currentInput, nextInputId) {
+            if (currentInput.value.length > 0) {
+                console.log(document.getElementById(nextInputId))
+                document.getElementById(nextInputId).focus();
+            }
+        }
+    </script>
 {% endblock %}
 {% block body %}
-    <h1>صفحه تکمیل پروفایل</h1>
-    {% if authentication == false %}
-    <div id="phone_form">
-        <input disabled type="tel" value="{{current_user.phone}}">
-        <button type="button" onclick="send_sms()">تائید شماره تلفن</button>
+<div id="continer">
+    <div id="side-wrp">
+        <div id="logo-wrp">
+            <img id="logo" src="" alt="">
+        </div>
+        <a href="{{ url_for('user.home') }}" class="icon-wrp">
+            <i class="fa fa-home icon"></i>
+            <h2>خانه </h2>
+        </a>
+        <a href="{{ url_for('user.activism') }}" class="icon-wrp">
+            <i class="fa fa-comments icon"></i>
+            <h2>کنشگری </h2>
+        </a>
+        <a href="{{ url_for('user.club') }}" class="icon-wrp">
+            <i class="fa fa-trophy icon"></i>
+            <h2>باشگاه </h2>
+        </a>
+        <a href="{{ url_for('user.profile') }}" class="icon-wrp">
+            <i class="fa fa-user-circle icon"></i>
+            <h2>پروفایل </h2>
+        </a>
+        <a href="{{ url_for('user.ticket') }}" class="icon-wrp">
+            <i class="fa fa-life-saver icon"></i>
+            <h2>تیکت </h2>
+        </a>
     </div>
-    <div id="code_form" class="hid">
-        <p id="exam-timer">3:00</p>
-        <input id="code_inp" type="number" minlength="6" maxlength="6" pattern="[0-9]{6}" placeholder="کد ارسال شده" required>
-        <input id="code_but" type="submit" onclick="send_code()" value="تائید کد">
-        <button type="button" id="resend_but" class="hid" onclick="send_sms()">ارسال مجدد کد</button>
+    <div id="content-wrp">
+        <div id="heading">
+            <h1>تکمیل اطلاعات</h1>
+        </div>
+        <div id="main">
+            <div id="phone_form" class="form-co">
+                <h2 class="sub-title">احراز هویت</h2>
+                <label for="phone">شماره موبایل:</label>
+                <input disabled type="tel" value="{{current_user.phone}}">
+                <br>
+                {% if authentication == false %}
+                <button type="button" onclick="send_sms()">تائید شماره تلفن</button>
+                {% else %}
+                <h3>شماره تلفن تائید شده!</h3>
+                {% endif %}
+            </div>
+            <div id="code_form" class="form-co hid">
+                <p id="exam-timer" class="neonText">2:00</p>
+                <div id="char-wrp">
+                    <input type="tel" name="" id="char6" class="char" maxlength="1" minlength="1">
+                    <input type="tel" name="" id="char5" class="char" maxlength="1" minlength="1" oninput="moveToNextInput(this, 'char6')">
+                    <input type="tel" name="" id="char4" class="char" maxlength="1" minlength="1" oninput="moveToNextInput(this, 'char5')">
+                    <input type="tel" name="" id="char3" class="char" maxlength="1" minlength="1" oninput="moveToNextInput(this, 'char4')">
+                    <input type="tel" name="" id="char2" class="char" maxlength="1" minlength="1" oninput="moveToNextInput(this, 'char3')">
+                    <input type="tel" name="" id="char1" class="char" maxlength="1" minlength="1" oninput="moveToNextInput(this, 'char2')">
+                </div>
+                <button id="code_but" type="button" onclick="send_code()">تائید کد</button>
+                <button type="button" id="resend_but" class="hid" onclick="send_sms()">ارسال مجدد کد</button>
+            </div>
+            <div class="table-co" id="invite-table-co">
+                <div class="table" id="invite-table">
+                    <div class="title-table">
+                        <h2 class="the-title">وضعیت پرداخت :
+                            <br id="status-br">
+                             {{'در انتظار پرداخت' if final == false else 'پرداخت شده'}}</h2>
+                    </div>
+                    <div class="name">
+                        {% if final == false %}
+                        <a id="pay-a" href="/payment{{'?next='+next if next is not none}}"><button id="pay-button">پرداخت مبلغ 15000</button></a>
+                        {% else %}
+                        <button disabled id="pay-button">پرداخت مبلغ 15000</button>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+        <div id="footer">
+            <h4 id="copyRight">© تمام حقوق برای مسابقه دانا پلاس شو محفوظ است</h4>
+        </div>
     </div>
-    {% else %}
-    <input disabled type="tel" value="{{current_user.phone}}">
-    <h4>شماره تلفن تائید شده است</h4>
-    {% endif %}
-    <br><br>
-    {% if final == false %}
-    <h4>وضعیت : در انتظار پرداخت</h4>
-    <a href="/payment{{'?next='+next if next is not none}}"><button>پرداخت</button></a>
-    {% else %}
-    <h4>وضعیت : پرداخت شده</h4>
-    <button disabled>پرداخت</button>
-    {% endif %}
+</div>
+
 
 
     <script>
@@ -46,13 +111,16 @@
             document.querySelector("#code_form").classList.remove("hid")
             document.querySelector("#code_but").classList.remove("hid");
             document.querySelector("#resend_but").classList.add("hid");
-            document.querySelector("#code_inp").removeAttribute("disabled");
+            document.querySelectorAll(".char").forEach(fu)
+            function fu(item) {
+                item.removeAttribute("disabled");
+            }
             timer()
         }
 
 
         function timer(){
-            var examDuration = 25; 
+            var examDuration = 120; 
             var examStartTime = new Date().getTime(); 
 
             var examTimer = setInterval(function() {
@@ -67,7 +135,10 @@
 
             if (remainingTime <= 0) {
                 clearInterval(examTimer);
-                document.querySelector("#code_inp").setAttribute("disabled", true);
+                document.querySelectorAll(".char").forEach(fu2)
+                function fu2(item) {
+                    item.setAttribute("disabled", true);
+                }
                 document.querySelector("#code_but").classList.add("hid");
                 document.querySelector("#resend_but").classList.remove("hid");
                 fetch("{{ url_for('user.unconf', _external=True) }}?auth={{current_user.invite_auth}}")
@@ -76,7 +147,13 @@
         }
 
         function send_code(){
-            const code = document.querySelector("#code_inp").value
+            const code1 = String(document.querySelector("#char1").value)
+            const code2 = String(document.querySelector("#char2").value)
+            const code3 = String(document.querySelector("#char3").value)
+            const code4 = String(document.querySelector("#char4").value)
+            const code5 = String(document.querySelector("#char5").value)
+            const code6 = String(document.querySelector("#char6").value)
+            const code = code1 + code2 + code3 + code4 + code5 + code6 
             fetch(`{{ url_for('user.confirmation', _external=True) }}?code=${code}`)
             .then(response => {
                 if (!response.ok) {
@@ -90,7 +167,10 @@
             .catch(error => {
                 console.error('Error:', error);
             });
-            document.querySelector("#code_inp").setAttribute("disabled", true);
+            document.querySelectorAll(".char").forEach(fu2)
+                function fu2(item) {
+                    item.setAttribute("disabled", true);
+                }
             document.querySelector("#code_but").classList.add("hid");
             document.querySelector("#resend_but").classList.remove("hid");
         }
