@@ -75,7 +75,7 @@ h1,.acts-title{
 }
 #h-im{
     margin-top: 8%;
-    border-radius: 5px;
+    border-radius: 10px;
 }
 @keyframes login {
     
@@ -219,6 +219,7 @@ input[type='submit']{
     color: #fbe1d2;
     width: 120px;
     height: 35px;
+    cursor: pointer;
 }
 input[type='submit'].rep-but{
     margin-top: 10px;
@@ -363,6 +364,9 @@ i.heart.liked{
     min-width: 180px;
     transition: 0.5s;
     margin: 1px 10px;
+}
+input[type='submit'].rep-com-2page{
+    margin-top: 10px;
 }
 @media only screen and (min-width: 1025px) {
     /*حالت عادی*/

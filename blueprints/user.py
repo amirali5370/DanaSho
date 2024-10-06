@@ -170,6 +170,7 @@ def book(book_link):
     book = Book.query.filter(Book.primalink==book_link).first_or_404()
     if request.method == "POST":
         comment = request.form.get('comment' , None)
+        print(request.form)
         c = Interaction(type="comment", content=comment, user_id=current_user.id, book_id=book.id, time=get_time())
         db.session.add(c)
 

@@ -1,31 +1,94 @@
 {% extends "Base.html" %}
 {% block head %}
     <title>{{book.name}} | دانا پلاس شو</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/user/single-activism.css') }}">
     {% endblock %}
     {% block body %}
-    <img src="/static/books/{{book.id}}.jpg" height="400" alt="{{book.name}}'s image">
-    <h3>{{book.name}}</h3>
-    <p style="white-space: pre-wrap;">{{book.about}}</p>
-    <br><br><br>
-    {% if current_user.is_authenticated %}
-        {% if current_user.authentication==1 and current_user.final==1 %}
-        <form action="#" method="post" id="comment-form">
-            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-            <textarea name="comment" id="comment-inp" form="comment-form" placeholder="نظر خود را اینجا بنویسید..."></textarea>
-            <input type="submit" value="ارسال نظر">
-        </form>
-        {% else %}
-        <a href="{{ url_for('user.completion')+'?next=/book/'+book.primalink }}"><button>ارسال نظر</button></a>
-        {% endif %}
-    {% else %}
-    <a href="{{ url_for('user.login')+'?next=/book/'+book.primalink}}"><button>ارسال نظر</button></a>
-    {% endif %}
-    <br><br><br>
-    {% for c in comments %}
-    <div data-comment-id="{{c.id}}">
-        <p>{{c.user.name}}</p>
-        <p>{{c.content}}</p>
-        <p>{{c.time}}</p>
+    <div id="continer">
+        <div id="side-wrp">
+            <div id="logo-wrp">
+                <img id="logo" src="" alt="">
+            </div>
+            <a href="{{ url_for('user.home') }}" class="icon-wrp">
+                <i class="fa fa-home icon"></i>
+                <h2>خانه </h2>
+            </a>
+            <a href="{{ url_for('user.activism') }}" class="icon-wrp">
+                <i class="fa fa-comments icon"></i>
+                <h2>کنشگری </h2>
+            </a>
+            <a href="{{ url_for('user.club') }}" class="icon-wrp">
+                <i class="fa fa-trophy icon"></i>
+                <h2>باشگاه </h2>
+            </a>
+            <a href="{{ url_for('user.profile') }}" class="icon-wrp">
+                <i class="fa fa-user-circle icon"></i>
+                <h2>پروفایل </h2>
+            </a>
+            <a href="{{ url_for('user.ticket') }}" class="icon-wrp">
+                <i class="fa fa-life-saver icon"></i>
+                <h2>تیکت </h2>
+            </a>
+        </div>
+        <div id="content-wrp">
+            <div id="heading">
+                <img id="h-im" src="/static/books/{{book.id}}.jpg" alt="{{book.name}}'s image" height="280">
+                <h1>{{book.name}}</h1>
+            </div>
+            <div id="main">
+                <p class="discription">{{book.about}}</p>
+                <br><br>
+                {% if current_user.grade==book.grade %}
+                <br><br class="windows"><br class="windows">
+                {% if current_user.authentication==1 and current_user.final==1 %}
+                <form action="#" method="post" id="comment-form" enctype="multipart/form-data">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <textarea name="comment" id="comment-inp" form="comment-form" placeholder="نظر خود را اینجا بنویسید..."></textarea>
+                    <input type="submit" value="ارسال نظر" class="rep-com-2page">
+                </form>
+                {% else %}
+                <a href="{{ url_for('user.completion')+'?next=/book/'+book.primalink }}">
+                    <button class="req">
+                    ارسال نظر
+                    </button>
+                </a>
+                {% endif %}
+                <br>
+                {% endif %}
+                <br class="windows"><br class="windows">
+                <span class="acts-title">کامنت ها</span>
+                <div class="activisms">
+                    {% for c in comments %}
+
+                    <div class="activism" data-activism-id="{{c.id}}">
+                        <div class="act-head">
+                            <div class="bio">
+                                <img src="{{ url_for('static', filename='main_img/user.jpg') }}" alt="">
+                                <h3>{{c.user.name}}</h3>
+                            </div>
+                        </div>
+                        <div class="act-body">
+                            <div class="act-content">
+                                <span class="sharpable" style="white-space: pre-wrap;">{{c.content}}</span>
+                            </div>
+                        </div>
+                        <div class="act-foot">
+                            <div class="task-co">
+                              <div></div>
+                            </div>
+                            <div dir="ltr" class="date-co">
+                                {{c.time}}
+                            </div>
+                        </div>
+                    </div>
+
+                    {% endfor %}
+                </div>
+            </div> 
+            <div id="footer">
+                <h4 id="copyRight">© تمام حقوق برای مسابقه دانا پلاس شو محفوظ است</h4>
+            </div>
+        </div>
     </div>
-    {% endfor %}
 {% endblock %}
