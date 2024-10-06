@@ -212,7 +212,7 @@ def comments():
     comments = Interaction.query.filter(Interaction.type != 'activism',Interaction.status == 'review').all()
     return render_template("admin/comments.html", comments=comments)
 
-@app.route("/admin/comments-api", methods=["POST"])
+@app.route("/admin/comments-api", methods=["POST","GET"])
 def comment_api():
     if request.method == "GET":
         abort(404)
@@ -221,15 +221,15 @@ def comment_api():
         comment_id = request.form.get('comment', None)
         comment = Interaction.query.filter(Interaction.id==comment_id).first_or_404()
         comment.status = status
-
         if status=="confirmed" and comment.type=="comment":
             comment.user.coin += coin_04
             text = confirm_comment_text_generator(comment)
+            tic = Ticket(type='comment_sta', sub_type='comment', content=text, user_id=comment.user_id, time=get_time())
+            db.session.add(tic)
         elif status=="rejected" and comment.type=="comment":
             text = reject_comment_text_generator(comment)
-
-        tic = Ticket(type='comment_sta', sub_type='comment', content=text, user_id=comment.user_id, time=get_time())
-        db.session.add(tic)
+            tic = Ticket(type='comment_sta', sub_type='comment', content=text, user_id=comment.user_id, time=get_time())
+            db.session.add(tic)
         db.session.commit()
         return jsonify({'status':'200'})
     else:

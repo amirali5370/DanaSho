@@ -1,0 +1,249 @@
+{% extends "Base.html" %}
+{% block head %}
+    <title> کنشگری کتاب {{book.name}} | دانا پلاس شو</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/user/single-activism.css') }}">
+    {% endblock %}
+    {% block body %}
+
+
+    <div id="continer">
+        <div id="side-wrp">
+            <div id="logo-wrp">
+                <img id="logo" src="" alt="">
+            </div>
+            <a href="{{ url_for('user.home') }}" class="icon-wrp">
+                <i class="fa fa-home icon"></i>
+                <h2>خانه </h2>
+            </a>
+            <a href="{{ url_for('user.activism') }}" class="icon-wrp">
+                <i class="fa fa-comments icon"></i>
+                <h2>کنشگری </h2>
+            </a>
+            <a href="{{ url_for('user.club') }}" class="icon-wrp">
+                <i class="fa fa-trophy icon"></i>
+                <h2>باشگاه </h2>
+            </a>
+            <a href="{{ url_for('user.profile') }}" class="icon-wrp">
+                <i class="fa fa-user-circle icon"></i>
+                <h2>پروفایل </h2>
+            </a>
+            <a href="{{ url_for('user.ticket') }}" class="icon-wrp">
+                <i class="fa fa-life-saver icon"></i>
+                <h2>تیکت </h2>
+            </a>
+        </div>
+        <div id="content-wrp">
+            <div id="heading">
+                <img id="h-im" src="/static/books/{{book.id}}.jpg" alt="{{book.name}}'s image" height="280">
+                <h1>{{book.name}}</h1>
+            </div>
+            <div id="main">
+                <p class="discription">{{book.about}}</p>
+                <br><br>
+                {% if current_user.grade==book.grade %}
+                <br><br class="windows"><br class="windows">
+                {% if current_user.authentication==1 and current_user.final==1 %}
+                <a href="">
+                    <button class="req">
+                        شرکت در آزمون این کتاب
+                    </button>
+                </a>
+                <br><br>
+                <form action="#" method="post" id="activism-form" enctype="multipart/form-data">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <textarea name="activism" id="activism-inp" form="activism-form" placeholder="متن کنش خود را اینجا بنویسید..."></textarea>
+                    <br>
+                    <label for="activism-file">
+                        فایل کنش خود را اینجا آپلود کنید
+                        <span>
+                        حداکثر حجم عکس : 5MB
+                        </span>
+                    </label>
+                    <br>
+                    <input type="file" name="photo" id="activism-file" class="hid" required>
+                    <input type="submit" value="ارسال کنش">
+                </form>
+                {% else %}
+                <a href="{{ url_for('user.completion')+'?next=/activism/'+book.primalink }}">
+                    <button class="req">
+                    ارسال کنش و شرکت در آزمون
+                    </button>
+                </a>
+                {% endif %}
+                <br>
+                {% endif %}
+                <br class="windows"><br class="windows">
+                <span class="acts-title">کنش‌های این کتاب:</span>
+                <div class="activisms">
+                    {% for a in activisms %}
+
+                    <div class="activism" data-activism-id="{{a.id}}">
+                        <div class="act-head">
+                            <div class="bio">
+                                <img src="{{ url_for('static', filename='main_img/user.jpg') }}" alt="">
+                                <h3>{{a.user.name}}</h3>
+                            </div>
+                            <i class="hiddener fa fa-toggle-down" onclick="switcher(this)"></i>
+                        </div>
+                        <div class="act-body">
+                            <div class="act-content">
+                                <span class="sharpable" style="white-space: pre-wrap;">{{a.content}}</span>
+                            </div>
+                            <img src="/static/activisms/{{a.id}}.jpg" alt="" class="hid">
+                        </div>
+                        <div class="act-foot">
+                            <div class="task-co">
+                                
+                                <div class="like-co">
+                                    <p>{{len(a.likes.all())}}</p>
+                                    <i class="fas fa-heart heart {{'liked' if is_liked(current_user,a)}}"></i>
+                                </div>
+                                <div id="comment-co{{a.id}}" class="comment-co">
+                                    <p>{{comments_calculator(a)}}</p>
+                                    <i class="fa fa-comment" aria-hidden="true"></i>
+                                </div>
+
+                            </div>
+                            <div dir="ltr" class="date-co">
+                                {{a.time}}
+                            </div>
+                        </div>
+                        <div class="replay-co hid">
+                            <form action="#" method="post" id="comment-form{{a.id}}">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                <input type="hidden" name="replay_id" value="{{a.id}}">
+                                <textarea name="comment" id="comment-inp" form="comment-form{{a.id}}" placeholder="پاسخ خود را اینجا بنویسید..."></textarea>
+                                <input type="submit" value="ارسال پاسخ" class="rep-but">
+                            </form>
+                            {% for r in replays %}
+                            {% if r.replay == a.id %}
+                            <br>
+                            <div class="comment">
+                                <div class="com-head">
+                                    <h4>{{r.user.name}}</h4>
+                                    <h4 dir="ltr">{{r.time}}</h4>
+                                </div>
+                                <div class="com-body sharpable">
+                                    {{r.content}}
+                                 </div>
+                            </div>
+                            {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    {% endfor %}
+                </div>
+            </div> 
+            <div id="footer">
+                <h4 id="copyRight">© تمام حقوق برای مسابقه دانا پلاس شو محفوظ است</h4>
+            </div>
+        </div>
+    </div>
+
+
+
+    <script>
+        function switcher(e){
+            e.classList.toggle('fa-toggle-up')
+            e.classList.toggle('fa-toggle-down')
+            e.parentNode.parentNode.children[1].children[1].classList.toggle('hid')
+
+        }
+    </script>
+    <script>
+        document.querySelectorAll('div.comment-co').forEach(item => {
+            item.addEventListener('click', event => {
+                replay_box = item.parentNode.parentNode.parentNode.children[3]
+                replay_box.classList.toggle('hid')
+            })
+        })
+
+    </script>
+
+
+
+
+
+
+
+
+
+    
+    <script>
+        document.querySelectorAll('div.comment-co').forEach(item => {
+            item.addEventListener('click', event => {
+
+                replay_box = document.querySelector(`#${item.id} + .replay-co`)
+                replay_box.classList.toggle('hid')
+            })
+        })
+
+    </script>
+
+
+    <script>
+        function re(e) {
+            let regex = /#[\u0600-\u06FF\w]+/g;
+            let matches = e.innerHTML.match(regex); // جستجو برای تطابق‌ها
+            if (matches != null){
+                matches.forEach(tag => {
+                    const newHTML = e.innerHTML.replace(tag, `<span class='sharp'>${tag}</span>`);
+                    e.innerHTML = newHTML;
+                    
+                });
+            }
+    }
+    document.querySelectorAll('.sharpable').forEach(tag => {
+        re(tag);
+        
+        
+    });
+    
+    </script>
+
+
+
+
+
+    <script>
+        function change_like(user_id,activism_id){
+
+            form = new FormData()
+
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '{{url_for("user.like_maneger", _external=True)}}', true);
+
+
+            var data = { 'csrf_token': '{{ csrf_token() }}', 'user_id': user_id, 'activism_id':activism_id };
+            
+            for (var key in data) {
+                form.append(key, data[key]);
+            }
+
+            xhr.send(form);
+        }
+
+
+        document.querySelectorAll('i.heart').forEach(item => {
+            item.addEventListener('click', event => {
+                var a_id = item.parentNode.parentNode.parentNode.parentNode.getAttribute("data-activism-id")
+
+                if (item.classList.contains("liked")){
+
+                    item.classList.remove("liked")
+                    change_like({{current_user.id}},a_id)
+                    item.parentNode.children[0].innerText = Number(item.parentNode.children[0].innerText) -1
+                    
+                } else{
+                    
+                    item.classList.add("liked")
+                    change_like({{current_user.id}},a_id)
+                    item.parentNode.children[0].innerText = Number(item.parentNode.children[0].innerText) +1
+                }
+            })
+        })
+    </script>
+{% endblock %}

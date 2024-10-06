@@ -20,7 +20,7 @@ def inviteAuth_generator():
     return code
 
 def authCode_generator():
-    string = "0123456789"
+    string = "123456789"
     while True:
         code = ''.join(random.choice(string) for x in range(6))
         if len(str(code)) == 6:

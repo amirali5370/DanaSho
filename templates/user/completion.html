@@ -84,9 +84,9 @@
                     </div>
                     <div class="name">
                         {% if final == false %}
-                        <a id="pay-a" href="/payment{{'?next='+next if next is not none}}"><button id="pay-button">پرداخت مبلغ 15000</button></a>
+                        <a id="pay-a" href="/payment{{'?next='+next if next is not none}}"><button id="pay-button">پرداخت مبلغ {{price}} تومان</button></a>
                         {% else %}
-                        <button disabled id="pay-button">پرداخت مبلغ 15000</button>
+                        <button disabled id="pay-button">پرداخت مبلغ {{price}} تومان</button>
                         {% endif %}
                     </div>
                 </div>

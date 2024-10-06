@@ -237,7 +237,7 @@ def book_activisms(book_link):
     else:
         activisms = book.interactions.filter(Interaction.type=="activism", Interaction.status=="confirmed").all()
         replays = book.interactions.filter(Interaction.type=="replay", Interaction.status=="confirmed").all()
-        return render_template("user/activism.html", book=book, activisms=activisms, replays=replays)
+        return render_template("user/single-activism.html", book=book, activisms=activisms, replays=replays)
 
 @app.route("/like_maneger", methods=["POST"])
 @login_required
@@ -319,7 +319,7 @@ def completion():
         return redirect(url_for("user.home"))
 
     else:
-        return render_template("user/completion.html", final=final, authentication=authentication, next=next)
+        return render_template("user/completion.html", final=final, authentication=authentication, price=price, next=next)
 
 #authentication api
 @app.route("/authentication")
