@@ -1,10 +1,86 @@
 {% extends "Base.html" %}
 {% block head %}
-    <title>داشبورد</title>
-    {% endblock %}
-    {% block body %}
-    <h3>{{current_user.name}}</h3>
-    {% if current_user.is_authenticated %}
-    <a href="{{ url_for('user.logout') }}">خروج از حساب کاربری</a>
-    {% endif %}
+    <title>دانا پلاس شو</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/user/home.css') }}">
+{% endblock %}
+{% block body %}
+
+    <div id="continer">
+        <div id="side-wrp">
+            <div id="logo-wrp">
+                <img id="logo" src="" alt="">
+            </div>
+            <a href="{{ url_for('user.home') }}" class="icon-wrp active">
+                <i class="fa fa-home icon"></i>
+                <h2>خانه </h2>
+            </a>
+            <a href="{{ url_for('user.activism') }}" class="icon-wrp">
+                <i class="fa fa-comments icon"></i>
+                <h2>کنشگری </h2>
+            </a>
+            <a href="{{ url_for('user.club') }}" class="icon-wrp">
+                <i class="fa fa-trophy icon"></i>
+                <h2>باشگاه </h2>
+            </a>
+            <a href="{{ url_for('user.profile') }}" class="icon-wrp">
+                <i class="fa fa-user-circle icon"></i>
+                <h2>پروفایل </h2>
+            </a>
+            <a href="{{ url_for('user.ticket') }}" class="icon-wrp">
+                <i class="fa fa-life-saver icon"></i>
+                <h2>تیکت </h2>
+            </a>
+        </div>
+        <div id="content-wrp">
+            <div id="heading">
+                <img id="typography" src="{{ url_for('static', filename='main_img/typo.png') }}" alt="">
+            </div>
+            <div id="main">
+                <div class="task-bar">
+                    <select name="grade-select" id="" onchange="change_grade(this.value)">
+                        <option selected disabled value="">انتخاب مقطع</option>
+                        <option {{'selected' if current_user.grade == 0}} value="0">فرهنگی</option>
+                        <option {{'selected' if current_user.grade == 1}} value="1">دوره اول ابتدایی</option>
+                        <option {{'selected' if current_user.grade == 2}} value="2">دوره دوم ابتدایی</option>
+                        <option {{'selected' if current_user.grade == 3}} value="3">دوره متوسطه اول</option>
+                        <option {{'selected' if current_user.grade == 4}} value="4">دوره متوسطه دوم</option>
+                    </select>
+                </div>
+                <div id="books">
+                    {% if current_user.is_authenticated %}
+                    {% for b in books %}
+                    <div class="book {{'hid' if b.grade != current_user.grade }}" data-grade="{{b.grade}}" onclick=" window.location.href = '/book/{{b.primalink}}' ">
+                        <img src="/static/books/{{b.id}}.jpg" alt="">
+                        <h2>{{b.name}}</h2>
+                    </div>
+                    {% endfor %}
+                    {% else %}
+                    {% for b in books %}
+                    <div class="book" data-grade="{{b.grade}}" onclick=" window.location.href = '/book/{{b.primalink}}' ">
+                        <img src="/static/books/{{b.id}}.jpg" alt="">
+                        <h2>{{b.name}}</h2>
+                    </div>
+                    {% endfor %}
+                    {% endif %}
+                </div>
+            </div> 
+            <div id="footer">
+                <h4 id="copyRight">© تمام حقوق برای مسابقه دانا پلاس شو محفوظ است</h4>
+            </div>
+        </div>
+    </div>
+    <script>
+        function change_grade(grade_id) {
+            const books = document.querySelectorAll(".book")
+            books.forEach(function (b){
+                b.classList.add('hid')
+            })
+
+            const my_book = document.querySelectorAll(`[data-grade="${grade_id}"]`);
+            my_book.forEach(function (m){
+                m.classList.remove('hid')
+            })
+        }
+    </script>
 {% endblock %}

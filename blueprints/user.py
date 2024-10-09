@@ -162,7 +162,8 @@ def get_cities():
 #home user page
 @app.route("/",  strict_slashes=False)
 def home():
-    return render_template("user/home.html")
+    books = Book.query.all()
+    return render_template("user/home.html", books=books)
 
 #comments (single book page)
 @app.route("/book/<book_link>", methods=["GET","POST"],  strict_slashes=False)

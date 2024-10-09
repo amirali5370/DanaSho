@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% block head%}{% endblock %}
     <link rel="stylesheet" href="{{ url_for('static', filename='libraries/sweetalert2/sweetalert2.min.css') }}">
     <script defer src="{{ url_for('static', filename='libraries/sweetalert2/sweetalert2.all.min.js') }}"></script>
-    {% block head%}{% endblock %}
     <link rel="shortcut icon" href="/static/main_img/favicon.ico" type="image/x-icon">
 </head>
 <body>

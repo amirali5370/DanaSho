@@ -1,7 +1,4 @@
 @import url('../fonts.css');
-.hid {
-    display: none;
-}
 body::-webkit-scrollbar {
     width: 0px; /* عرض نوار اسکرول را صفر می‌کند */
     background: transparent; /* پس‌زمینه نوار اسکرول را شفاف می‌کند */
@@ -63,20 +60,13 @@ body{
     margin: 0px;
 }
 h1{
-    margin-top: 8%;
+    margin-top: 10px;
     color: #fff;
-    text-shadow:
-    0 0 5px #fff,
-    0 0 10px #fff,
-    0 0 20px #fff,
-    0 0 40px #0ff,
-    0 0 80px #0ff,
-    0 0 90px #0ff,
-    0 0 100px #0ff,
-    0 0 150px #0ff;
-    animation: login 2s infinite alternate;  
 }
-@keyframes login {
+#h-im{
+    margin-top: 8%;
+}
+@keyframes title {
     
     100% {
 
@@ -106,9 +96,22 @@ h1{
 
 }}  
 #heading{
-display: flex;
-justify-content: center;
+    margin: 40px;
+    padding: 0 7%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: transparent;
+    height: 70px;
+    color: #fff;
+    /* box-shadow: 0 0 .2rem #fff,
+    0 0 .2rem #fff,
+    0 0 2rem #bc13fe,
+    0 0 0.8rem #bc13fe,
+    0 0 2.8rem #bc13fe,
+    inset 0 0 1.3rem #bc13fe; */
 }
+
 .name{
     width: 90%;
     height: 100%;
@@ -156,223 +159,96 @@ h2{
     0 0 10px #fff,
     0 0 20px #fff;
 }
-
 #main{
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    margin-top: 0;
 }
 #content-wrp{
     min-height: calc( 100vh - 88px );
 }
-
-.table-co{
-    width: 80%;
-    max-width: 900px;
-    margin-top: 15vh;
-}
-.table{
-    padding-bottom: 20px;
+.bio{
     display: flex;
+    gap: 5px;
     align-items: center;
-    flex-direction: column;
+}
+#books{
+    display: grid;
+    grid-template-columns: calc(25% - 15px)  calc(25% - 15px) calc(25% - 15px) calc(25% - 15px);
+    width: 92%;
+    gap: 25px;
+    row-gap: 100px;
+}
+.book{
+    cursor: pointer;
     width: 100%;
-    border-radius: 29px;
-    background-image: linear-gradient(#0b937c,#005446);
-    transition: 0.5s;
-}
-.table:hover{
+    /* background-color: red; */
+    border-radius: 5px;
     box-shadow: 0 0 .2rem #fff,
-    0 0 .2rem #fff,
-    0 0 2rem #bc13fe,
-    0 0 0.8rem #bc13fe,
-    0 0 2.8rem #bc13fe,
-    inset 0 0 1.3rem #bc13fe; 
-}
-.title-table{
-    color: #116644;
+    0 0 .1rem #fff,
+    0 0 1rem #bc13fe,
+    0 0 0.4rem #bc13fe,
+    0 0 1.4rem #bc13fe,
+    inset 0 0 0.7rem #bc13fe;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    position: relative;
-    top: -20px;
-    border-radius: 15px;
-    width: 70%;
-    height: 50px;
-    border-radius: 42px;
-    border-radius: 42px;
-    background: #3df58d;
-    box-shadow: 
-    1px 1px 25px #186238,
-    -1px -1px 25px #62ffe235,
-    0 0 .2rem #fff,
-    0 0 .2rem #fff,
-    0 0 2rem #bc13fe,
-    0 0 0.8rem #bc13fe,
-    0 0 2.8rem #bc13fe,
-    inset 0 0 1.3rem #bc13fe;
-    transition: 0.3s;
 }
-.title-table:hover{
-    position: relative;
-    top: -20px;
-    border-radius: 15px;
-    width: 70%;
-    height: 50px;
-    border-radius: 42px;
-    border-radius: 42px;
-    background: #3df58d;
-    box-shadow: inset 5px 5px 26px #186238,
-    inset -5px -5px 26px #62ffe2,
-    1px 1px 25px #186238,
-    -1px -1px 25px #62ffe235;;
-    transform: scale(1.05);
-}
-
-.name{
-    width: 90%;
-    height: 100%;
-}
-.person{
-    background-color: #0b937c;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    margin: 1%;
-    margin-top: 10px;
-    width: 95%;
-    height: 50px;
-    background-color: #0b937c;
-    border: 3px #012d25bc solid;
-    color: white;
-    text-align: center;
-    text-decoration: none;
-    font-size: 16px;
-    cursor: pointer;
-    border-radius: 50px;
-    box-shadow: inset 4px -8px 4px 0px rgb(4 4 4 / 19%),
-    inset -1px 3px 5px 3px rgb(0 0 0 / 12%);
-    
-    transition: background-color 0.3s, transform 0.3s;
-}
-.person:hover {
-    transform: scale(1.03);
-}
-.form-co{
-    background-color: #fbe1d2;
-    text-align: center;
-    width: 80%;
-    padding: 40px 0px;
-    border-radius: 15px;
-    box-shadow: 0 0 .2rem #fff,
-    0 0 .2rem #fff,
-    0 0 2rem #bc13fe,
-    0 0 0.8rem #bc13fe,
-    0 0 2.8rem #bc13fe,
-    inset 0 0 1.3rem #bc13fe; 
-    max-width: 700px;
-    background-image: linear-gradient(#d7ae97,#be8c6f);
-}
-input{
-    border-radius: 10px;
-    border: none;
-    width: 70%;
-    height: 40px;
-    outline-color: #bc13fe;
-    background-color: #fbe1d2;
-    border: 2px solid #bc13fe;
-    padding: 2px 7px;
-    color: #186238;
-}
-button{
-    height: 40px;
-    width: 60%;
-    border-radius: 35px;
-    max-width: 160px;
-    border: none;
-    background-color: #fbe1d2;
-    box-shadow: 
-    1px 1px 25px #186238,
-    -1px -1px 25px #62ffe235,
-    0 0 .1rem #fff,
-    0 0 .1rem #fff,
-    0 0 1.5rem #bc13fe,
-    0 0 0.3rem #bc13fe,
-    0 0 2.3rem #bc13fe,
-    inset 0 0 .8rem #bc13fe;
-    cursor: pointer;
-
-    position: relative;
-    top: 20px;
-}
-.sub-title{
-    margin-bottom: 7px;
-}
-#char-wrp{
+.book > img{
+    /* margin: 5% 0; */
     width: 100%;
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
+    mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.9) 0%, rgba(255, 255, 255, 0) 100%);
+    transition: all 1.5s cubic-bezier(0.62, 0.02, 0.74, 0.47)
 }
-.char{
-    font-size: xx-large;
-    width: 5%;
-    text-align: center;
+.book > img:hover{
+    mask-image: none;
 }
-#status-br{
-    display: none;
-}
-#exam-timer{
-    font-size: xx-large;
-}
-#pay-button{
-    cursor: pointer;
-    background-color: #008c7b;
-    border: none;
-    box-shadow: 0 0 .2rem #fff,
-    0 0 .2rem #fff,
-    0 0 2rem #bc13fe,
-    0 0 0.8rem #bc13fe,
-    0 0 2.8rem #bc13fe,
-    inset 0 0 1.3rem #bc13fe;
-    border-radius: 8px;
-    width: 100%;
-    height: 50px;
+.book > h2{
     color: #fff;
     text-shadow:
-    0 0 7px #bc13fe,
-    0 0 10px #bc13fe,
-    0 0 21px #bc13fe,
-    0 0 42px #bc13fe,
-    0 0 82px #bc13fe,
-    0 0 92px #bc13fe,
-    0 0 102px #bc13fe,
-    0 0 151px #bc13fe;
-    min-width: 180px;
-    transition: 0.5s;
-    margin: 1px 10px;
-    margin-bottom: 50px;
+    0 0 5px #fff,
+    0 0 10px #fff,
+    0 0 20px #fff,
+    0 0 40px #0ff,
+    0 0 80px #0ff,
+    0 0 90px #0ff,
+    0 0 100px #0ff,
+    0 0 150px #0ff;
+    animation: title 2s infinite alternate;  
+    margin-bottom: 20px;
 }
-#pay-button:disabled{
+.task-bar{
+    margin: 40px 0;
+}
+select{
+    border-radius: 10px;
     box-shadow: 0 0 .2rem #fff,
-    0 0 .2rem #fff,
-    0 0 2rem #54475a,
-    0 0 0.8rem #54475a,
-    0 0 2.8rem #54475a,
-    inset 0 0 1.3rem #54475a;
-    text-shadow:
-    0 0 7px #54475a,
-    0 0 10px #54475a,
-    0 0 21px #54475a,
-    0 0 42px #54475a,
-    0 0 82px #54475a,
-    0 0 92px #54475a,
-    0 0 102px #54475a,
-    0 0 151px #54475a;
-    cursor: auto;
+    0 0 .1rem #fff,
+    0 0 1rem #bc13fe,
+    0 0 0.4rem #bc13fe,
+    0 0 1.4rem #bc13fe,
+    inset 0 0 0.7rem #bc13fe;
+    width: 100%;
+    height: 40px;
+    outline-color: #bc13fe;
+    background-color: transparent;
+    padding: 2px 7px;
+    color: #fbe1d2;
+    font-size: large;
+    cursor: pointer;
 }
-
+option{
+    background-color: #483052;
+}
+option:disabled{
+    background-color: #7b598a;
+    color: #000;
+}
 
 @media only screen and (min-width: 1025px) {
     /*حالت عادی*/
@@ -398,7 +274,9 @@ button{
         height: 100vh;
     }
     #main{
-        margin: 3%;
+        margin: 3% 0;
+        margin-top: 0;
+
     }
     h1{
         font-size: 2.7em;
@@ -411,7 +289,6 @@ button{
     #logo-wrp{
         margin-bottom: 40px;
     }
-    
 }
 @media only screen and (max-width: 1024px) and (min-width: 770px) {
     /*محتوای وسط تک ستونی*/
@@ -435,8 +312,8 @@ button{
         height: 100vh;
     }
     #main{
-        
-        margin: 10%;
+        margin: 7% 0;
+        margin-top: 0;        
     }
     .icon{
         font-size: 36px;
@@ -452,7 +329,12 @@ button{
     #logo-wrp{
         margin-bottom: 35px;
     }
-
+    #books{
+        display: grid;
+        grid-template-columns: calc(33% - 8px)  calc(33% - 8px) calc(33% - 8px);
+        width: 95%;
+        gap: 16px;
+    }
 }
 
 
@@ -465,7 +347,9 @@ button{
         height: auto;
     }
     #main{
-        margin: 10%;
+        margin: 5% 0;
+        margin-top: 0;
+
     }
     #content-wrp{
         background-color: #012720;
@@ -514,8 +398,25 @@ button{
     h1{
         font-size: 2.2em;
     }
-    #status-br{
-        display: inline;
+    #books{
+        display: grid;
+        grid-template-columns: calc(33% - 8px)  calc(33% - 8px) calc(33% - 8px);
+        width: 95%;
+        gap: 16px;
+    }
+    #typography{
+        width: 90%;
+    }
+    .book > img{
+        mask-image: none;
+        transition: all 1.5s cubic-bezier(0.62, 0.02, 0.74, 0.47);
+        border-bottom: 2px dashed #cfc800;
+    }
+    .book > h2{
+        margin: 15px 0;
+    }
+    .book{
+        background-color: #01493c;
     }
 }
 
@@ -533,18 +434,12 @@ button{
         font-size: 2.4em;
     }
 }
-/* @media only screen and (max-width: 560px) {
-    .char{
-        font-size: x-large;
-        width: 6%;
-    }
-} */
 @media only screen and (max-width: 450px) {
     h3{
-        font-size: 0.8em;
+        font-size: 0.9em;
     }
     h4{
-        font-size: 0.65em;
+        font-size: 0.8em;
     }
     .icon{
         font-size: 24px;
@@ -558,29 +453,22 @@ button{
     h1{
         font-size: 1.9em;
     }
-    .char{
-        height: 30px;
+    /* #heading{
+        padding: 0 5%;
+    } */
+}
+@media only screen and (max-width: 510px) {
+    #books{
+        display: grid;
+        grid-template-columns: calc(50% - 8px)  calc(50% - 8px);
+        width: 95%;
+        gap: 16px;
+    }
+    select{
+        font-size: medium;
+        height: 35px;
     }
 }
-@media only screen and (max-width: 870px) {
-    #status-br{
-        display: block;
-    }
-    .title-table{
-        height: 70px;
-    }    
-}
-@media only screen and (max-width: 330px) {
-    input{
-        width: 65%;
-    }
-}
-button.swal2-styled{
-    height: inherit;
-    width: inherit;
-    max-width: inherit;
-    position: inherit;
-}
-button.swal2-close{
-    box-shadow: inherit;
+.hid {
+    display: none;
 }
