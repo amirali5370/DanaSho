@@ -195,7 +195,8 @@ def book(book_link):
 @app.route("/activism", methods=["GET","POST"],  strict_slashes=False)
 @login_required
 def activism():
-    return 'ok'
+    books = Book.query.filter(Book.grade==current_user.grade).all()
+    return render_template("user/activism.html", books=books)
 
 
 #activism (single book page)

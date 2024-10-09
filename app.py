@@ -42,21 +42,6 @@ def load_user(user_id):
     return User.query.filter(User.id==user_id).first()
 
 
-# FIXME : هر وقت برنامه خواست روی هاست اجرا بشه باید خط های زیر از کامنت در بیان
-# remote_url = config.MAIN_SLIDE
-# local_file = 'static/slides/main.jpg'
-# data = requests.get(remote_url)
-# with open(local_file, 'wb')as file:
-#     file.write(data.content)
-
-# remote_url = config.FAV_ICON
-# local_file = 'static/main_img/favicon.ico'
-# data = requests.get(remote_url)
-# with open(local_file, 'wb')as file:
-#     file.write(data.content)
-
-
-
 
 with app.app_context():
     extentions.db.create_all()
