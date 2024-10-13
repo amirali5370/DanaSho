@@ -9,3 +9,6 @@ class Book(db.Model):
     about = Column(String, nullable=False, index=True)
     grade = Column(Integer, nullable=False, index=True)
     primalink = Column(String, nullable=False, index=True)
+
+    time = Column(Integer, index=True)
+    number = Column(Integer, index=True)

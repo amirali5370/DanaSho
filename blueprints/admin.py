@@ -2,9 +2,11 @@ from flask import Blueprint, jsonify, render_template, request, session, redirec
 from PIL import Image
 import os
 import config
+import pandas as pd
 from functions.methods import get_time
 from functions.text_generators import confirm_activate_text_generator, confirm_camp_text_generator, confirm_comment_text_generator, confirm_course_text_generator, reject_activate_text_generator, reject_comment_text_generator
 from models.interaction import Interaction
+from models.question import Question
 from models.ticket import Ticket
 from models.user import User
 from models.book import Book
@@ -264,7 +266,7 @@ def activism_api():
     else:
         abort(404)
 
-#activism
+#requests
 @app.route("/admin/requests")
 def requests():
     requests = Ticket.query.filter(Ticket.type == 'request',Ticket.status == 'review').all()
@@ -295,3 +297,35 @@ def request_api():
         return jsonify({'status':'200'})
     else:
         abort(404)
+
+##############################   Quiz   ###############################
+@app.route("/admin/quiz/<book_link>", methods=["GET","POST"])
+def quiz(book_link):
+    book = Book.query.filter(Book.primalink==book_link).first_or_404()
+    if request.method == "POST":
+        book.number = file = request.form['number']
+        book.time = file = request.form['time']
+        db.session.commit()
+
+        file = request.files['file']
+        if file!=None:
+            if file.filename != '':
+                df = pd.read_excel(file)
+                q_old = Question.query.filter(Question.book_id == book.id).all()
+                for i in q_old:
+                    db.session.delete(i)
+                    db.session.commit() 
+
+                for index, row in df.iterrows():
+                    q = Question(book_id=book.id, text=row['text'], option1=row['op1'], option2=row['op2'], option3=row['op3'], option4=row['op4'])
+                    q.answer = q.__dict__['option' + str(row['answer'])]
+                    db.session.add(q)
+                
+                db.session.commit()
+
+            flash('quiz_add_success')
+        return redirect(url_for('admin.quiz', book_link=book_link))
+    else:
+        questions = Question.query.filter(Question.book_id == book.id).all()
+        return render_template("admin/questions.html", questions=questions, book=book)
+    

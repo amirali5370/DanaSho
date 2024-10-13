@@ -1,3 +1,4 @@
+import random
 import jdatetime
 from models.interaction import Interaction
 def likes_calculator(user):
@@ -20,5 +21,10 @@ def comments_calculator(activism):
 def get_time():
     return jdatetime.datetime.today().strftime("%Y/%m/%d %H:%M")
 
+def randomizer(op1, op2, op3, op4):
+    shuffled_list = [op1, op2, op3, op4]
+    random.shuffle(shuffled_list)
+    return shuffled_list
 
-
+def excerpt(input_list, number):
+    return random.sample(input_list, number)

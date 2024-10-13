@@ -1,0 +1,44 @@
+{% extends "Base.html" %}
+{% block head %}
+    <title>سوالات کتاب {{book.name}}</title>
+{% endblock %}
+{% block body %}
+<form id="enter" action="#" enctype="multipart/form-data" method="post">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <input id="file" type="file" name="file">
+    <input id="time" type="number" name="time" value="{{book.time}}" placeholder="زمان به ثانیه (مثلا : 60)">
+    <input id="number" type="number" name="number" value="{{book.number}}" placeholder="تعداد سوالات در هر آزمون">
+    <input type="submit" value="ثبت تغییرات">
+</form>
+
+<br><br><br>
+{% for q in questions %}
+<div style="border: 3px black solid;">
+    <form action="#">
+    
+    <h4 style="margin: 6px; white-space: pre-wrap;">{{q.text}}</h4>
+
+    <div style="width: 75%; display:flex; justify-content:space-around">
+        <div>
+            <input disabled {{'checked' if q.answer == q.option1 }} type="radio" name="o{{id}}" id="o{{id}}_1">
+            <label for="o{{id}}_1">{{q.option1}}</label>
+        </div>
+        <div>
+            <input disabled {{'checked' if q.answer == q.option2 }} type="radio" name="o{{id}}" id="o{{id}}_2">
+            <label for="o{{id}}_2">{{q.option2}}</label>
+        </div>
+        <div>
+            <input disabled {{'checked' if q.answer == q.option3 }} type="radio" name="o{{id}}" id="o{{id}}_3">
+            <label for="o{{id}}_3">{{q.option3}}</label>
+        </div>
+        <div>
+            <input disabled {{'checked' if q.answer == q.option4 }} type="radio" name="o{{id}}" id="o{{id}}_4">
+            <label for="o{{id}}_4">{{q.option4}}</label>
+        </div>
+    </div>
+
+    </form>
+</div>
+<br>
+{% endfor %}
+{% endblock %}
