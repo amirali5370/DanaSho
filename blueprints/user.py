@@ -3,9 +3,13 @@ from flask_login import login_user, login_required, current_user, logout_user
 from passlib.hash import sha256_crypt
 from functions.methods import is_liked, get_time
 import os
+import math
 import time
+import random
 from PIL import Image
 from models.book import Book
+from models.question import Question
+from models.result import Result
 from models.ticket import Ticket
 from models.user import User
 from models.invite import Invite
@@ -266,6 +270,55 @@ def like_maneger():
         abort(404)
 
 
+#quiz
+@app.route("/quiz/<book_link>", methods=["GET","POST"],  strict_slashes=False)
+@login_required
+def book_quiz(book_link):
+    book = Book.query.filter(Book.primalink==book_link).first_or_404()
+    r = Result.query.filter(Result.user_id==current_user.id, Result.book_id==book.id).first()
+    print(r)           
+    if book.number == 0:
+        abort(404)
+
+    if request.method == "POST":
+        total = 0
+        true = 0
+
+        for key, value in request.form.items():
+            if key != 'csrf_token':
+                total += 1
+                q = Question.query.filter(Question.id==key[1:]).first()
+                if q.answer == value:
+                    true += 1
+        result = true*100/total
+        if r.score < result:
+            ol_p =  math.ceil((r.score/100)*point_04)
+            new_p =  math.ceil((result/100)*point_04)
+            p = new_p - ol_p
+            r.score = result
+            current_user.point += p
+        else:
+            p = 0
+        db.session.commit()
+                
+        flash(f'{p} امتیاز')
+        return redirect(url_for('user.book_activisms', book_link=book.primalink))
+     
+    else:
+        if r==None:
+            r = Result(user_id=current_user.id, book_id=book.id)
+            db.session.add(r)
+            db.session.commit()
+
+        if r.enter > 1:
+            flash('quiz_more_2')
+            return redirect(url_for('user.book_activisms', book_link=book.primalink)) 
+        
+        r.enter = r.enter+1
+        db.session.commit()
+        
+        questions = random.sample(book.questions.all(), book.number)
+        return render_template("user/quiz.html", book=book, questions=questions)
 
 
 
@@ -433,8 +486,9 @@ def verify():
 @app.route('/invites',  strict_slashes=False)
 @login_required
 def invites():
-    invitees = current_user.invites.all()
-    return render_template("user/invites.html", invitees=invitees)
+    invitees = current_user.invites.order_by(Invite.id.desc()).limit(10).all()
+    inv = current_user.invites.all()
+    return render_template("user/invites.html", invitees=invitees, inv=inv)
 
 
 # ------------- TICKET -------------

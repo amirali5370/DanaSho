@@ -26,5 +26,5 @@ def randomizer(op1, op2, op3, op4):
     random.shuffle(shuffled_list)
     return shuffled_list
 
-def excerpt(input_list, number):
-    return random.sample(input_list, number)
+def invites_index(invite, invites_list):
+    return invites_list.index(invite)+1

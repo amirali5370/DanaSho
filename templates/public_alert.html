@@ -100,6 +100,33 @@
                     allowOutsideClick:false,
                 }).then((result) => {swal.close();})
                 {% endif %}
+                
+                {% if message == "quiz_more_2"%}
+                swal({
+                    title: 'شما تمام فرصت های خود را برای شرکت در این آزمون استفاده کرده‌اید!',
+                    html: 'میتوانید در آزمون سایر کتاب ها شرکت کرده و امتیاز کسب کنید.',
+                    type: 'error',
+                    confirmButtonColor: '#dc1225',
+                    confirmButtonText: '<div style="direction:rtl;font-size:18px;font-family:Iran,Calibri;font-weight:bold;"><i style="margin-left: 5px;" class="fa fa-times"></i> باشه</div>',
+                    showCloseButton: true,
+                    showLoaderOnConfirm:true,
+                    allowOutsideClick:false,
+                }).then((result) => {swal.close();})
+                {% endif %}
+
+                {% if 'امتیاز' in message %}
+                    swal({
+                        title: '{{message}} به شما تعلق گرفت!',
+                        html: "با توجه به نتایج این نوبت و محاسبه بهترین نتیجه شما برای این آزمون، {{message}} به حساب شما اضافه شد.",
+                        type: 'success',
+                        confirmButtonColor: '#3f9b0b',
+                        confirmButtonText: '<div style="direction:rtl;font-size:18px;font-family:Iran,Calibri;font-weight:bold;"><i style="margin-left: 5px;" class="fa fa-times"></i> باشه</div>',
+                        showCloseButton: true,
+                        showLoaderOnConfirm:true,
+                        allowOutsideClick:false,
+                    }).then((result) => {swal.close();})
+                {% endif %}
+
             {% endfor %}
         {% endif %}
     {% endwith %}

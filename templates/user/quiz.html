@@ -1,0 +1,78 @@
+{% extends "Base.html" %}
+{% block head %}
+    <title>آزمون {{book.name}}</title>
+{% endblock %}
+{% block body %}
+<h3 id="exam-timer"></h3>
+<form action="#" method="post">
+<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+{% for q in questions %}
+<div style="border: 3px black solid;">
+    
+    <h4 style="margin: 6px; white-space: pre-wrap;">{{q.text}}</h4>
+
+    <div style="width: 75%; display:flex; justify-content:space-around">
+        {% for o in randomizer(q.option1 , q.option2 , q.option3 , q.option4) %}
+        <div>
+            <input type="radio" name="o{{q.id}}" id="o{{q.id}}_{{loop.index}}" value="{{o}}">
+            <label for="o{{q.id}}_{{loop.index}}">{{o}}</label>
+        </div>
+        {% endfor %}
+    </div>
+
+</div>
+<br>
+{% endfor %}
+
+<input type="submit" value="اتمام آزمون">
+</form>
+
+<script>
+    function timer(){
+        var examDuration = {{book.time}}; 
+        var examStartTime = new Date().getTime(); 
+
+        var examTimer = setInterval(function() {
+        var currentTime = new Date().getTime();
+        var elapsedTime = currentTime - examStartTime;
+        var remainingTime = examDuration - Math.floor(elapsedTime / 1000);
+
+        var minutes = Math.floor(remainingTime / 60);
+        var seconds = remainingTime % 60;
+
+        document.getElementById("exam-timer").textContent = minutes + ":" + String(seconds).padStart(2, '0');
+
+        if (remainingTime <= 0) {
+            clearInterval(examTimer);
+            document.querySelector('form').submit();
+            
+        }
+        }, 1000);
+    }
+    timer()
+</script>
+
+<script type="module">
+    {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+    
+                    {% if 'امتیاز' in message %}
+                    swal({
+                        title: '{{message}} به شما تعلق گرفت!',
+                        html: "با توجه به نتایج این نوبت و بهترین نتیجه شما برای این آزمون، {{message}} به حساب شما اضافه شد.",
+                        type: 'success',
+                        confirmButtonColor: '#3f9b0b',
+                        confirmButtonText: '<div style="direction:rtl;font-size:18px;font-family:Iran,Calibri;font-weight:bold;"><i style="margin-left: 5px;" class="fa fa-times"></i> باشه</div>',
+                        showCloseButton: true,
+                        showLoaderOnConfirm:true,
+                        allowOutsideClick:false,
+                    }).then((result) => {swal.close();})
+                    {% endif %}
+    
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+</script>
+{% endblock %}

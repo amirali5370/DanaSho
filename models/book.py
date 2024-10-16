@@ -11,4 +11,4 @@ class Book(db.Model):
     primalink = Column(String, nullable=False, index=True)
 
     time = Column(Integer, index=True)
-    number = Column(Integer, index=True)
+    number = Column(Integer, index=True ,default=0)

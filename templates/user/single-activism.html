@@ -45,24 +45,26 @@
                 {% if current_user.grade==book.grade %}
                 <br><br class="windows"><br class="windows">
                 {% if current_user.authentication==1 and current_user.final==1 %}
-                <a href="">
+                {% if book.number != 0 %}
+                <a href="{{ url_for('user.book_quiz', book_link=book.primalink) }}">
                     <button class="req">
                         شرکت در آزمون این کتاب
                     </button>
                 </a>
+                {% endif %}
                 <br><br>
                 <form action="#" method="post" id="activism-form" enctype="multipart/form-data">
                     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                     <textarea name="activism" id="activism-inp" form="activism-form" placeholder="متن کنش خود را اینجا بنویسید..."></textarea>
                     <br>
-                    <label for="activism-file">
+                    <label id="lable_file" for="activism-file">
                         فایل کنش خود را اینجا آپلود کنید
                         <span>
                         حداکثر حجم عکس : 5MB
                         </span>
                     </label>
                     <br>
-                    <input type="file" name="photo" id="activism-file" class="hid" accept="image/jpeg" required>
+                    <input type="file" name="photo" id="activism-file" class="hid" accept="image/jpeg" onchange="rename()" required>
                     <input type="submit" value="ارسال کنش">
                 </form>
                 {% else %}
@@ -166,7 +168,13 @@
 
 
 
-
+    <script>
+        function rename(){
+            var inputFile = document.getElementById("activism-file");
+            var fileName = inputFile.files[0].name; // نام اولین فایل انتخاب شده
+            document.getElementById("lable_file").innerText=fileName;
+        }
+    </script>
 
 
 

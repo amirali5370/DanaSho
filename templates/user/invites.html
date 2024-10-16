@@ -39,12 +39,12 @@
                 <div class="table-co" id="invite-table-co">
                     <div class="table" id="invite-table">
                         <div class="title-table">
-                            <h2 class="the-title">افراد دعوت شده</h2>
+                            <h2 class="the-title">آخرین دعوت شده‌ها</h2>
                         </div>
                         <div class="name">
                             {%for i in invitees%}
                             <div class="person p{{loop.index}} neonText {{'me' if i==current_user}}">
-                                <h4>{{loop.index}}</h4>
+                                <h4>{{invites_index(i,inv)}}</h4>
                                 <h4>{{i.invitee}}</h4>
                             </div>
                             {% endfor %}

@@ -6,8 +6,8 @@
 <form id="enter" action="#" enctype="multipart/form-data" method="post">
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
     <input id="file" type="file" name="file">
-    <input id="time" type="number" name="time" value="{{book.time}}" placeholder="زمان به ثانیه (مثلا : 60)">
-    <input id="number" type="number" name="number" value="{{book.number}}" placeholder="تعداد سوالات در هر آزمون">
+    <input id="time" type="number" name="time" value="{{book.time}}" min="30" placeholder="زمان به ثانیه (مثلا : 60)">
+    <input id="number" type="number" name="number" value="{{book.number}}" max="{{len(questions)}}" placeholder="تعداد سوالات در هر آزمون">
     <input type="submit" value="ثبت تغییرات">
 </form>
 

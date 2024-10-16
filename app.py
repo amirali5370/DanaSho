@@ -6,7 +6,7 @@ from blueprints.user import app as user
 from blueprints.general import page_not_found
 import config
 import extentions
-from functions.methods import comments_calculator, is_liked, randomizer, excerpt
+from functions.methods import comments_calculator, is_liked, randomizer, invites_index
 from models.user import User
 from flask_login import LoginManager
 
@@ -21,7 +21,7 @@ app.jinja_env.globals['len'] = len
 app.jinja_env.globals['is_liked'] = is_liked
 app.jinja_env.globals['comments_calculator'] = comments_calculator
 app.jinja_env.globals['randomizer'] = randomizer
-app.jinja_env.globals['excerpt'] = excerpt
+app.jinja_env.globals['invites_index'] = invites_index
 
 # HACK: مدیریت ارور ستون های یونیک دیتابیس
 # TODO: اضافه شدن پیش ثبت نام توسط دانش آموز و گزینه افزدون پیش ثبت نامی ها به دانش آموزان برای ادمین
