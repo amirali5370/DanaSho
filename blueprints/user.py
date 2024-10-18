@@ -280,16 +280,17 @@ def book_quiz(book_link):
         abort(404)
 
     if request.method == "POST":
-        total = 0
+
         true = 0
 
         for key, value in request.form.items():
             if key != 'csrf_token':
-                total += 1
                 q = Question.query.filter(Question.id==key[1:]).first()
+                print(q.answer, value)
                 if q.answer == value:
                     true += 1
-        result = true*100/total
+        result = true*100/book.number
+        print(result)
         if r.score < result:
             ol_p =  math.ceil((r.score/100)*point_04)
             new_p =  math.ceil((result/100)*point_04)
