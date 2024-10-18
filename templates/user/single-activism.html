@@ -84,7 +84,7 @@
                     <div class="activism" data-activism-id="{{a.id}}">
                         <div class="act-head">
                             <div class="bio">
-                                <img src="{{ url_for('static', filename='main_img/user.jpg') }}" alt="">
+                                <img src="/static/users/{{a.user.id}}.jpg"  onerror="this.onerror=null; this.src=`{{ url_for('static', filename='main_img/user.jpg') }}`;" alt="">
                                 <h3>{{a.user.name}}</h3>
                             </div>
                             <i class="hiddener fa fa-toggle-down" onclick="switcher(this)"></i>

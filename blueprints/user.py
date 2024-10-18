@@ -354,10 +354,25 @@ def club():
 
 
 # ------------- PROFILE -------------
-@app.route("/profile", methods=["GET"],  strict_slashes=False)
+@app.route("/profile", methods=["GET","POST"],  strict_slashes=False)
 @login_required
 def profile():
-    return 'profile'
+    if request.method == "POST":
+        file = request.files.get("file", None)
+
+        file.save(f"static/users/{file.filename}")
+        image = Image.open(f"static/users/{file.filename}")
+        resized_image = image.resize((280, 280))
+        resized_image = resized_image.convert("RGB") 
+        resized_image.save(f"static/users/{current_user.id}.jpg", 'JPEG')
+
+        os.remove(f"static/users/{file.filename}")
+
+        return redirect(request.url)
+    else:
+        activisms = len(current_user.interactions.filter(Interaction.type=='activism', Interaction.status=='confirmed').all())
+        comments = len(current_user.interactions.filter(Interaction.type=='comment', Interaction.status=='confirmed').all())
+        return render_template("user/profile.html", activisms=activisms, comments=comments)
 
 
 #  ||||||||||||||||   completion   ||||||||||||||

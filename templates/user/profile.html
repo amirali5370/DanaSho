@@ -1,0 +1,113 @@
+{% extends "Base.html" %}
+{% block head %}
+    <title>پروفایل | دانا پلاس شو</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/user/profile.css') }}">
+    {% endblock %}
+    {% block body %}
+    <div id="continer">
+        <div id="side-wrp">
+            <div id="logo-wrp">
+                <img id="logo" src="" alt="">
+            </div>
+            <a href="{{ url_for('user.home') }}" class="icon-wrp">
+                <i class="fa fa-home icon"></i>
+                <h2>خانه </h2>
+            </a>
+            <a href="{{ url_for('user.activism') }}" class="icon-wrp">
+                <i class="fa fa-comments icon"></i>
+                <h2>کنشگری </h2>
+            </a>
+            <a href="{{ url_for('user.club') }}" class="icon-wrp">
+                <i class="fa fa-trophy icon"></i>
+                <h2>باشگاه </h2>
+            </a>
+            <a href="{{ url_for('user.profile') }}" class="icon-wrp active">
+                <i class="fa fa-user-circle icon"></i>
+                <h2>پروفایل </h2>
+            </a>
+            <a href="{{ url_for('user.ticket') }}" class="icon-wrp">
+                <i class="fa fa-life-saver icon"></i>
+                <h2>تیکت </h2>
+            </a>
+        </div>
+        <div id="content-wrp">
+            <div id="heading">
+                <img id="h-im" src="/static/users/{{current_user.id}}.jpg"  onerror="this.onerror=null; this.src=`{{ url_for('static', filename='main_img/user.jpg') }}`;" alt="" width="280">
+                <form id="p_im" action="#" method="post" enctype="multipart/form-data">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                </form>
+                <input class="hid" type="file" name="file" id="file" accept="image/jpeg" form="p_im" onchange="send_photo()">
+                <label for="file">تغییر عکس پروفایل</label>
+                <br class="mob">
+                <h1>{{current_user.name}}</h1>
+                <div id="log_out" onclick="log_out()">خروج از حساب کاربری</div>
+            </div>
+            <div id="main">
+                <div class="task_bar">
+                    <a href="{{ url_for('user.invites') }}" class="invite_link task_link"><button class="invite_btn task_btn">دعوت از دوستان</button></a>
+                    {% if current_user.downloads != 0 %}
+                    <a href="#" class="down_link task_link"><button class="down_btn task_btn">دانلود کتاب‌ها ({{current_user.downloads}})</button></a>
+                    {% else %}
+                    <a class="down_link task_link"><button disabled class="down_btn task_btn">دانلود کتاب‌ها ({{current_user.downloads}})</button></a>
+                    {% endif %}
+                </div>
+                <div class="about">
+                    <h3>نام کاربری: {{current_user.username}}</h3>
+                    <h3>نوع اکانت: {{"الماسی" if current_user.authentication == 1 and current_user.final == 1  else "طلایی" if current_user.final == 1 else "نقره‌ای" if  current_user.authentication == 1 else "برنزی"}}</h3>
+                    <h3>مدرسه: {{current_user.school_name}} </h3>
+                    <h3>مقطع: {{"دوره اول ابتدایی" if current_user.grade == 1 else "دوره دوم ابتدایی" if current_user.grade == 2 else "دوره متوسطه اول" if current_user.grade == 3 else "دوره متوسطه دوم" if current_user.grade == 4 else "فرهنگی"}}</h3>
+                </div> 
+                <div class="values">
+                    <div class="value">
+                        تعداد کنش ها: {{activisms}}
+                    </div>
+                    <div class="value">
+                        تعداد نظرات: {{comments}}
+                    </div>
+                    <div class="value">
+                        تعداد دعوت ها: {{current_user.invite}}
+                    </div>
+                    <div class="value">
+                        تعداد لایک ها: {{current_user.like}}
+                    </div>
+                </div>
+            <div id="footer">
+                <h4 id="copyRight">© تمام حقوق برای مسابقه دانا پلاس شو محفوظ است</h4>
+            </div>
+        </div>
+    </div>
+    <script>
+        function send_photo(){
+            document.querySelector('form').submit()
+        }
+
+        function log_out() {
+            swal({
+                title: 'آیا میخواهید از حساب کاربری خود، خارج شوید؟',
+                html: '',
+                type: 'warning',
+                reverseButtons: true,
+                showCancelButton: true,
+                confirmButtonColor: '#F38524',
+                confirmButtonText: '<div style="direction:rtl;font-size:18px;font-family:Iran,Calibri;font-weight:bold;"><i style="margin-left: 5px;" class="fa fa-times"></i> تایید</div>',
+                cancelButtonText: '<div style="direction:rtl;font-size:18px;font-family:Iran,Calibri;font-weight:bold;border: 3 solid #ffd700;"><i style="margin-left: 5px;" class="fa fa-times"></i> انصراف</div>',
+                showLoaderOnConfirm:true,
+                allowOutsideClick:false,
+                showCloseButton: false,
+                focusConfirm: true,
+            }).then((result) => {
+                if(result.value){
+                    const xhr = new XMLHttpRequest();
+                    var url = '/logout'
+                    xhr.open('GET',url, true);
+                    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                    xhr.send();
+                    setInterval(function() {
+                        location.reload();
+                }, 250); 
+            };
+        });
+        }
+    </script>
+{% endblock %}

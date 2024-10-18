@@ -1,0 +1,549 @@
+@import url('../fonts.css');
+body{
+    min-width: 315px;
+}
+body * {
+    box-sizing: border-box;
+}
+body::-webkit-scrollbar {
+    width: 0px; /* عرض نوار اسکرول را صفر می‌کند */
+    background: transparent; /* پس‌زمینه نوار اسکرول را شفاف می‌کند */
+}
+a:-webkit-any-link {
+    color: none;
+    cursor: pointer;
+    text-decoration: none;
+}
+.neonText{
+    color: #fff;
+    text-shadow:
+      0 0 7px #fff,
+      0 0 10px #fff,
+      0 0 21px #fff,
+      0 0 42px #cfc800,
+      0 0 82px #cfc800,
+      0 0 92px #cfc800,
+      0 0 102px #cfc800,
+      0 0 151px #cfc800;
+      animation: pulsate 1.5s infinite alternate;  
+  }
+  @keyframes pulsate {
+    
+    100% {
+  
+        text-shadow:
+        0 0 4px #fff,
+        0 0 11px #fff,
+        0 0 19px #fff,
+        0 0 40px #cfc800,
+        0 0 80px #cfc800,
+        0 0 90px #cfc800,
+        0 0 100px #cfc800,
+        0 0 150px #cfc800;
+    
+    }
+    
+    0% {
+  
+      text-shadow:
+      0 0 2px #fff,
+      0 0 4px #fff,
+      0 0 6px #fff,
+      0 0 10px #cfc800,
+      0 0 45px #cfc800,
+      0 0 55px #cfc800,
+      0 0 70px #cfc800,
+      0 0 80px #cfc800;
+  
+  }}
+
+body *{
+    font-family: Tanha;
+}
+body{
+    font-family: Arial;
+    padding: 0px;
+    margin: 0px;
+}
+h1{
+    margin-top: 10px;
+    color: #fff;
+    /* text-shadow: */
+    /* 0 0 5px #fff,
+    0 0 10px #fff,
+    0 0 20px #fff,
+    0 0 40px #0ff,
+    0 0 80px #0ff,
+    0 0 90px #0ff,
+    0 0 100px #0ff,
+    0 0 150px #0ff; */
+    /* animation: login 2s infinite alternate;   */
+}
+#h-im{
+    margin-top: 8%;
+    border-radius: 50%;
+    box-shadow: 0 0 .2rem #fff,
+    0 0 .2rem #fff,
+    0 0 2rem #bc13fe,
+    0 0 0.8rem #bc13fe,
+    0 0 2.8rem #bc13fe,
+    inset 0 0 1.3rem #bc13fe; 
+}
+#heading{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+.name{
+    width: 90%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+}
+#copyRight{
+    color: white
+}
+#author{
+    font-family: Emza;
+}
+.icon-wrp{
+    display: flex;
+    justify-content: start;
+    align-items: center;
+}
+.icon{
+    font-size:48px;
+    color:#fbe1d2;
+    margin-left: 10%;
+}
+.icon-wrp>h2{
+    color:#fbe1d2;
+}
+h2{
+    margin: 0;
+}
+#side-wrp{
+    display: flex;
+}
+#logo-wrp{
+    border-bottom: 3px dashed #d7d00297;
+    width: 100%;
+}
+#footer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
+.icon-wrp.active *{
+    color: #8dffea;
+    text-shadow:
+    0 0 5px #fff,
+    0 0 10px #fff,
+    0 0 20px #fff;
+}
+#main{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin-top: 0;
+}
+#content-wrp{
+    min-height: calc( 100vh - 88px );
+}
+label,#log_out{
+    position: relative;
+    bottom: 25px;
+    right: 150px;
+    background-color: #fbe1d2;
+    padding: 7px;
+    font-weight: 900;
+    border-radius: 15px;
+    cursor: pointer;
+}
+.mob{
+    display: none;
+}
+.about{
+    display: grid;
+    grid-template-columns: 25% 25% 25% 25%;
+    width: 100%;
+    margin-bottom: 30px;
+}
+.about *{
+    margin: 5px 0;
+    color: #caaa98;
+    white-space: nowrap;
+}
+.value{
+    background-color: #008c7b;
+    border: none;
+    box-shadow: 0 0 .2rem #fff,
+    0 0 .2rem #fff,
+    0 0 2rem #bc13fe,
+    0 0 0.8rem #bc13fe,
+    0 0 2.8rem #bc13fe,
+    inset 0 0 1.3rem #bc13fe;
+    border-radius: 8px;
+    width: 20%;
+    height: 55px;
+    color: #fff;
+    text-shadow:
+    0 0 7px #bc13fe,
+    0 0 10px #bc13fe,
+    0 0 21px #bc13fe,
+    0 0 42px #bc13fe,
+    0 0 82px #bc13fe,
+    0 0 92px #bc13fe,
+    0 0 102px #bc13fe,
+    0 0 151px #bc13fe;
+    min-width: 180px;
+    transition: 0.5s;
+    margin: 1px 10px;
+    text-align: center;
+    justify-self: center;
+    padding-top: 10px;
+}
+.values{
+    display: grid;
+    grid-template-columns: 25% 25% 25% 25%;
+    width: 100%;
+}
+.task_btn{
+    cursor: pointer;
+    width: 150px;
+    height: 50px;
+    background-color: #0b937c;
+    border: 3px #012d25bc solid;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 50px;
+    box-shadow: inset 4px -8px 4px 0px rgb(4 4 4 / 19%),
+    inset -1px 3px 5px 3px rgb(0 0 0 / 12%);
+    
+    transition: background-color 0.3s, transform 0.3s;
+}
+.task_btn:hover {
+    transform: scale(1.03);
+}
+.task_btn:disabled {
+    background-color: #5c6f6c;
+}
+.task_link{
+    margin: 1%;
+    margin-top: 40px;
+}
+.task_bar{
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 50px;
+}
+@media only screen and (min-width: 1025px) {
+    /*حالت عادی*/
+    /*کامپیوتر لپتاپ لارج*/
+    #continer{
+        display: flex;
+        width: 100%;
+        height: auto;
+    }
+    #content-wrp{
+        width: 85%;
+        background-color: #012720;
+        justify-content: center;
+        align-items: center;
+    }
+    #side-wrp{
+        flex-direction: column;
+        position: sticky;
+        top: 0;
+        width: 15%;
+        background-color: #012720;    
+        border-left: 3px solid #fbe1d2;
+        height: 100vh;
+    }
+    #main{
+        margin: 3%;
+        margin-top: 0;
+
+    }
+    h1{
+        font-size: 2.7em;
+    }
+    .icon-wrp{
+        margin-top: 30px;
+        margin-right: 10%;
+
+    }
+    #logo-wrp{
+        margin-bottom: 40px;
+    }
+    .about *{
+        text-align: center;
+        font-size: 1.7vw;
+    }
+}
+@media only screen and (max-width: 1024px) and (min-width: 770px) {
+    /*محتوای وسط تک ستونی*/
+    /* لپتاپ */
+    #continer{
+        display: flex;
+        width: 100%;
+        height: auto;
+    }
+    #content-wrp{
+        width: 85%;
+        background-color: #012720;
+    }
+    #side-wrp{
+        flex-direction: column;
+        position: sticky;
+        top: 0;
+        width: 17%;
+        background-color: #012720;    
+        border-left: 3px solid #fbe1d2;
+        height: 100vh;
+    }
+    #main{
+        margin: 8%;
+        margin-top: 0;        
+    }
+    .icon{
+        font-size: 36px;
+    }
+    h2{
+        font-size: 1.3em;
+    }
+    .icon-wrp{
+        margin-top: 30px;
+        margin-right: 10%;
+
+    }
+    #logo-wrp{
+        margin-bottom: 35px;
+    }
+    .about{
+        display: grid;
+        grid-template-columns: 65% 35%;
+        width: 100%;
+    }
+    .values{
+        display: grid;
+        grid-template-columns: 50% 50%;
+        width: 100%;
+        row-gap: 40px;
+    }
+    .value{
+        height: 50px;
+    }
+}
+
+
+@media only screen and (max-width: 769px){
+    /*منو زیر*/
+    /* مینی */
+    #continer{
+        display: flex;
+        width: 100%;
+        height: auto;
+    }
+    #main{
+        margin: 5%;
+        margin-top: 0;
+
+    }
+    #content-wrp{
+        background-color: #012720;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        margin-bottom: 85px;
+    }
+
+    #side-wrp{
+        z-index: 999;
+        display: flex;
+        height: 85px;
+        width: 100%;
+        background-color: #012720;    
+        border-top: 3px solid #fbe1d2;
+        position: fixed;
+        bottom: 0;
+        margin: 0;
+        justify-content: space-around;
+    }
+
+    h3{
+        font-size: 1.2em;
+    }
+    .icon-wrp{
+        flex-direction: column;
+        height: 100%;
+        justify-content: center;
+        width: 71px;
+    }
+    #menu-br{
+        display: none;
+    }
+    #logo-wrp{
+        border-bottom: none;
+        border-left: 3px dashed #d7d00297;
+        width: 60px;
+    }
+    .icon{
+        font-size: 30px;
+    }
+    h2{
+        font-size: 1.4em;
+    }
+    h1{
+        font-size: 2.2em;
+    }
+    #h-im{
+        margin-top: 5%;
+        width: 200px;
+        border-radius: 50%;
+        box-shadow: 0 0 .2rem #fff,
+        0 0 .2rem #fff,
+        0 0 2rem #bc13fe,
+        0 0 0.8rem #bc13fe,
+        0 0 2.8rem #bc13fe,
+        inset 0 0 1.3rem #bc13fe; 
+    }
+    label,#log_out{
+        position: relative;
+        bottom: 20px;
+        right: 120px;
+        background-color: #fbe1d2;
+        padding: 5px;
+        font-weight: 700;
+        border-radius: 15px;
+        font-size: 14px;
+        cursor: pointer;
+    }
+    .about{
+        display: grid;
+        grid-template-columns: 65% 35%;
+        width: 100%;
+    }
+    .values{
+        display: grid;
+        grid-template-columns: 50% 50%;
+        width: 100%;
+        row-gap: 25px;
+        column-gap: 25px;
+    }
+    .value{
+        height: 50px;
+    }
+}
+
+@media only screen and (min-width: 1024px) and (max-width: 1400px) {
+    h3{
+        font-size: 1.2em;
+    }
+    .icon{
+        font-size: 30px;
+    }
+    h2{
+        font-size: 1.4em;
+    }
+    h1{
+        font-size: 2.4em;
+    }
+}
+@media only screen and (max-width: 525px) {
+    .about{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        width: 100%;
+    }
+    .values{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        width: 100%;
+    }
+    .value{
+            padding-bottom: 40px;
+    }
+}
+@media only screen and (max-width: 450px) {
+    h3{
+        font-size: 0.9em;
+    }
+    h4{
+        font-size: 0.8em;
+    }
+    .icon{
+        font-size: 24px;
+    }
+    #logo-wrp{
+        display: none;
+    }
+    h2{
+        font-size: 1em;
+    }
+    h1{
+        font-size: 1.9em;
+    }
+    #h-im{
+        margin-top: 7%;
+        width: 125px;
+        border-radius: 50%;
+        box-shadow: 0 0 .2rem #fff,
+        0 0 .2rem #fff,
+        0 0 2rem #bc13fe,
+        0 0 0.8rem #bc13fe,
+        0 0 2.8rem #bc13fe,
+        inset 0 0 1.3rem #bc13fe; 
+    }
+    label,#log_out{
+        position: relative;
+        bottom: -15px;
+        right: 0px;
+        background-color: #fbe1d2;
+        padding: 5px;
+        font-weight: 600;
+        border-radius: 15px;
+        font-size: 12px;
+        cursor: pointer;
+    }
+    .mob{
+        display: block;
+    }
+    .value{
+        font-size: medium;
+        padding: 10px 0;
+    }
+    .task_btn{
+        width: 140px;
+        height: 45px;
+        font-size: 14px;
+    }
+}
+#log_out{
+    background-color: rgb(255, 66, 66);
+    position: static;
+}
+.hid {
+    display: none;
+}
+@media only screen and (max-width: 315px) {
+    html *{
+        display: none;
+    }
+}
+@media only screen and (min-width: 1370px) {
+    .about *{
+        font-size: 22px;
+    }
+}
+
