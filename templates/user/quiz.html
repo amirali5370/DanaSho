@@ -1,32 +1,43 @@
 {% extends "Base.html" %}
 {% block head %}
     <title>آزمون {{book.name}} | دانا پلاس شو</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/user/quiz.css') }}">
 {% endblock %}
 {% block body %}
-<h3 id="exam-timer"></h3>
-<form action="#" method="post">
-<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-
-{% for q in questions %}
-<div style="border: 3px black solid;">
-    
-    <h4 style="margin: 6px; white-space: pre-wrap;">{{q.text}}</h4>
-
-    <div style="width: 75%; display:flex; justify-content:space-around">
-        {% for o in randomizer(q.option1 , q.option2 , q.option3 , q.option4) %}
-        <div>
-            <input type="radio" name="o{{q.id}}" id="o{{q.id}}_{{loop.index}}" value="{{o}}">
-            <label for="o{{q.id}}_{{loop.index}}">{{o}}</label>
+<div id="continer">
+    <div id="content-wrp">
+        <div id="main">
+            <h1 id="timer"></h1>
+            <form action="#" id="form" method="post"></form>
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" form="form">
+            {% for q in questions %}
+            <div class="person p5 question_box">
+                <div class="question">
+                    <h3>
+                        <pre>{{loop.index}} -   </pre>{{q.text}}
+                    </h3>
+                </div>
+                {% for o in randomizer(q.option1 , q.option2 , q.option3 , q.option4) %}
+                <div class="option">
+                    <input type="radio" name="o{{q.id}}" id="o{{q.id}}_{{loop.index}}" form="form" value="{{o}}">
+                    <label class="option-l cir" for="o{{q.id}}_{{loop.index}}"></label>
+                    <label class="option-l text" for="o{{q.id}}_{{loop.index}}">{{o}}</label>
+                </div>
+                {% endfor %}
+            </div>
+            {% endfor %}
+            <input type="submit" value="ثبت آزمون" form="form">
         </div>
-        {% endfor %}
+        <div id="footer">
+            <h4 id="copyRight">© تمام حقوق برای مسابقه دانا پلاس شو محفوظ است</h4>
+        </div>
+        </div>
     </div>
-
 </div>
-<br>
-{% endfor %}
 
-<input type="submit" value="اتمام آزمون">
-</form>
+
+
+
 
 <script>
     function timer(){
@@ -41,7 +52,7 @@
         var minutes = Math.floor(remainingTime / 60);
         var seconds = remainingTime % 60;
 
-        document.getElementById("exam-timer").textContent = minutes + ":" + String(seconds).padStart(2, '0');
+        document.getElementById("timer").textContent = minutes + ":" + String(seconds).padStart(2, '0');
 
         if (remainingTime <= 0) {
             clearInterval(examTimer);
