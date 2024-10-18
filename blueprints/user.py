@@ -110,7 +110,6 @@ def register():
             inviting = False
         else:
             inviting = True
-        print(cities.keys())
         return render_template("user/register.html", inviting=inviting, recognitions=recognitions, provinces=cities.keys(), next=next)
     
 #login page
@@ -422,7 +421,7 @@ def authentication():
         else:
             return redirect(url_for('user.completion'))
     else:
-        return "sss"
+        abort(403)
     
 #confirmation handler
 @app.route("/confirmation", methods=["GET"])

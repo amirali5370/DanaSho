@@ -3,7 +3,7 @@ from PIL import Image
 import os
 import config
 import pandas as pd
-from functions.methods import get_time
+from functions.methods import get_time, likes_calculator
 from functions.text_generators import confirm_activate_text_generator, confirm_camp_text_generator, confirm_comment_text_generator, confirm_course_text_generator, reject_activate_text_generator, reject_comment_text_generator
 from models.interaction import Interaction
 from models.question import Question
@@ -333,4 +333,14 @@ def quiz(book_link):
     else:
         questions = Question.query.filter(Question.book_id == book.id).all()
         return render_template("admin/questions.html", questions=questions, book=book)
+    
+#########################################################################
+
+@app.route('/admin/likes_calculator')
+def like_cal():
+    users = User.query.all()
+    for u in users:
+        u.like = likes_calculator(u)
+    db.session.commit()
+    return '200'
     

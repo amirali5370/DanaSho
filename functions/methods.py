@@ -15,7 +15,6 @@ def is_liked(user, activism):
     return any(item in user_like for item in activism_like)
 
 def comments_calculator(activism):
-
     return len(Interaction.query.filter(Interaction.type=="replay", Interaction.status=="confirmed",  Interaction.replay==activism.id).all())
 
 def get_time():

@@ -45,11 +45,16 @@
             </div>
             <div id="main">
                 <div class="task_bar">
-                    <a href="{{ url_for('user.invites') }}" class="invite_link task_link"><button class="invite_btn task_btn">دعوت از دوستان</button></a>
-                    {% if current_user.downloads != 0 %}
-                    <a href="/download" onclick="setInterval(function() {location.reload();}, 1000);" class="down_link task_link"><button class="down_btn task_btn">دانلود کتاب‌ها ({{current_user.downloads}})</button></a>
+                    {% if current_user.authentication==1 and current_user.final==1 %}
+                        <a href="{{ url_for('user.invites') }}" class="invite_link task_link"><button class="invite_btn task_btn">دعوت از دوستان</button></a>
+                        {% if current_user.downloads != 0 %}
+                        <a href="/download" onclick="setInterval(function() {location.reload();}, 1000);" class="down_link task_link"><button class="down_btn task_btn">دانلود کتاب‌ها ({{current_user.downloads}})</button></a>
+                        {% else %}
+                        <a class="down_link task_link"><button disabled class="down_btn task_btn">دانلود کتاب‌ها ({{current_user.downloads}})</button></a>
+                        {% endif %}
                     {% else %}
-                    <a class="down_link task_link"><button disabled class="down_btn task_btn">دانلود کتاب‌ها ({{current_user.downloads}})</button></a>
+                        <a href="{{ url_for('user.completion')+'?next=/profile' }}" class="invite_link task_link"><button class="invite_btn task_btn">دعوت از دوستان</button></a>
+                        <a href="{{ url_for('user.completion')+'?next=/profile' }}" class="down_link task_link"><button class="down_btn task_btn">دانلود کتاب‌ها ({{current_user.downloads}})</button></a>
                     {% endif %}
                 </div>
                 <div class="about">

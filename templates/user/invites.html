@@ -44,8 +44,8 @@
                         <div class="name">
                             {%for i in invitees%}
                             <div class="person p{{loop.index}} neonText {{'me' if i==current_user}}">
-                                <h4>{{invites_index(i,inv)}}</h4>
                                 <h4>{{i.invitee}}</h4>
+                                <h4>#{{invites_index(i,inv)}}</h4>
                             </div>
                             {% endfor %}
                         </div>
