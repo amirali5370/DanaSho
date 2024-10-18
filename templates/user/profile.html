@@ -47,7 +47,7 @@
                 <div class="task_bar">
                     <a href="{{ url_for('user.invites') }}" class="invite_link task_link"><button class="invite_btn task_btn">دعوت از دوستان</button></a>
                     {% if current_user.downloads != 0 %}
-                    <a href="#" class="down_link task_link"><button class="down_btn task_btn">دانلود کتاب‌ها ({{current_user.downloads}})</button></a>
+                    <a href="/download" onclick="setInterval(function() {location.reload();}, 1000);" class="down_link task_link"><button class="down_btn task_btn">دانلود کتاب‌ها ({{current_user.downloads}})</button></a>
                     {% else %}
                     <a class="down_link task_link"><button disabled class="down_btn task_btn">دانلود کتاب‌ها ({{current_user.downloads}})</button></a>
                     {% endif %}

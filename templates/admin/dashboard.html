@@ -3,5 +3,17 @@
     <title>پنل ادمین</title>
 {% endblock %}
 {% block body %}
-    
+    <form action="#" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <input type="file" name="file" id="file" accept=".zip,application/zip,application/x-zip-compressed">
+        <select name="grade" id="grade">
+            <option selected disabled value="">انتخاب مقطع</option>
+            <option value="1">دوره اول ابتدایی</option>
+            <option value="2">دوره دوم ابتدایی</option>
+            <option value="3">دوره متوسطه اول</option>
+            <option value="4">دوره متوسطه دوم</option>
+            <option value="0">فرهنگی</option>
+        </select>
+        <input type="submit" value="ثبت فایل">
+    </form>
 {% endblock %}

@@ -1,4 +1,4 @@
-from flask import Blueprint, abort, render_template, request, redirect, url_for, flash, jsonify
+from flask import Blueprint, abort, render_template, request, redirect, send_file, url_for, flash, jsonify
 from flask_login import login_user, login_required, current_user, logout_user
 from passlib.hash import sha256_crypt
 from functions.methods import is_liked, get_time
@@ -373,6 +373,18 @@ def profile():
         activisms = len(current_user.interactions.filter(Interaction.type=='activism', Interaction.status=='confirmed').all())
         comments = len(current_user.interactions.filter(Interaction.type=='comment', Interaction.status=='confirmed').all())
         return render_template("user/profile.html", activisms=activisms, comments=comments)
+    
+#books' file
+@app.route('/download')
+@login_required
+def download_file():
+    if current_user.authentication == 1 and current_user.final == 1:
+        if current_user.downloads > 0:
+            path = f"static/files/{current_user.grade}.zip"
+            current_user.downloads += -1
+            db.session.commit()
+            return send_file(path, as_attachment=True)
+    abort(403)
 
 
 #  ||||||||||||||||   completion   ||||||||||||||

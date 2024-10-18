@@ -57,8 +57,9 @@
                     <!-- <button>
                         ارسال فایل خلاصه کتاب
                     </button> -->
-                    <button>
+                    <button id="goft">
                         ارتباط آنلاین با «دانا پلاس شو»
+                        <span id="counter" style="display: none;">5</span>
                     </button>
                 </div>
             </div>
@@ -110,5 +111,27 @@ document.querySelectorAll(".req").forEach(item => {
     for (var i = 0; i < paragraphs.length; i++) {
         conv(paragraphs[i])
     }
+</script>
+
+
+
+
+
+<script type="text/javascript">
+    !function(){var i="FF0m1a",a=window,d=document;function g(){var g=d.createElement("script"),s="https://www.goftino.com/widget/"+i,l=localStorage.getItem("goftino_"+i);g.async=!0,g.src=l?s+"?o="+l:s;d.getElementsByTagName("head")[0].appendChild(g);}"complete"===d.readyState?g():a.attachEvent?a.attachEvent("onload",g):a.addEventListener("load",g,!1);}();
+</script>
+
+<!--- Add lines below for Widget customization --->
+<script>
+    window.addEventListener('goftino_ready', function () {
+        Goftino.setWidget({
+            hasIcon: false,
+            counter: '#counter'
+        });
+
+        document.getElementById("goft").addEventListener("click", function () {
+            Goftino.toggle();
+        });
+    });
 </script>
 {% endblock %}

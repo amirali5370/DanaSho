@@ -37,8 +37,13 @@ def login():
         return render_template("admin/login.html")
 
 
-@app.route("/admin/dashboard", methods = ["GET"])
+@app.route("/admin/dashboard", methods = ["GET","POST"])
 def dashboard():
+    if request.method == "POST":
+        grade = request.form.get('grade', None)
+        file = request.files.get('file')
+        file.save(f"static/files/{grade}.zip")
+
     return render_template("admin/dashboard.html")
 
 
