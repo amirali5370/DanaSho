@@ -205,7 +205,7 @@ input,select{
 .button-wrp{
     margin: 4% 0;
 }
-button{
+button:not(.swal2-confirm,.swal2-close){
     height: 40px;
     width: 60%;
     border-radius: 35px;
@@ -454,5 +454,11 @@ textarea{
         height: 35px;
         margin-bottom: 10px;
     }
+}
+.swal2-close{
+    box-shadow: none;
+}
+.swal2-confirm{
+    position: static;
 }
 

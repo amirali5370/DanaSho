@@ -42,10 +42,10 @@
                         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
                         <div class="input-wrp">
-                            <input type="text" placeholder="نام کاربری" name="username" id="usrename">
+                            <input type="text" placeholder="نام کاربری" name="username" id="usrename" required>
                         </div>
                         <div class="input-wrp">
-                            <input type="password" placeholder="رمز عبور" name="password" id="password" minlength="0">
+                            <input type="password" placeholder="رمز عبور" name="password" id="password" minlength="0" required>
                         </div>
                     </div>
                     <div class="button-wrp">

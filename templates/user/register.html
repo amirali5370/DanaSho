@@ -1,22 +1,5 @@
 {% extends "Base.html" %}
 {% block head %}
-    <script type="module">
-        function checkPass() {
-            alert("SDf")
-            // می‌توانید شرایط خود را در اینجا بررسی کنید
-            let password = document.querySelector("input[name='password']").value;
-            let config = document.querySelector("input[name='password_co']").value;
-        
-            // اگر نام کاربری خالی باشد، ارسال فرم را متوقف کنید
-            if (password == config) {
-                alert("سورد یکی نیس");
-                return false; // جلوگیری از ارسال فرم
-            }
-        
-            // در غیر این صورت، فرم ارسال می‌شود
-            return true;
-        }
-    </script>
     <title>ثبت نام | دانا پلاس شو</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/user/register.css') }}">
@@ -54,7 +37,7 @@
             <h1>ثبت نام</h1>
         </div>
         <div id="main">
-            <form action="#" method="post" id="form" onsubmit="checkPass()">
+            <form action="#" method="post" id="form" onsubmit="return validatePasswords()">
                 <div id="form-body-wrp">
                     <div id="inputs">
                         
@@ -220,4 +203,26 @@
         }
     </script>
 
+
+    <script>
+        function validatePasswords() {
+            var password = document.querySelector("input[name='password']").value;
+            var confirmPassword = document.querySelector("input[name='password_co']").value;
+        
+            if (password !== confirmPassword) {
+                swal({
+                    title: 'تکرار رمز عبور، صحیح نیست!',
+                    html: "",
+                    type: 'error',
+                    confirmButtonColor: '#dc1225',
+                    confirmButtonText: '<div style="direction:rtl;font-size:18px;font-family:Iran,Calibri;font-weight:bold;"><i style="margin-left: 5px;" class="fa fa-times"></i> باشه</div>',
+                    showCloseButton: true,
+                    showLoaderOnConfirm:true,
+                    allowOutsideClick:false,
+                }).then((result) => {swal.close();})
+                return false; // جلوگیری از ارسال فرم
+            }
+            return true; // اجازه ارسال فرم
+        }
+        </script>
 {% endblock %}

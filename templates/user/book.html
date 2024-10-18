@@ -44,7 +44,7 @@
                 {% if current_user.authentication==1 and current_user.final==1 %}
                 <form action="#" method="post" id="comment-form" enctype="multipart/form-data">
                     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                    <textarea name="comment" id="comment-inp" form="comment-form" placeholder="نظر خود را اینجا بنویسید..."></textarea>
+                    <textarea name="comment" id="comment-inp" form="comment-form" placeholder="نظر خود را اینجا بنویسید..." required></textarea>
                     <input type="submit" value="ارسال نظر" class="rep-com-2page">
                 </form>
                 {% else %}
