@@ -1,0 +1,244 @@
+@import url('../fonts.css');
+body *{
+    font-family: Tanha;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    overflow-x: hidden;
+}
+
+.navbar {
+    background-color: #333;
+    overflow: hidden;
+    position: sticky;
+    top: 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: .5rem;
+    padding-bottom: .5rem;
+}
+
+.navbar ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.navbar li {
+    float: right;
+}
+
+.navbar a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+.navbar a:hover {
+    background-color: #575757;
+}
+
+.container {
+    width: 100%;
+    max-width: 1000px;
+    margin: 20px auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+p{
+    margin: 10px;
+}
+
+details{
+    border: 3px dashed black;
+    padding: 7px;
+    border-radius: 7px;
+    width: 80%;
+    margin-bottom: 20px;
+}
+
+summary{
+    font-weight: bold;
+}
+
+p.prima , #primalink{
+    direction: ltr;
+    margin-top: 0;
+}
+
+form > h2{
+    margin-bottom: 0;
+}
+
+h3{
+    margin-bottom: 6px;
+}
+
+details > img{
+    width: 90%;
+    padding-right: 5%;
+}
+
+form > input[type='number']{
+    border-radius: 10px;
+}
+
+form > input[type='file']{
+    display: none;
+}
+
+form > label{
+    background-color: transparent; /* رنگ پس‌زمینه دکمه بروزرسانی */
+    border: none; /* بدون حاشیه */
+    border-radius: 4px; /* گوشه‌های گرد */
+    cursor: pointer; /* نشانگر ماوس */
+    margin-top: 20px;
+    padding: 25px;
+    border-radius: 12px;
+    margin: 5px;
+    margin-right: calc((100% - 85px) / 2);
+
+    background-color: white;
+    border-radius: 15px;
+    border: 4px dashed black;
+    display: flex;
+    justify-content: center;
+}
+
+input[type='submit']{
+    background-color: #4cae4c; /* رنگ پس‌زمینه دکمه */
+    color: white; /* رنگ متن دکمه */
+    border: 2px solid black;
+    padding: 5px;
+    width: 90px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: small;
+}
+
+input[type='submit']:hover{
+    background-color: #5cb85c; /* رنگ پس‌زمینه در حالت هاور */
+}
+
+.buttons{
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.comm-co , form{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 50px;
+    width: 100%;
+}
+
+.hid {
+    display: none; /* مخفی کردن بخش اطلاعات */
+}
+
+/* استایل برای ورودی‌ها و دکمه‌ها */
+input[type=text], .form-select {
+    width: calc(100% - 20px);
+    padding: 10px;
+    margin-bottom: 15px;
+}
+
+button {
+    border: none; /* بدون حاشیه */
+    border-radius: 4px; /* گوشه‌های گرد */
+    cursor: pointer; /* نشانگر ماوس */
+}
+
+button:hover {
+    background-color: #9dc6f3; /* رنگ پس‌زمینه در حالت هاور */
+}
+
+form.form{
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    margin-bottom: 100px;
+}
+
+form.form *{
+    margin: 12px;
+    width: 520px;
+    padding: 10px;
+}
+
+form.form > select{
+    width: 542px;
+}
+
+form.form > textarea{
+    resize: vertical
+}
+
+form.form > label{
+    background-color: white;
+    display: block;
+    border-radius: 15px;
+    border: 4px dashed black;
+    display: flex;
+    justify-content: center;
+    color: black;
+    padding: 25px 0;
+}
+
+select{
+    padding-right: 25px;
+}
+
+ul{
+    margin-top: 0;
+    margin-bottom: 1rem;
+}
+
+.options{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+h3{
+    margin-bottom: 20px;
+}
+
+.option{
+    margin-bottom: 10px;
+}
+
+form > label{
+    margin: 0;
+}
+
+form > input{
+    margin-top: 20px;
+}
+
+form{
+    width: 70%;
+}
+
+form{
+    width: 70%;
+}

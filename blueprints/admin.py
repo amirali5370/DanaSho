@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify, render_template, request, session, redirect, abort, flash, url_for
+from flask import Blueprint, jsonify, render_template, request, send_file, session, redirect, abort, flash, url_for
 from PIL import Image
 import os
 import config
@@ -47,6 +47,12 @@ def dashboard():
     return render_template("admin/dashboard.html")
 
 
+@app.route('/admin/logout')
+def logout():
+    session.pop("admin_login", None)
+    return redirect(url_for('admin.login'))
+
+
 ##############################   USER DATA   ###############################
 @app.route("/admin/data", methods = ["GET", "POST"])
 def data():
@@ -87,7 +93,7 @@ def data():
             flash('edit success')
             return redirect(url_for('admin.students'))
     else:
-        users = User.query.all()
+        users = User.query.order_by(User.name).all()
         return render_template("admin/data.html", users=users)
     
 
@@ -343,4 +349,9 @@ def like_cal():
         u.like = likes_calculator(u)
     db.session.commit()
     return '200'
+
+@app.route('/admin/question_file')
+def question_file():
+    path = "static/files/Questions.xlsx"
+    return send_file(path, as_attachment=True)
     

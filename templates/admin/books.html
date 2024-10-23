@@ -1,107 +1,83 @@
 {% extends "Base.html" %}
 {% block head %}
-    <title>admin | students</title>
-    <style>
-        #k_class .c10 {
-            background-color: aquamarine;
-        }
-        #k_class .c11 {
-            background-color: rgb(129, 255, 127);
-        }
-        #k_class .c12 {
-            background-color: rgb(244, 127, 255);
-        }
-        td,th,tr {
-            border: 2px black solid; 
-            text-align: center; 
-        }
-        input[type="file"].edit {
-            display: none;
-        }
+    <title>کتاب ها</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/admin/books.css') }}">
 
-        .custom-file-upload {
-            display: inline-block;
-            padding: 6px 12px;
-            cursor: pointer;
-            background-color: #bef5f6;
-            color: white;
-            border-radius: 4px;
-        }
-        
-    </style>
-    <link rel="stylesheet" href="{{ url_for('static', filename='libraries/sweetalert2/sweetalert2.min.css') }}">
-    <script defer src="{{ url_for('static', filename='libraries/sweetalert2/sweetalert2.all.min.js') }}"></script>
 {% endblock %}
 {% block body %}
+<div class="navbar">
+    <ul>
+      <li><a href="{{ url_for('admin.dashboard') }}">داشبورد</a></li>
+      <li><a href="{{ url_for('admin.books') }}">کتاب ها</a></li>
+      <li><a href="{{ url_for('admin.activisms') }}">کنش ها</a></li>
+      <li><a href="{{ url_for('admin.comments') }}">نظرات</a></li>
+      <li><a href="{{ url_for('admin.requests') }}">درخواست ها</a></li>
+      <li><a href="{{ url_for('admin.data') }}">مدیریت اطلاعات</a></li>
+      <li><a href="{{ url_for('admin.logout') }}">خروج</a></li>
+    </ul>
+  </div>
+<div class="container">
 
-<form action="#" method="post" enctype="multipart/form-data">
+    <form action="#" class="form" method="post" enctype="multipart/form-data">
 
-    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-    <input type="hidden" name="mode" id="mode" value="add">
-
-    <label for="photo" id="L-photo">عکس کتاب</label>
-    <input type="file" name="photo" id="photo" accept="image/*">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <input type="hidden" name="mode" id="mode" value="add">
     
-    <label for="name" id="L-name">نام کتاب :</label>
-    <input type="text" name="name" id="name" placeholder="مثلا : مسافر هشتم">
+        <label for="photo" id="L-photo">عکس جلد کتاب را اینجا بارگذاری کنید (600*400)</label>
+        <input type="file" name="photo" id="photo" onchange="rename()" accept="image/*">
+        
+        <input type="text" name="name" id="name" placeholder="نام کتاب">
+        
+        <textarea type="text" name="about" id="about" placeholder="توضیحات کتاب"></textarea>
+        
+        <select name="grade" id="grade" class="form-select">
+            <option disabled selected id="title_grade" value="">پایه مورد نظر :</option>
+            <option value="1">دوره اول ابتدایی</option>
+            <option value="2">دوره دوم ابتدایی</option>
+            <option value="3">دوره متوسطه اول</option>
+            <option value="4">دوره متوسطه دوم</option>
+            <option value="0">فرهنگیان</option>
+        </select>
     
-    <label for="about" id="L-about">توضیحات کتاب :</label>
-    <textarea type="text" name="about" id="about" placeholder="مثلا : رضایی"></textarea>
+        <input type="text" name="primalink" id="primalink" placeholder="Book ID (0-9 , a-Z , _ )" onkeypress="return isValidChar(event)">
+        
+        <button type="submit" id="submit">ثبت کتاب</button>
+    </form>
     
-    <select name="grade" id="grade">
-        <option disabled selected id="title_grade" value="">پایه مورد نظر :</option>
-        <option value="1">دوره اول ابتدایی</option>
-        <option value="2">دوره دوم ابتدایی</option>
-        <option value="3">دوره متوسطه اول</option>
-        <option value="4">دوره متوسطه دوم</option>
-        <option value="0">فرهنگیان</option>
-    </select>
-
-    <label for="primalink" id="L-primalink">پیوند یکتا :</label>
-    <input type="text" name="primalink" id="primalink" placeholder="مثلا : mosafer_hashtom" onkeypress="return isValidChar(event)">
     
-    <button type="submit" id="submit">ثبت کتاب</button>
-</form>
-
-
-
-
-
-
-<table>
-    <tr>
-        <th>جلد</th>
-        <th>نام</th>
-        <th>توضیحات</th>
-        <th>پایه</th>
-        <th>پیوند یکتا</th>
-        <th>ویرایش</th>
-        <th>تغییر جلد</th>
-        <th>حذف</th>
-    </tr>
     {% for b in books %}
-    <tr id="{{b.id}}">
-        <td><a href="/static/books/{{b.id}}.jpg">جلد</a></td>
-        <td>{{b.name}}</td>
-        <td style="white-space: pre-wrap;">{{b.about}}</td>
-        <td>{{"دوره اول ابتدایی" if b.grade == 1 else "دوره دوم ابتدایی" if b.grade == 2 else "دوره متوسطه اول" if b.grade == 3 else "دوره متوسطه دوم" if b.grade == 4 else "فرهنگیان"}}</td>
-        <td>{{b.primalink}}</td>
-        <td onclick="edit(this)">ویرایش</td>
-        <td><form id="upload-file{{b.id}}" enctype="multipart/form-data">
-            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-            <label for="photo-edit{{b.id}}" class="custom-file-upload">ویرایش جلد</label>
-            <input class="file-inp edit" name="photo" id="photo-edit{{b.id}}" type="file" onchange="edit_photo(this)" accept="image/*">
-        </form></td>
-        <td>
-            <input type="button" value="Eliminar"
+    <div class="book-co" id="{{b.id}}">
+        <h2>{{b.name}}</h2>
+        <p class="prima">/{{b.primalink}}</p>
+        <details>
+            <summary>جلد کتاب</summary>
+            <img src="/static/books/{{b.id}}.jpg" alt="">
+            <br>
+            <form id="upload-file{{b.id}}" enctype="multipart/form-data">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <label for="photo-edit{{b.id}}" class="custom-file-upload">ویرایش جلد</label>
+                <input class="file-inp edit" name="photo" id="photo-edit{{b.id}}" type="file" onchange="edit_photo(this)" accept="image/*">
+            </form>
+        </details>
+        <details>
+            <summary>توضیحات کتاب</summary>
+            <p>{{b.about}}</p>
+        </details>
+        <details>
+            <summary>مقطع کتاب</summary>
+            <p>{{"دوره اول ابتدایی" if b.grade == 1 else "دوره دوم ابتدایی" if b.grade == 2 else "دوره متوسطه اول" if b.grade == 3 else "دوره متوسطه دوم" if b.grade == 4 else "فرهنگیان"}}</p>
+        </details>
+        <a href="/admin/quiz/{{b.primalink}}"><input type="button" class="quiz" value="آزمون این کتاب"></a>
+        <div class="buttons">
+            <input type="button" value="ویرایش"
+            onclick="edit(this)">
+            <input type="button" value="حذف"
             onclick="del_book(this,{{b.id}})">
-        </td>
-    </tr>
+        </div>
+    </div>
     {% endfor %}
-</table>
+</div>
 
-
-<br><br>
 
 <script>
     function isValidChar(event) {
@@ -156,39 +132,38 @@
 
 
 <script>
-
-    
-    
-    
-    
     document.querySelector("#mode").value = "add";
     document.querySelector("#submit").innerText = "ثبت کتاب";
     
     document.querySelector("#name").value = null;
     document.querySelector("#about").value = null;
     document.querySelector("#primalink").value = null;
+
     
     document.querySelector("#title_grade").selected = "selected";
 
     
     function edit(e) {
-        const row = e.parentNode;
+        const row = e.parentNode.parentNode;
 
         const id = row.id;
-        const name = row.children[1].innerText;
-        const about = row.children[2].innerText;
-        const grade = row.children[3].innerText;
-        const primalink = row.children[4].innerText;
-        ;
+        const name = row.children[0].innerText;
+        const about = row.children[3].children[1].innerHTML;
+        console.log(about);
+        const grade = row.children[4].children[1].innerHTML;
+        const primalink = row.children[1].innerText;
+        
         
         document.querySelector("#submit").innerText = "ویرایش کتاب";
+        document.querySelector("#submit").style.backgroundColor = "#00d0ff";
         document.querySelector("#mode").value = id;
+        document.querySelector("#L-photo").style.display = 'none';
         
         
         document.querySelector("#name").value = name;
         document.querySelector("#about").value = about;
         document.querySelector("#primalink").value = primalink;
-        
+
         const grade_list = document.querySelector("#grade").children
         for (var i=1;i<=grade_list.length;i++){
             var element = grade_list[i]
@@ -196,8 +171,10 @@
                 element.selected = "selected";
                 break
             };
-        }
-        
+        } 
+        window.scrollTo(0, 0);
+        const ta = document.getElementById('about');
+        ta.style.height = (ta.scrollHeight) + 'px'; // تنظیم ارتفاع بر اساس محتوای داخلی
     };
     
     
@@ -276,6 +253,14 @@ function edit_photo(e) {
         
 
         
+    </script>
+
+    <script>
+        function rename(){
+            var inputFile = document.getElementById("photo");
+            var fileName = inputFile.files[0].name; // نام اولین فایل انتخاب شده
+            document.getElementById("L-photo").innerText= `فایل انتخابی : ${fileName}`;
+        }
     </script>
     
     

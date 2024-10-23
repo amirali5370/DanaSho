@@ -1,21 +1,64 @@
 {% extends "Base.html" %}
 {% block head %}
-    <title>کامنت ها</title>
+    <title>نظرات</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/admin/comments.css') }}">
+
 {% endblock %}
 {% block body %}
-
-{% for c in comments %}
-    <div data-comment-id="{{c.id}}">
-        <p>{{c.user.name}}</p>
-        <p>{{c.content}}</p>
-        <p dir="ltr" style="text-align: end;">{{c.time}}</p>
-        <button onclick="confirm(this,'confirmed')" style="display: inline;">تائید کامنت</button>
-        <button onclick="confirm(this,'rejected')" style="display: inline;">رد کامنت</button>
+<div class="navbar">
+    <ul>
+      <li><a href="{{ url_for('admin.dashboard') }}">داشبورد</a></li>
+      <li><a href="{{ url_for('admin.books') }}">کتاب ها</a></li>
+      <li><a href="{{ url_for('admin.activisms') }}">کنش ها</a></li>
+      <li><a href="{{ url_for('admin.comments') }}">نظرات</a></li>
+      <li><a href="{{ url_for('admin.requests') }}">درخواست ها</a></li>
+      <li><a href="{{ url_for('admin.data') }}">مدیریت اطلاعات</a></li>
+      <li><a href="{{ url_for('admin.logout') }}">خروج</a></li>
+    </ul>
+  </div>
+  <div class="container">
+    {% if comments | length == 0 %}
+    <div class="comm-co">
+        <h2>نظر یا پاسخی در حالت بررسی نیست!</h2>
     </div>
-{% endfor %}
+    {% endif %}
+    {% for c in comments %}
+    <div class="comm-co" data-comment-id="{{c.id}}">
+        <h3>{{c.user.name}}</h3>
+        <p>{{c.content}}</p>
+        <p class="prima">{{c.time}}</p>
+        <div class="buttons">
+            <input type="button" onclick="confirm(this,'confirmed')" value="تائید کامنت">
+            <input type="button" onclick="confirm(this,'rejected')" value="رد کامنت">
+        </div>
+    </div>
+    {% endfor %}
+  </div>
+
+
 <script>
+    function check(){
+        var parentDiv = document.querySelector('.container');
+        var children = parentDiv.children; // دریافت تمامی فرزندان
+
+        // شمارش فرزندان با display != 'none'
+        var visibleChildrenCount = 0;
+
+        for (var i = 0; i < children.length; i++) {
+            if (children[i].style.display !== 'none') {
+                visibleChildrenCount++;
+            }
+        }
+        if (visibleChildrenCount == 0) {
+            para = document.createElement("div");
+            para.innerHTML = "<h2>نظر یا پاسخی در حالت بررسی نیست!</h2>";
+            para.classList.add("comm-co")
+            parentDiv.appendChild(para);
+        }
+    }
+
     function confirm(item,status){
-        comment_id = item.parentNode.getAttribute("data-comment-id")
+        comment_id = item.parentNode.parentNode.getAttribute("data-comment-id")
         form = new FormData()
     
         var xhr = new XMLHttpRequest();
@@ -35,7 +78,8 @@
                 // 4. تبدیل پاسخ به JSON
                 var jsonResponse = JSON.parse(xhr.responseText);
                 if (jsonResponse['status'] == '200'){
-                    item.parentNode.style.display = 'none'
+                    item.parentNode.parentNode.style.display = 'none'
+                    check()
                 }
               } else {
                 console.error('Error: ' + xhr.status);

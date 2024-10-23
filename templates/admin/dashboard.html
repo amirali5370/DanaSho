@@ -1,22 +1,58 @@
 {% extends "Base.html" %}
 {% block head %}
     <title>پنل ادمین</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/admin/dashboard.css') }}">
+
 {% endblock %}
 {% block body %}
+<div class="navbar">
+    <ul>
+      <li><a href="{{ url_for('admin.dashboard') }}">داشبورد</a></li>
+      <li><a href="{{ url_for('admin.books') }}">کتاب ها</a></li>
+      <li><a href="{{ url_for('admin.activisms') }}">کنش ها</a></li>
+      <li><a href="{{ url_for('admin.comments') }}">نظرات</a></li>
+      <li><a href="{{ url_for('admin.requests') }}">درخواست ها</a></li>
+      <li><a href="{{ url_for('admin.data') }}">مدیریت اطلاعات</a></li>
+      <li><a href="{{ url_for('admin.logout') }}">خروج</a></li>
+    </ul>
+  </div>
+
+  <div class="container">
     <form action="#" method="post" enctype="multipart/form-data">
-        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-        <input type="file" name="file" id="file" accept=".zip,application/zip,application/x-zip-compressed">
-        <select name="grade" id="grade">
-            <option selected disabled value="">انتخاب مقطع</option>
-            <option value="1">دوره اول ابتدایی</option>
-            <option value="2">دوره دوم ابتدایی</option>
-            <option value="3">دوره متوسطه اول</option>
-            <option value="4">دوره متوسطه دوم</option>
-            <option value="0">فرهنگی</option>
-        </select>
-        <input type="submit" value="ثبت فایل">
+      <h3>آپلود فایل کتاب ها</h3>
+      <br>
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+      <input
+        type="file"
+        name="file"
+        id="file"
+        accept=".zip,application/zip,application/x-zip-compressed"
+        class="hidden-file"
+        onchange="rename()"
+        required
+      />
+      <label for="file" id="lable_file">فایل زیپ کتاب های مورد نظر (.zip)</label>
+      <select name="grade" id="grade" required>
+        <option selected disabled value="">انتخاب مقطع</option>
+        <option value="1">دوره اول ابتدایی</option>
+        <option value="2">دوره دوم ابتدایی</option>
+        <option value="3">دوره متوسطه اول</option>
+        <option value="4">دوره متوسطه دوم</option>
+        <option value="0">فرهنگی</option>
+      </select>
+      <input type="submit" value="ثبت فایل"/>
     </form>
-    <button onclick="update_like()">بروزرسانی لایک های کاربران</button>
+    <button class="update-btn" onclick="update_like()">
+      بروزرسانی لایک های کاربران
+    </button>
+    <a href="/admin/question_file">
+      <button class="update-btn">
+        دانلود فایل پیشفرض سوالات آزمون
+      </button>
+    </a>
+  </div>
+
+
     <script>
 
         function update_like() {
@@ -45,6 +81,14 @@
                 }, 250); 
             };
         });
+        }
+    </script>
+
+    <script>
+        function rename(){
+            var inputFile = document.getElementById("file");
+            var fileName = inputFile.files[0].name; // نام اولین فایل انتخاب شده
+            document.getElementById("lable_file").innerText= `فایل انتخابی : ${fileName}`;
         }
     </script>
 {% endblock %}

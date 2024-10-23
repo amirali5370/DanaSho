@@ -1,22 +1,66 @@
 {% extends "Base.html" %}
 {% block head %}
     <title>کنش ها</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/admin/comments.css') }}">
+
 {% endblock %}
 {% block body %}
-
-{% for a in activisms %}
-    <div data-activism-id="{{a.id}}">
-        <p>{{a.user.name}}</p>
-        <p>{{a.content}}</p>
-        <img width="150px" src="/static/activisms/{{a.id}}.jpg" alt="">
-        <p dir="ltr" style="text-align: end;">{{a.time}}</p>
-        <button onclick="confirm(this,'confirmed')" style="display: inline;">تائید کنش</button>
-        <button onclick="confirm(this,'rejected')" style="display: inline;">رد کنش</button>
+<div class="navbar">
+    <ul>
+      <li><a href="{{ url_for('admin.dashboard') }}">داشبورد</a></li>
+      <li><a href="{{ url_for('admin.books') }}">کتاب ها</a></li>
+      <li><a href="{{ url_for('admin.activisms') }}">کنش ها</a></li>
+      <li><a href="{{ url_for('admin.comments') }}">نظرات</a></li>
+      <li><a href="{{ url_for('admin.requests') }}">درخواست ها</a></li>
+      <li><a href="{{ url_for('admin.data') }}">مدیریت اطلاعات</a></li>
+      <li><a href="{{ url_for('admin.logout') }}">خروج</a></li>
+    </ul>
+  </div>
+  <div class="container">
+    {% if activisms | length == 0 %}
+    <div class="comm-co">
+        <h2>کنشی در حالت بررسی نیست!</h2>
     </div>
-{% endfor %}
+    {% endif %}
+    {% for a in activisms %}
+    <div class="comm-co" data-activism-id="{{a.id}}">
+        <h3>{{a.user.name}}</h3>
+        <details>
+            <summary>تصویر کنش</summary>
+            <img src="/static/activisms/{{a.id}}.jpg" alt="">
+        </details>
+        <p>{{a.content}}</p>
+        <p class="prima">{{a.time}}</p>
+        <div class="buttons">
+            <input type="button" onclick="confirm(this,'confirmed')" value="تائید کنش">
+            <input type="button" onclick="confirm(this,'rejected')" value="رد کنش">
+        </div>
+    </div>
+    {% endfor %}
+  </div>
+
 <script>
+    function check(){
+        var parentDiv = document.querySelector('.container');
+        var children = parentDiv.children; // دریافت تمامی فرزندان
+
+        // شمارش فرزندان با display != 'none'
+        var visibleChildrenCount = 0;
+
+        for (var i = 0; i < children.length; i++) {
+            if (children[i].style.display !== 'none') {
+                visibleChildrenCount++;
+            }
+        }
+        if (visibleChildrenCount == 0) {
+            para = document.createElement("div");
+            para.innerHTML = "<h2>کنشی در حالت بررسی نیست!</h2>";
+            para.classList.add("comm-co")
+            parentDiv.appendChild(para);
+        }
+    }
     function confirm(item,status){
-        activism_id = item.parentNode.getAttribute("data-activism-id")
+        activism_id = item.parentNode.parentNode.getAttribute("data-activism-id")
         form = new FormData()
     
         var xhr = new XMLHttpRequest();
@@ -36,7 +80,8 @@
                 // 4. تبدیل پاسخ به JSON
                 var jsonResponse = JSON.parse(xhr.responseText);
                 if (jsonResponse['status'] == '200'){
-                    item.parentNode.style.display = 'none'
+                    item.parentNode.parentNode.style.display = 'none'
+                    check()
                 }
               } else {
                 console.error('Error: ' + xhr.status);

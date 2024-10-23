@@ -1,21 +1,63 @@
 {% extends "Base.html" %}
 {% block head %}
     <title>درخواست ها</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/admin/comments.css') }}">
+
 {% endblock %}
 {% block body %}
-
-{% for r in requests %}
-    <div data-request-id="{{r.id}}">
-        <p>{{r.user.name}}</p>
-        <p>{{"شرکت در اردو" if r.sub_type=='camp' else "شرکت در دوره ها"}}</p>
-        <p dir="ltr" style="text-align: end;">{{r.time}}</p>
-        <button onclick="confirm(this,'confirmed')" style="display: inline;">تائید درخواست</button>
-        <button onclick="confirm(this,'rejected')" style="display: inline;">رد درخواست</button>
+<div class="navbar">
+    <ul>
+      <li><a href="{{ url_for('admin.dashboard') }}">داشبورد</a></li>
+      <li><a href="{{ url_for('admin.books') }}">کتاب ها</a></li>
+      <li><a href="{{ url_for('admin.activisms') }}">کنش ها</a></li>
+      <li><a href="{{ url_for('admin.comments') }}">نظرات</a></li>
+      <li><a href="{{ url_for('admin.requests') }}">درخواست ها</a></li>
+      <li><a href="{{ url_for('admin.data') }}">مدیریت اطلاعات</a></li>
+      <li><a href="{{ url_for('admin.logout') }}">خروج</a></li>
+    </ul>
+  </div>
+  <div class="container">
+    {% if requests | length == 0 %}
+    <div class="comm-co">
+        <h2>درخواستی در حالت بررسی نیست!</h2>
     </div>
-{% endfor %}
+    {% endif %}
+    {% for r in requests %}
+    <div class='comm-co {{r.sub_type}}' data-request-id="{{r.id}}">
+        <h3>{{r.user.name}}</h3>
+        <p>{{"شرکت در اردو" if r.sub_type=="camp" else "شرکت در دوره ها"}}</p>
+        <p class="prima">{{r.time}}</p>
+        <div class="buttons">
+            <input type="button" onclick="confirm(this,'confirmed')" value="تائید درخواست">
+            <input type="button" onclick="confirm(this,'rejected')" value="رد درخواست">
+        </div>
+    </div>
+    {% endfor %}
+  </div>
+
 <script>
+    function check(){
+        var parentDiv = document.querySelector('.container');
+        var children = parentDiv.children; // دریافت تمامی فرزندان
+
+        // شمارش فرزندان با display != 'none'
+        var visibleChildrenCount = 0;
+
+        for (var i = 0; i < children.length; i++) {
+            if (children[i].style.display !== 'none') {
+                visibleChildrenCount++;
+            }
+        }
+        if (visibleChildrenCount == 0) {
+            para = document.createElement("div");
+            para.innerHTML = "<h2>درخواستی در حالت بررسی نیست!</h2>";
+            para.classList.add("comm-co")
+            parentDiv.appendChild(para);
+        }
+    }
+
     function confirm(item,status){
-        request_id = item.parentNode.getAttribute("data-request-id")
+        request_id = item.parentNode.parentNode.getAttribute("data-request-id")
         form = new FormData()
     
         var xhr = new XMLHttpRequest();
@@ -35,7 +77,8 @@
                 // 4. تبدیل پاسخ به JSON
                 var jsonResponse = JSON.parse(xhr.responseText);
                 if (jsonResponse['status'] == '200'){
-                    item.parentNode.style.display = 'none'
+                    item.parentNode.parentNode.style.display = 'none'
+                    check()
                 }
               } else {
                 console.error('Error: ' + xhr.status);

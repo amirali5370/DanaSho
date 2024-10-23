@@ -1,0 +1,74 @@
+@import url('../fonts.css');
+body *{
+    font-family: Tanha;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+}
+
+.navbar {
+    background-color: #333;
+    overflow: hidden;
+    position: sticky;
+    top: 0;
+}
+
+.navbar ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.navbar li {
+    float: right;
+}
+
+.navbar a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+.navbar a:hover {
+    background-color: #575757;
+}
+
+.container {
+    width: 100%;
+    max-width: 600px;
+    margin: 20px auto;
+}
+
+form {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.hid {
+    display: none; /* مخفی کردن بخش اطلاعات */
+}
+
+/* استایل برای ورودی‌ها و دکمه‌ها */
+input[type=text], .form-select {
+    width: calc(100% - 20px);
+    padding: 10px;
+    margin-bottom: 15px;
+}
+
+button {
+    background-color: #007bff; /* رنگ پس‌زمینه دکمه */
+    color: white; /* رنگ متن دکمه */
+    border: none; /* بدون حاشیه */
+    border-radius: 4px; /* گوشه‌های گرد */
+    cursor: pointer; /* نشانگر ماوس */
+}
+
+button:hover {
+    background-color: #9dc6f3; /* رنگ پس‌زمینه در حالت هاور */
+}
