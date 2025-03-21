@@ -7,9 +7,9 @@ from sqlalchemy.types import ARRAY
 class User(db.Model, UserMixin):
     __tablename__ = "users"
     id = Column(Integer, primary_key=True)
-    name = Column(String, nullable=False, unique=True, index=True)
+    name = Column(String, nullable=False, index=True)
     username = Column(String, nullable=False, unique=True, index=True)
-    password = Column(String, nullable=False, unique=True, index=True)
+    password = Column(String, nullable=False, index=True)
     code = Column(Integer, nullable=False, unique=True, index=True)
     phone = Column(String, nullable=False, index=True)
     email = Column(String, nullable=False, index=True)

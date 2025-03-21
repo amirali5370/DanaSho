@@ -64,7 +64,7 @@
                     <div class="activism" data-activism-id="{{c.id}}">
                         <div class="act-head">
                             <div class="bio">
-                                <img src="{{ url_for('static', filename='main_img/user.jpg') }}" alt="">
+                                <img src="/static/users/{{c.user.id}}.jpg" onerror="this.onerror=null; this.src=`{{ url_for('static', filename='main_img/user.jpg') }}`;" alt="">
                                 <h3>{{c.user.name}}</h3>
                             </div>
                         </div>
@@ -84,6 +84,9 @@
                     </div>
 
                     {% endfor %}
+                    {% if len(comments)==0 %}
+                    کامنتی موجود نیست !
+                    {% endif %}
                 </div>
             </div> 
             <div id="footer">

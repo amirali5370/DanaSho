@@ -17,6 +17,7 @@ from models.payment import Payment
 from models.interaction import Interaction
 from models.like import Like
 from extentions import db
+from config import STATIC_SAVE_PATH
 from functions.code_generators import authCode_generator, invite_generator, inviteAuth_generator
 from functions.text_generators import *
 from sqlalchemy.exc import IntegrityError
@@ -59,7 +60,7 @@ def register():
         user = current_user
 
         school_type = school_types[school_type]
-        recognition = recognitions[recognition]
+        
 
 
 
@@ -75,15 +76,18 @@ def register():
         user.school_name = school_name
         user.school_type = school_type
         user.home_addres = addres
-        user.recognition = recognition
         
 
 
         if inv != None:
             inviter = User.query.filter(User.invite_auth==inv).first()
+            recognition = "دعوت با لینک"
         else:
             inviter = User.query.filter(User.invite_code==invite).first()
+            recognition = recognitions[recognition]
 
+
+        user.recognition = recognition
         db.session.add(user)
 
         try:
@@ -110,8 +114,29 @@ def register():
             inviting = False
         else:
             inviting = True
-        return render_template("user/register.html", inviting=inviting, recognitions=recognitions, provinces=cities.keys(), next=next)
+        return render_template("user/register.html", inviting=inviting, recognitions=recognitions, school_types=school_types, provinces=cities.keys(), next=next)
     
+
+
+@app.route('/is_repetitive', methods=['POST'])
+def is_repetitive():
+    data = request.get_json()
+    userName = data.get('username',None)
+    code = data.get('code',None)
+
+    user1 = User.query.filter(User.username==userName).first()
+    user2 = User.query.filter(User.code==code).first()
+    print(userName,code)
+    if user1==None and user2==None:
+        result = False
+    else:
+        result = True
+
+    return jsonify({'result': result})
+
+
+
+
 #login page
 @app.route("/login", methods = ["POST","GET"],  strict_slashes=False)
 def login():
@@ -217,14 +242,12 @@ def book_activisms(book_link):
             db.session.commit()
             print(c.id)
             
-            file.save(f"static/activisms/{file.filename}")
 
-            image = Image.open(f"static/activisms/{file.filename}")
-            resized_image = image.resize(vol_size)
-            resized_image = resized_image.convert("RGB") 
-            resized_image.save(f"static/activisms/{c.id}.jpg", 'JPEG')
+            image = Image.open(file)
+            image = image.resize(vol_size)
+            image = image.convert("RGB") 
+            image.save(f"{STATIC_SAVE_PATH}/activisms/{c.id}.jpg", 'JPEG')
 
-            os.remove(f"static/activisms/{file.filename}")
             
             tik = Ticket(type="activism_sta", sub_type="review", content=review_activate_text_generator(current_user.name), user_id=current_user.id, time=get_time())
             db.session.add(tik)
@@ -360,13 +383,12 @@ def profile():
     if request.method == "POST":
         file = request.files.get("file", None)
 
-        file.save(f"static/users/{file.filename}")
-        image = Image.open(f"static/users/{file.filename}")
-        resized_image = image.resize((280, 280))
-        resized_image = resized_image.convert("RGB") 
-        resized_image.save(f"static/users/{current_user.id}.jpg", 'JPEG')
 
-        os.remove(f"static/users/{file.filename}")
+        image = Image.open(file)
+        image = image.resize((280, 280))
+        image = image.convert("RGB") 
+        image.save(f"{STATIC_SAVE_PATH}/users/{current_user.id}.jpg", 'JPEG')
+
 
         return redirect(request.url)
     else:

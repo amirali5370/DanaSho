@@ -23,10 +23,6 @@ app.jinja_env.globals['comments_calculator'] = comments_calculator
 app.jinja_env.globals['randomizer'] = randomizer
 app.jinja_env.globals['invites_index'] = invites_index
 
-# HACK: مدیریت ارور ستون های یونیک دیتابیس
-# TODO: اضافه شدن پیش ثبت نام توسط دانش آموز و گزینه افزدون پیش ثبت نامی ها به دانش آموزان برای ادمین
-# FIXME: حذف دیتابیس و برداشتن ویژگی یونیک از پسورد ها
-# TODO : در هنگام عمل حذف کردن، مسیج باکس آیا اطمینان دارید گذاشته شود
 
 app.config["SQLALCHEMY_DATABASE_URI"] = config.SQLALCHEMY_DATABASE_URI
 app.config["SECRET_KEY"] = config.SECRET_KEY

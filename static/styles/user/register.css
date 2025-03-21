@@ -412,6 +412,27 @@ textarea{
     button{
         top: 50px;
     }
+    button:not(.swal2-confirm,.swal2-close){
+        height: 40px;
+        width: 60%;
+        border-radius: 35px;
+        max-width: 160px;
+        border: none;
+        background-color: #d2b9ab;
+        box-shadow: 
+        1px 1px 25px #186238,
+        -1px -1px 25px #62ffe235,
+        0 0 .1rem #fff,
+        0 0 .1rem #fff,
+        0 0 1.5rem #bc13fe,
+        0 0 0.3rem #bc13fe,
+        0 0 2.3rem #bc13fe,
+        inset 0 0 .8rem #bc13fe;
+        cursor: pointer;
+    
+        position: relative;
+        top: 30px;
+    }
 }
 
 @media only screen and (min-width: 1024px) and (max-width: 1400px) {

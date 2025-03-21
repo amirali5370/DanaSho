@@ -17,8 +17,8 @@ app = Blueprint("admin" , __name__)
 
 @app.before_request
 def before_request():
-        if session.get("admin_login", None) == None and request.endpoint != "admin.login":
-            abort(404)
+    if session.get("admin_login", None) == None and request.endpoint != "admin.login":
+        abort(404)
 
 
 ##############################   ADMIN   ###############################
@@ -42,7 +42,7 @@ def dashboard():
     if request.method == "POST":
         grade = request.form.get('grade', None)
         file = request.files.get('file')
-        file.save(f"static/files/{grade}.zip")
+        file.save(f"{config.STATIC_SAVE_PATH}/files/{grade}.zip")
 
     return render_template("admin/dashboard.html")
 
@@ -161,14 +161,12 @@ def books():
             db.session.add(b)
             db.session.commit()
 
-            file.save(f"static/books/{file.filename}")
 
-            image = Image.open(f"static/books/{file.filename}")
-            resized_image = image.resize(vol_size)
-            resized_image = resized_image.convert("RGB") 
-            resized_image.save(f"static/books/{b.id}.jpg", 'JPEG')
+            image = Image.open(file)
+            image = image.resize(vol_size)
+            image = image.convert("RGB") 
+            image.save(f"{config.STATIC_SAVE_PATH}/books/{b.id}.jpg", 'JPEG')
 
-            os.remove(f"static/books/{file.filename}")
 
             flash('book_add_success')
             return redirect(url_for('admin.books'))
@@ -207,14 +205,12 @@ def delete_book(id):
 def edit_photo_book(id):
     file = request.files.get("photo", None)
     if file!=None:
-        file.save(f"static/books/{file.filename}")
 
-        image = Image.open(f"static/books/{file.filename}")
-        resized_image = image.resize(vol_size)
-        resized_image = resized_image.convert("RGB") 
-        resized_image.save(f"static/books/{id}.jpg", 'JPEG')
+        image = Image.open(file)
+        image = image.resize(vol_size)
+        image = image.convert("RGB") 
+        image.save(f"{config.STATIC_SAVE_PATH}/books/{id}.jpg", 'JPEG')
 
-        os.remove(f"static/books/{file.filename}")
         
     flash('book_edit_success')
     return redirect(url_for('admin.books'))
@@ -314,8 +310,8 @@ def request_api():
 def quiz(book_link):
     book = Book.query.filter(Book.primalink==book_link).first_or_404()
     if request.method == "POST":
-        book.number = file = request.form['number']
-        book.time = file = request.form['time']
+        book.number = request.form['number']
+        book.time = request.form['time']
         db.session.commit()
 
         file = request.files['file']

@@ -37,7 +37,7 @@
             <h1>ثبت نام</h1>
         </div>
         <div id="main">
-            <form action="#" method="post" id="form" onsubmit="return validatePasswords()">
+            <form action="#" method="post" id="form" onsubmit="return checking()">
                 <div id="form-body-wrp">
                     <div id="inputs">
                         
@@ -111,13 +111,9 @@
                         <div class="input-wrp">
                             <select type="text" name="school_type" id="school_type" required>
                                 <option selected disabled value="">نوع مدرسه</option>
-                                <option value="1">دولتی</option>
-                                <option value="2">نمونه دولتی</option>
-                                <option value="3">هیئت امنایی</option>
-                                <option value="4">غیر انتفاعی</option>
-                                <option value="5">شاهد</option>
-                                <option value="6">تیزهوشان</option>
-                                <option value="7">استثنائی</option>
+                                {% for key, value in school_types.items() %}
+                                <option value="{{key}}">{{value}}</option>
+                                {% endfor %}
                             </select>
                         </div>
                         <div class="input-wrp addres-wrp">
@@ -160,7 +156,7 @@
         </div>
     </div>
 </div>
-    <script type="module">
+    <!-- <script type="module">
         {% with messages = get_flashed_messages() %}
             {% if messages %}
                 {% for message in messages %}
@@ -179,7 +175,59 @@
                 {% endfor %}
             {% endif %}
         {% endwith %}
+    </script> -->
+
+
+    <script>
+        function chekuniqe() {
+            var code = document.querySelector("input[name='code']").value;
+            var username = document.querySelector("input[name='username']").value;
+
+            var data = {
+                'code':code,
+                'username':username
+            }
+            console.log(data);
+
+            const csrfToken = '{{ csrf_token() }}';
+
+            fetch(`{{ url_for('user.is_repetitive', _external=True) }}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(status => {
+                console.log(status.result);
+
+
+                if(status.result==true){
+                swal({
+                    title: 'مشخصات قبلا در سامانه ثبت شده!',
+                    html: 'این مشخصات قبلا در سامانه ثبت شده است. لطفا مشخصات دیگری وارد کنید.',
+                    type: 'warning',
+                    confirmButtonColor: '#ffc000',
+                    confirmButtonText: '<div style="direction:rtl;font-size:18px;font-family:Iran,Calibri;font-weight:bold;"><i style="margin-left: 5px;" class="fa fa-times"></i> تائید</div>',
+                    showCloseButton: true,
+                    showLoaderOnConfirm:true,
+                    allowOutsideClick:false,
+                }).then((result) => {swal.close();})
+                return false;
+            }
+
+            })
+            .catch(error => {console.error('Error:', error);
+            return false;
+            });
+
+            return true
+            }
     </script>
+
+
 
     <script src="{{ url_for('static', filename='scripts/user/register.js') }}"></script>
     <script>
@@ -222,7 +270,17 @@
                 }).then((result) => {swal.close();})
                 return false; // جلوگیری از ارسال فرم
             }
-            return true; // اجازه ارسال فرم
+            return true
         }
         </script>
+
+    <script>
+        function checking(){
+            if (validatePasswords() && chekuniqe() ){
+                return true
+            }
+            return false
+        }
+
+    </script>
 {% endblock %}
